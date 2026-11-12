@@ -84,19 +84,34 @@ export class Diorama3D {
     neonLight.position.set(6, 5, 4);
     this.scene.add(neonLight);
 
-    // Mouse orbital pan interaction
+    // Responsive orbit: preserve the desktop view but pull back on narrow phones.
     this.isDragging = false;
+    this.activePointerId = null;
     this.prevMousePos = { x: 0, y: 0 };
     this.camAngle = Math.atan2(this.camera.position.z, this.camera.position.x);
     this.camDist = Math.hypot(this.camera.position.x, this.camera.position.z);
+    this.fitCameraToViewport(this.canvas.clientWidth || 800, this.canvas.clientHeight || 600);
 
-    this.canvas.addEventListener('mousedown', (e) => {
+    // Pointer events support both desktop mouse dragging and single-finger touch orbit.
+    this.canvas.addEventListener('pointerdown', (e) => {
+      if (this.isDragging || (e.pointerType === 'touch' && !e.isPrimary)) return;
       this.isDragging = true;
+      this.activePointerId = e.pointerId;
       this.prevMousePos = { x: e.clientX, y: e.clientY };
+      this.canvas.setPointerCapture?.(e.pointerId);
     });
-    window.addEventListener('mouseup', () => { this.isDragging = false; });
-    window.addEventListener('mousemove', (e) => {
-      if (!this.isDragging) return;
+    const stopOrbit = (e) => {
+      if (e.pointerId !== this.activePointerId) return;
+      this.isDragging = false;
+      this.activePointerId = null;
+      if (this.canvas.hasPointerCapture?.(e.pointerId)) {
+        this.canvas.releasePointerCapture?.(e.pointerId);
+      }
+    };
+    window.addEventListener('pointerup', stopOrbit);
+    window.addEventListener('pointercancel', stopOrbit);
+    window.addEventListener('pointermove', (e) => {
+      if (!this.isDragging || e.pointerId !== this.activePointerId) return;
       const dx = e.clientX - this.prevMousePos.x;
       this.camAngle -= dx * 0.006;
       this.camera.position.x = Math.cos(this.camAngle) * this.camDist;
@@ -104,6 +119,28 @@ export class Diorama3D {
       this.camera.lookAt(0, 2.5, 0);
       this.prevMousePos = { x: e.clientX, y: e.clientY };
     });
+  }
+
+  fitCameraToViewport(width, height) {
+    if (!this.camera) return;
+    const w = Math.max(1, width || 800);
+    const h = Math.max(1, height || 600);
+    const aspect = w / h;
+    const compact = typeof window !== 'undefined'
+      && window.matchMedia?.('(max-width: 760px), (max-width: 1024px) and (max-height: 540px)')?.matches;
+    // The original camera crops the 30-unit wide city tray on tall screens.
+    // Widen the field through camera distance rather than distorting geometry.
+    const factor = compact ? Math.max(1, Math.min(2.35, 1.58 / aspect)) : 1;
+    const angle = this.camAngle ?? Math.atan2(22, 18);
+    this.camDist = Math.hypot(18, 22) * factor;
+    this.camera.position.set(
+      Math.cos(angle) * this.camDist,
+      2.5 + 17.5 * factor,
+      Math.sin(angle) * this.camDist
+    );
+    this.camera.lookAt(0, 2.5, 0);
+    this.camera.aspect = aspect;
+    this.camera.updateProjectionMatrix();
   }
 
   createDioramaBase() {
@@ -656,15 +693,16 @@ export class Diorama3D {
   }
 
   bindWindowResize() {
-    window.addEventListener('resize', () => {
-      // WebGL can fail while the rest of the 2D game remains playable.
+    const resizeDiorama = () => {
+      // WebGL can fail while the 2D game stays playable.
       if (!this.canvas || !this.camera || !this.webglSupported || !this.renderer) return;
       const width = Math.max(1, this.canvas.clientWidth || 800);
       const height = Math.max(1, this.canvas.clientHeight || 600);
-      this.camera.aspect = width / height;
-      this.camera.updateProjectionMatrix();
+      this.fitCameraToViewport(width, height);
       this.renderer.setSize(width, height);
-    });
+    };
+    window.addEventListener('resize', resizeDiorama);
+    window.visualViewport?.addEventListener('resize', resizeDiorama);
   }
 
   animate() {
