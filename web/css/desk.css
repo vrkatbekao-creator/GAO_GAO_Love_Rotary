@@ -214,176 +214,7 @@ body, html {
   font-weight: bold;
 }
 
-/* 左側市政決策與設定抽屜 (Collapsible Settings & Fiscal Policy Drawer) */
-#settings-drawer {
-  position: absolute;
-  left: 0;
-  top: 68px;
-  z-index: 80;
-  display: flex;
-  transform: translateX(-100%);
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(6px 8px 16px rgba(0, 0, 0, 0.65));
-}
-
-#settings-drawer.drawer-open {
-  transform: translateX(0);
-}
-
-/* 抽屜握把 / 開關拉籤 (Left Pull Tab) */
-.settings-drawer-toggle-tab {
-  position: absolute;
-  right: -132px;
-  top: 12px;
-  width: 132px;
-  height: 44px;
-  background: linear-gradient(135deg, #233342 0%, #15222e 100%);
-  color: #ffd43b;
-  border: 2px solid #51cf66;
-  border-left: none;
-  border-top-right-radius: 22px;
-  border-bottom-right-radius: 22px;
-  box-shadow: 5px 4px 15px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 0 14px 0 12px;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  user-select: none;
-  outline: none;
-  transition: all 0.22s ease;
-  z-index: 85;
-  white-space: nowrap;
-}
-
-.settings-drawer-toggle-tab:hover {
-  background: linear-gradient(135deg, #2f4458 0%, #1c2c3b 100%);
-  border-color: #69db7c;
-  color: #fff;
-  transform: translateX(3px);
-  box-shadow: 7px 6px 18px rgba(81, 207, 102, 0.35);
-}
-
-.settings-tab-icon {
-  font-size: 16px;
-}
-
-.settings-tab-text {
-  font-weight: 900;
-}
-
-.settings-tab-arrow {
-  font-size: 11px;
-  color: #69db7c;
-  transition: transform 0.3s ease;
-}
-
-#settings-drawer.drawer-open .settings-tab-arrow {
-  transform: rotate(180deg);
-}
-
-/* 抽屜本體容器 */
-.settings-drawer-inner {
-  background: linear-gradient(180deg, #18232e 0%, #0d151c 100%);
-  border-right: 3px solid #51cf66;
-  border-top: 2px solid #2e4357;
-  border-bottom: 2px solid #2e4357;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
-  padding: 16px 18px 20px 18px;
-  width: 275px;
-  max-height: calc(100vh - 170px);
-  display: flex;
-  flex-direction: column;
-  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
-}
-
-.settings-drawer-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 10px;
-}
-
-.settings-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.settings-group-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #a6c0d6;
-}
-
-.settings-group-icon {
-  font-size: 14px;
-}
-
-.settings-select-dropdown {
-  background: #090e13;
-  color: #f8fafc;
-  border: 1px solid #4a637a;
-  border-radius: 6px;
-  padding: 7px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  outline: none;
-  width: 100%;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.settings-select-dropdown:hover,
-.settings-select-dropdown:focus {
-  border-color: #51cf66;
-  background: #121c26;
-}
-
-.settings-hint-text {
-  font-size: 11px;
-  color: #8fa0b0;
-  line-height: 1.4;
-  padding: 4px 6px;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 4px;
-  border-left: 2px solid #ffd43b;
-}
-
-.settings-group-actions {
-  margin-top: 8px;
-  border-top: 1px solid #2e4357;
-  padding-top: 12px;
-}
-
-.settings-action-btn {
-  background: linear-gradient(135deg, #d9480f 0%, #b03408 100%);
-  color: #fff;
-  border: 1px solid #ffa94d;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-.settings-action-btn:hover {
-  background: linear-gradient(135deg, #f76707 0%, #d9480f 100%);
-  box-shadow: 0 0 10px rgba(255, 146, 43, 0.5);
-  transform: translateY(-1px);
-}
-
-/* 主工作區 (沙盤 + 左右面板) */
+/* 主工作區 (沙盤 + 右側面板) */
 #main-viewport-layout {
   flex: 1;
   position: relative;
@@ -545,19 +376,15 @@ body, html {
   transform: translateX(0);
 }
 
-/* 抽屜握把 / 開關拉籤 (Pull Tab) */
+/* 抽屜握把 / 開關拉籤 (Pull Tabs on Right Edge) */
 .drawer-toggle-tab {
   position: absolute;
   left: -128px;
-  top: 12px;
   width: 128px;
   height: 44px;
-  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-  color: #1a0f05;
-  border: 2px solid #fff3bf;
-  border-right: none;
   border-top-left-radius: 22px;
   border-bottom-left-radius: 22px;
+  border-right: none;
   box-shadow: -5px 4px 15px rgba(0,0,0,0.5);
   cursor: pointer;
   display: flex;
@@ -571,12 +398,38 @@ body, html {
   transition: all 0.2s ease;
   user-select: none;
   white-space: nowrap;
+  outline: none;
+  z-index: 85;
 }
 
-.drawer-toggle-tab:hover {
+.drawer-toggle-tab.tab-actions {
+  top: 12px;
+  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+  color: #1a0f05;
+  border: 2px solid #fff3bf;
+  border-right: none;
+}
+
+.drawer-toggle-tab.tab-actions:hover {
   background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%);
   transform: translateX(-4px);
   box-shadow: -8px 6px 20px rgba(212, 175, 55, 0.6);
+}
+
+.drawer-toggle-tab.tab-settings {
+  top: 66px;
+  background: linear-gradient(135deg, #233342 0%, #15222e 100%);
+  color: #ffd43b;
+  border: 2px solid #51cf66;
+  border-right: none;
+}
+
+.drawer-toggle-tab.tab-settings:hover {
+  background: linear-gradient(135deg, #2f4458 0%, #1c2c3b 100%);
+  border-color: #69db7c;
+  color: #fff;
+  transform: translateX(-4px);
+  box-shadow: -8px 6px 20px rgba(81, 207, 102, 0.4);
 }
 
 .drawer-toggle-tab:active {
@@ -593,7 +446,7 @@ body, html {
 
 .drawer-tab-arrow {
   font-size: 11px;
-  color: #49280a;
+  color: inherit;
   transition: transform 0.3s ease;
 }
 
@@ -610,7 +463,7 @@ body, html {
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
   padding: 16px 18px 20px 18px;
-  width: 270px;
+  width: 275px;
   max-height: calc(100vh - 170px);
   display: flex;
   flex-direction: column;
@@ -626,21 +479,133 @@ body, html {
   margin-bottom: 12px;
 }
 
-.drawer-title-group {
+/* 右側抽屜標頭內部切換頁籤 */
+.drawer-tab-switch-group {
   display: flex;
   align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid #54341b;
+}
+
+.drawer-nav-tab {
+  background: transparent;
+  color: #adb5bd;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.drawer-nav-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.drawer-nav-tab.active {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+  color: #1a0f05;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+}
+
+/* 抽屜頁面切換控制 */
+.drawer-tab-panel {
+  display: none;
+  flex-direction: column;
+}
+
+.drawer-tab-panel.active {
+  display: flex;
+}
+
+.settings-drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
   gap: 6px;
 }
 
-.drawer-header-icon {
-  font-size: 16px;
+.settings-group-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #d4af37;
 }
 
-.drawer-header-title {
-  font-size: 13px;
-  font-weight: 900;
-  color: #ffd43b;
-  letter-spacing: 0.5px;
+.settings-group-icon {
+  font-size: 14px;
+}
+
+.settings-select-dropdown {
+  background: #090e13;
+  color: #f8fafc;
+  border: 1px solid #54341b;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.settings-select-dropdown:hover,
+.settings-select-dropdown:focus {
+  border-color: #ffd43b;
+  background: #141c24;
+}
+
+.settings-hint-text {
+  font-size: 11px;
+  color: #ced4da;
+  line-height: 1.4;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  border-left: 3px solid #51cf66;
+}
+
+.settings-group-actions {
+  margin-top: 4px;
+  border-top: 1px solid #54341b;
+  padding-top: 10px;
+}
+
+.settings-action-btn {
+  background: linear-gradient(135deg, #d9480f 0%, #b03408 100%);
+  color: #fff;
+  border: 1px solid #ffa94d;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.settings-action-btn:hover {
+  background: linear-gradient(135deg, #f76707 0%, #d9480f 100%);
+  box-shadow: 0 0 10px rgba(255, 146, 43, 0.5);
+  transform: translateY(-1px);
 }
 
 .drawer-close-btn {

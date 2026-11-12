@@ -97,123 +97,120 @@
         <canvas id="diorama-canvas"></canvas>
       </div>
 
-      <!-- 左側市政決策與設定抽屜 (Collapsible Settings & Fiscal Policy Drawer) -->
-      <nav id="settings-drawer" class="settings-drawer">
-        <!-- 抽屜常駐開關握把 (Left Drawer Pull Tab) -->
-        <button id="settings-drawer-toggle-btn" class="settings-drawer-toggle-tab" type="button" aria-expanded="false" title="開啟/收起市政決策與語言設定">
-          <span class="settings-tab-icon">⚙️</span>
-          <span id="settings-tab-text" class="settings-tab-text">市政決策</span>
-          <span id="settings-tab-arrow" class="settings-tab-arrow">▶</span>
-        </button>
-
-        <!-- 抽屜內部本體 -->
-        <div class="settings-drawer-inner">
-          <div class="drawer-header">
-            <div class="drawer-title-group">
-              <span class="drawer-header-icon">⚙️</span>
-              <span id="settings-drawer-header-title" class="drawer-header-title">市政決策與設定</span>
-            </div>
-            <button id="settings-drawer-close-btn" class="drawer-close-btn" type="button" aria-label="Close Settings Drawer">✕</button>
-          </div>
-
-          <div class="settings-drawer-content">
-            <!-- 區塊 1：多語言切換 (i18n Language) -->
-            <div class="settings-group">
-              <label class="settings-group-label" for="lang-select">
-                <span class="settings-group-icon">🌐</span>
-                <span id="label-drawer-lang">語言選擇 (Language)</span>
-              </label>
-              <select id="lang-select" class="settings-select-dropdown">
-                <option value="zh">繁體中文</option>
-                <option value="en">English</option>
-                <option value="ja">日本語</option>
-                <option value="fr">Français</option>
-                <option value="nl">Nederlands</option>
-              </select>
-            </div>
-
-            <!-- 區塊 2：財政開局與決策 (Fiscal Start & Decision) -->
-            <div class="settings-group">
-              <label class="settings-group-label" for="budget-scenario-select">
-                <span class="settings-group-icon">💰</span>
-                <span id="label-drawer-budget">起始預算決策 (Fiscal Policy)</span>
-              </label>
-              <select id="budget-scenario-select" class="settings-select-dropdown" title="選擇起始預算模式 (零基或負基)">
-                <option value="0.5">🟢 零基預算 (+$0.5億)</option>
-                <option value="-6.0">🟡 輕度負基 (-$6.0億)</option>
-                <option value="-12.0">🟠 重度負基 (-$12.0億)</option>
-                <option value="-18.0">🔴 極限負基 (-$18.0億)</option>
-                <option value="custom">⚙️ 自訂數值 (+0.5 ~ -18.0億)...</option>
-              </select>
-              <div id="settings-budget-hint" class="settings-hint-text">
-                ※ 零基開局 (+0.5億) 考驗精準撙節；負基開局 (-18.0億) 將面臨利息與查封深淵。
-              </div>
-            </div>
-
-            <!-- 區塊 3：快速操作 (Quick Actions) -->
-            <div class="settings-group settings-group-actions">
-              <button id="btn-restart-game" class="settings-action-btn" type="button">
-                <span id="label-btn-restart">🔄 重新召開市政會議</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <!-- 螢幕周遭便利貼遮擋層 (受行政負擔驅動) -->
+      <!-- 螢幕周遭便利貼遮擋層 (左側保留給行政負擔展現) -->
       <div id="sticky-notes-zone"></div>
 
       <!-- 財政局長崩潰進程道具 (受預算赤字驅動) -->
       <div id="director-meltdown-props"></div>
 
-      <!-- 右側建設行動抽屜 (Collapsible Action Drawer) -->
+      <!-- 右側整合選擇面板抽屜 (Unified Right-Side Drawer: Actions & Settings) -->
       <nav id="action-drawer" class="action-drawer">
-        <!-- 抽屜常駐開關握把 (Drawer Pull Tab) -->
-        <button id="drawer-toggle-btn" class="drawer-toggle-tab" type="button" aria-expanded="false" title="開啟/收起市政行動選單">
+        <!-- 抽屜常駐開關握把 1：建設行動 (Action Drawer Pull Tab) -->
+        <button id="drawer-toggle-btn" class="drawer-toggle-tab tab-actions" type="button" aria-expanded="false" title="開啟/收起建設行動選單 (快捷鍵 B)">
           <span class="drawer-tab-icon">🏗️</span>
           <span id="drawer-tab-text" class="drawer-tab-text">建設行動</span>
           <span id="drawer-tab-arrow" class="drawer-tab-arrow">◀</span>
         </button>
 
+        <!-- 抽屜常駐開關握把 2：市政決策與設定 (Settings Drawer Pull Tab) -->
+        <button id="drawer-settings-toggle-btn" class="drawer-toggle-tab tab-settings" type="button" aria-expanded="false" title="開啟/收起市政決策與語言設定 (快捷鍵 S)">
+          <span class="drawer-tab-icon">⚙️</span>
+          <span id="settings-tab-text" class="drawer-tab-text">市政決策</span>
+          <span id="settings-tab-arrow" class="drawer-tab-arrow">◀</span>
+        </button>
+
         <!-- 抽屜內部本體 -->
         <div class="drawer-inner">
           <div class="drawer-header">
-            <div class="drawer-title-group">
-              <span class="drawer-header-icon">🛠️</span>
-              <span id="drawer-header-title" class="drawer-header-title">市政行動清單</span>
+            <!-- 內部頁籤切換器 (Drawer Top Switcher) -->
+            <div class="drawer-tab-switch-group">
+              <button id="tab-btn-actions" class="drawer-nav-tab active" type="button">
+                <span>🏗️ 建設行動</span>
+              </button>
+              <button id="tab-btn-settings" class="drawer-nav-tab" type="button">
+                <span>⚙️ 市政決策</span>
+              </button>
             </div>
             <button id="drawer-close-btn" class="drawer-close-btn" type="button" aria-label="Close Drawer">✕</button>
           </div>
 
-          <div class="action-btn-scroll-list">
-            <button class="action-btn" data-action="wheel">
-              <span>🎡 愛情摩天輪</span>
-              <span class="cost-badge">$8億 / 2回</span>
-            </button>
-            <button class="action-btn" data-action="shuttle">
-              <span>🚌 愛情接駁線</span>
-              <span class="cost-badge">$3億 / 即時</span>
-            </button>
-            <button class="action-btn" data-action="market">
-              <span>🏪 愛情商圈</span>
-              <span class="cost-badge">$3億 / 1回</span>
-            </button>
-            <button class="action-btn" data-action="event">
-              <span>💕 巡迴充氣活動</span>
-              <span class="cost-badge">$2億 / 即時</span>
-            </button>
-            <button class="action-btn" data-action="hearing">
-              <span>📋 召開公聽會</span>
-              <span class="cost-badge">$1億 / 催眠</span>
-            </button>
-            <button class="action-btn" data-action="repay">
-              <span>💰 償還債務</span>
-              <span class="cost-badge">上限現金</span>
-            </button>
-            <button class="action-btn" data-action="rest" style="background:#e9ecef;">
-              <span>☕ 暫停建設 (休息)</span>
-              <span class="cost-badge">$0</span>
-            </button>
+          <!-- 面板 1：市政建設行動清單 -->
+          <div id="panel-actions" class="drawer-tab-panel active">
+            <div class="action-btn-scroll-list">
+              <button class="action-btn" data-action="wheel">
+                <span>🎡 愛情摩天輪</span>
+                <span class="cost-badge">$8億 / 2回</span>
+              </button>
+              <button class="action-btn" data-action="shuttle">
+                <span>🚌 愛情接駁線</span>
+                <span class="cost-badge">$3億 / 即時</span>
+              </button>
+              <button class="action-btn" data-action="market">
+                <span>🏪 愛情商圈</span>
+                <span class="cost-badge">$3億 / 1回</span>
+              </button>
+              <button class="action-btn" data-action="event">
+                <span>💕 巡迴充氣活動</span>
+                <span class="cost-badge">$2億 / 即時</span>
+              </button>
+              <button class="action-btn" data-action="hearing">
+                <span>📋 召開公聽會</span>
+                <span class="cost-badge">$1億 / 催眠</span>
+              </button>
+              <button class="action-btn" data-action="repay">
+                <span>💰 償還債務</span>
+                <span class="cost-badge">上限現金</span>
+              </button>
+              <button class="action-btn" data-action="rest" style="background:#e9ecef;">
+                <span>☕ 暫停建設 (休息)</span>
+                <span class="cost-badge">$0</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 面板 2：市政決策與系統設定 -->
+          <div id="panel-settings" class="drawer-tab-panel">
+            <div class="settings-drawer-content">
+              <!-- 區塊 1：多語言切換 (i18n Language) -->
+              <div class="settings-group">
+                <label class="settings-group-label" for="lang-select">
+                  <span class="settings-group-icon">🌐</span>
+                  <span id="label-drawer-lang">語言選擇 (Language)</span>
+                </label>
+                <select id="lang-select" class="settings-select-dropdown">
+                  <option value="zh">繁體中文</option>
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                  <option value="fr">Français</option>
+                  <option value="nl">Nederlands</option>
+                </select>
+              </div>
+
+              <!-- 區塊 2：財政開局與決策 (Fiscal Start & Decision) -->
+              <div class="settings-group">
+                <label class="settings-group-label" for="budget-scenario-select">
+                  <span class="settings-group-icon">💰</span>
+                  <span id="label-drawer-budget">起始預算決策 (Fiscal Policy)</span>
+                </label>
+                <select id="budget-scenario-select" class="settings-select-dropdown" title="選擇起始預算模式 (零基或負基)">
+                  <option value="0.5">🟢 零基預算 (+$0.5億)</option>
+                  <option value="-6.0">🟡 輕度負基 (-$6.0億)</option>
+                  <option value="-12.0">🟠 重度負基 (-$12.0億)</option>
+                  <option value="-18.0">🔴 極限負基 (-$18.0億)</option>
+                  <option value="custom">⚙️ 自訂數值 (+0.5 ~ -18.0億)...</option>
+                </select>
+                <div id="settings-budget-hint" class="settings-hint-text">
+                  ※ 零基開局 (+0.5億) 考驗精準撙節；負基開局 (-18.0億) 將面臨利息與查封深淵。
+                </div>
+              </div>
+
+              <!-- 區塊 3：快速操作 (Quick Actions) -->
+              <div class="settings-group settings-group-actions">
+                <button id="btn-restart-game" class="settings-action-btn" type="button">
+                  <span id="label-btn-restart">🔄 重新召開市政會議</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </nav>

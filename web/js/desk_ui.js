@@ -44,26 +44,29 @@ export class DeskUI {
     this.langSelect = document.getElementById('lang-select');
     this.budgetSelect = document.getElementById('budget-scenario-select');
 
-    // Settings Drawer elements
-    this.settingsDrawer = document.getElementById('settings-drawer');
-    this.settingsToggleBtn = document.getElementById('settings-drawer-toggle-btn');
+    // Right Drawer elements
+    this.actionDrawer = document.getElementById('action-drawer');
+    this.drawerToggleBtn = document.getElementById('drawer-toggle-btn');
+    this.drawerTabText = document.getElementById('drawer-tab-text');
+    this.drawerTabArrow = document.getElementById('drawer-tab-arrow');
+    this.drawerSettingsToggleBtn = document.getElementById('drawer-settings-toggle-btn');
     this.settingsTabText = document.getElementById('settings-tab-text');
     this.settingsTabArrow = document.getElementById('settings-tab-arrow');
-    this.settingsCloseBtn = document.getElementById('settings-drawer-close-btn');
-    this.settingsHeaderTitle = document.getElementById('settings-drawer-header-title');
+    this.drawerCloseBtn = document.getElementById('drawer-close-btn');
+
+    // Drawer internal tabs & panels
+    this.tabBtnActions = document.getElementById('tab-btn-actions');
+    this.tabBtnSettings = document.getElementById('tab-btn-settings');
+    this.panelActions = document.getElementById('panel-actions');
+    this.panelSettings = document.getElementById('panel-settings');
+    this.currentDrawerTab = 'actions';
+
+    // Settings group labels & buttons
     this.labelDrawerLang = document.getElementById('label-drawer-lang');
     this.labelDrawerBudget = document.getElementById('label-drawer-budget');
     this.settingsBudgetHint = document.getElementById('settings-budget-hint');
     this.btnRestartGame = document.getElementById('btn-restart-game');
     this.mayorAvatarBtn = document.getElementById('mayor-avatar-btn');
-
-    // Action Drawer elements
-    this.actionDrawer = document.getElementById('action-drawer');
-    this.drawerToggleBtn = document.getElementById('drawer-toggle-btn');
-    this.drawerTabText = document.getElementById('drawer-tab-text');
-    this.drawerTabArrow = document.getElementById('drawer-tab-arrow');
-    this.drawerCloseBtn = document.getElementById('drawer-close-btn');
-    this.drawerHeaderTitle = document.getElementById('drawer-header-title');
 
     // Props & modals
     this.stickyNotesZone = document.getElementById('sticky-notes-zone');
@@ -80,26 +83,28 @@ export class DeskUI {
   }
 
   bindEvents() {
-    // Action drawer toggle & close
+    // Right drawer toggle tabs
     this.drawerToggleBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
-      this.toggleActionDrawer();
+      this.toggleDrawer('actions');
+    });
+
+    this.drawerSettingsToggleBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleDrawer('settings');
     });
 
     this.drawerCloseBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
-      this.closeActionDrawer();
+      this.closeDrawer();
     });
 
-    // Settings drawer toggle & close
-    this.settingsToggleBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleSettingsDrawer();
+    // Drawer internal tab switch buttons
+    this.tabBtnActions?.addEventListener('click', () => {
+      this.switchDrawerTab('actions');
     });
-
-    this.settingsCloseBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.closeSettingsDrawer();
+    this.tabBtnSettings?.addEventListener('click', () => {
+      this.switchDrawerTab('settings');
     });
 
     // Mayor avatar click -> cycle next quote with fun feedback
@@ -110,7 +115,7 @@ export class DeskUI {
     // Restart game session button in settings drawer
     this.btnRestartGame?.addEventListener('click', () => {
       if (confirm(t('confirm_reset_budget'))) {
-        this.closeSettingsDrawer();
+        this.closeDrawer();
         this.gm.reset(this.gm.seed, this.gm.initialNetBudget ?? 0.5);
         if (window.audio) {
           window.audio.setDeficitState(this.gm.net_budget < 0);
@@ -123,29 +128,23 @@ export class DeskUI {
       }
     });
 
-    // Close drawers when clicking the 3D diorama canvas or desk outside drawers
+    // Close drawer when clicking the 3D diorama canvas or desk outside drawer
     this.dioramaWrapper?.addEventListener('click', () => {
       if (this.actionDrawer?.classList.contains('drawer-open')) {
-        this.closeActionDrawer();
-      }
-      if (this.settingsDrawer?.classList.contains('drawer-open')) {
-        this.closeSettingsDrawer();
+        this.closeDrawer();
       }
     });
 
-    // Keyboard shortcuts: 'B' toggles action drawer, 'S' / 'O' toggles settings drawer, 'Escape' closes both
+    // Keyboard shortcuts: 'B' toggles actions, 'S' / 'O' toggles settings, 'Escape' closes drawer
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (this.actionDrawer?.classList.contains('drawer-open')) {
-          this.closeActionDrawer();
-        }
-        if (this.settingsDrawer?.classList.contains('drawer-open')) {
-          this.closeSettingsDrawer();
+          this.closeDrawer();
         }
       } else if ((e.key === 'b' || e.key === 'B') && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
-        this.toggleActionDrawer();
+        this.toggleDrawer('actions');
       } else if ((e.key === 's' || e.key === 'S' || e.key === 'o' || e.key === 'O') && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
-        this.toggleSettingsDrawer();
+        this.toggleDrawer('settings');
       }
     });
 
@@ -232,55 +231,61 @@ export class DeskUI {
     }
   }
 
-  toggleActionDrawer() {
-    if (this.actionDrawer?.classList.contains('drawer-open')) {
-      this.closeActionDrawer();
+  switchDrawerTab(tabName) {
+    this.currentDrawerTab = tabName;
+    if (tabName === 'actions') {
+      this.tabBtnActions?.classList.add('active');
+      this.tabBtnSettings?.classList.remove('active');
+      this.panelActions?.classList.add('active');
+      this.panelSettings?.classList.remove('active');
     } else {
-      this.openActionDrawer();
+      this.tabBtnSettings?.classList.add('active');
+      this.tabBtnActions?.classList.remove('active');
+      this.panelSettings?.classList.add('active');
+      this.panelActions?.classList.remove('active');
     }
+    this.updateDrawerArrows();
   }
 
-  openActionDrawer() {
+  openDrawer(tabName = 'actions') {
     if (!this.actionDrawer) return;
-    this.closeSettingsDrawer();
+    this.switchDrawerTab(tabName);
     this.actionDrawer.classList.add('drawer-open');
-    if (this.drawerToggleBtn) this.drawerToggleBtn.setAttribute('aria-expanded', 'true');
-    if (this.drawerTabText) this.drawerTabText.textContent = t('drawer_tab_close');
-    if (this.drawerTabArrow) this.drawerTabArrow.textContent = '▶';
+    this.drawerToggleBtn?.setAttribute('aria-expanded', 'true');
+    this.drawerSettingsToggleBtn?.setAttribute('aria-expanded', 'true');
+    this.updateDrawerArrows();
   }
 
-  closeActionDrawer() {
+  closeDrawer() {
     if (!this.actionDrawer) return;
     this.actionDrawer.classList.remove('drawer-open');
-    if (this.drawerToggleBtn) this.drawerToggleBtn.setAttribute('aria-expanded', 'false');
-    if (this.drawerTabText) this.drawerTabText.textContent = t('drawer_tab_open');
-    if (this.drawerTabArrow) this.drawerTabArrow.textContent = '◀';
+    this.drawerToggleBtn?.setAttribute('aria-expanded', 'false');
+    this.drawerSettingsToggleBtn?.setAttribute('aria-expanded', 'false');
+    this.updateDrawerArrows();
   }
 
-  toggleSettingsDrawer() {
-    if (this.settingsDrawer?.classList.contains('drawer-open')) {
-      this.closeSettingsDrawer();
+  toggleDrawer(tabName = 'actions') {
+    const isOpen = this.actionDrawer?.classList.contains('drawer-open');
+    if (isOpen && this.currentDrawerTab === tabName) {
+      this.closeDrawer();
     } else {
-      this.openSettingsDrawer();
+      this.openDrawer(tabName);
     }
   }
 
-  openSettingsDrawer() {
-    if (!this.settingsDrawer) return;
-    this.closeActionDrawer();
-    this.settingsDrawer.classList.add('drawer-open');
-    if (this.settingsToggleBtn) this.settingsToggleBtn.setAttribute('aria-expanded', 'true');
-    if (this.settingsTabText) this.settingsTabText.textContent = t('settings_drawer_tab_close');
-    if (this.settingsTabArrow) this.settingsTabArrow.textContent = '◀';
+  updateDrawerArrows() {
+    const isOpen = this.actionDrawer?.classList.contains('drawer-open');
+    if (this.drawerTabArrow) this.drawerTabArrow.textContent = isOpen && this.currentDrawerTab === 'actions' ? '▶' : '◀';
+    if (this.settingsTabArrow) this.settingsTabArrow.textContent = isOpen && this.currentDrawerTab === 'settings' ? '▶' : '◀';
   }
 
-  closeSettingsDrawer() {
-    if (!this.settingsDrawer) return;
-    this.settingsDrawer.classList.remove('drawer-open');
-    if (this.settingsToggleBtn) this.settingsToggleBtn.setAttribute('aria-expanded', 'false');
-    if (this.settingsTabText) this.settingsTabText.textContent = t('settings_drawer_tab_open');
-    if (this.settingsTabArrow) this.settingsTabArrow.textContent = '▶';
-  }
+  // Alias helpers for compatibility
+  toggleActionDrawer() { this.toggleDrawer('actions'); }
+  openActionDrawer() { this.openDrawer('actions'); }
+  closeActionDrawer() { this.closeDrawer(); }
+  toggleSettingsDrawer() { this.toggleDrawer('settings'); }
+  openSettingsDrawer() { this.openDrawer('settings'); }
+  closeSettingsDrawer() { this.closeDrawer(); }
 
   cycleNextMayorQuote() {
     this.quoteIdx++;
@@ -311,22 +316,23 @@ export class DeskUI {
     if (statLabels[1]) statLabels[1].textContent = t('admin_label');
     if (statLabels[2]) statLabels[2].textContent = t('complaints_label');
 
-    // Drawer tab & header
-    const isOpen = this.actionDrawer?.classList.contains('drawer-open');
-    if (this.drawerTabText) this.drawerTabText.textContent = t(isOpen ? 'drawer_tab_close' : 'drawer_tab_open');
-    if (this.drawerTabArrow) this.drawerTabArrow.textContent = isOpen ? '▶' : '◀';
-    if (this.drawerHeaderTitle) this.drawerHeaderTitle.textContent = t('drawer_header_title');
-
-    // Settings drawer tab, header & group labels
-    const isSettingsOpen = this.settingsDrawer?.classList.contains('drawer-open');
-    if (this.settingsTabText) this.settingsTabText.textContent = t(isSettingsOpen ? 'settings_drawer_tab_close' : 'settings_drawer_tab_open');
-    if (this.settingsTabArrow) this.settingsTabArrow.textContent = isSettingsOpen ? '◀' : '▶';
-    if (this.settingsHeaderTitle) this.settingsHeaderTitle.textContent = t('settings_drawer_title');
+    // Right drawer tab labels
+    if (this.drawerTabText) this.drawerTabText.textContent = t('drawer_tab_open');
+    if (this.settingsTabText) this.settingsTabText.textContent = t('settings_drawer_tab_open');
+    if (this.tabBtnActions) {
+      const span = this.tabBtnActions.querySelector('span');
+      if (span) span.textContent = '🏗️ ' + t('drawer_tab_open');
+    }
+    if (this.tabBtnSettings) {
+      const span = this.tabBtnSettings.querySelector('span');
+      if (span) span.textContent = '⚙️ ' + t('settings_drawer_tab_open');
+    }
     if (this.labelDrawerLang) this.labelDrawerLang.textContent = t('label_drawer_lang');
     if (this.labelDrawerBudget) this.labelDrawerBudget.textContent = t('label_drawer_budget');
     if (this.settingsBudgetHint) this.settingsBudgetHint.textContent = t('settings_budget_hint');
     const labelRestart = document.getElementById('label-btn-restart');
     if (labelRestart) labelRestart.textContent = t('btn_restart_game');
+    this.updateDrawerArrows();
 
     // Action buttons labels
     const actionDefs = [
@@ -747,17 +753,15 @@ export class DeskUI {
       note.className = `sticky-note ${colors[i % colors.length]}`;
       const rot = (i % 2 === 0 ? -1 : 1) * (5 + (i * 4) % 15);
       
-      // Position notes safely around top and mid borders, strictly avoiding the bottom dashboard
-      if (i < 2) {
-        note.style.left = `${15 + i * 160}px`;
-        note.style.top = '70px';
-      } else if (i < 4) {
-        note.style.right = `${160 + (i - 2) * 160}px`;
-        note.style.top = '70px';
-      } else {
-        note.style.left = '20px';
-        note.style.top = `${220 + (i - 4) * 125}px`;
-      }
+      // Position notes exclusively on the left side in staggered dual columns,
+      // keeping the center diorama, right drawer, and bottom LED dashboard completely unobstructed.
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const leftPos = col === 0 ? 18 + (i % 3) * 6 : 172 + ((i + 1) % 3) * 6;
+      const topPos = 20 + row * 135 + (col === 1 ? 15 : 0);
+
+      note.style.left = `${leftPos}px`;
+      note.style.top = `${topPos}px`;
       note.style.transform = `rotate(${rot}deg)`;
       note.textContent = phrases[i % phrases.length];
       this.makeDraggable(note);
