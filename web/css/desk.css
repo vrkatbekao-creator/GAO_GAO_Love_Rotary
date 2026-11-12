@@ -1,0 +1,759 @@
+/* ==========================================================================
+   《高高平等：人人有輪坐》 2D 復古辦公桌與公文蓋章系統 UI 樣式表
+   ========================================================================== */
+
+:root {
+  --wood-dark: #2c1a0e;
+  --wood-desk: #54341b;
+  --wood-light: #7c4c28;
+  --kraft-paper: #e6cead;
+  --kraft-dark: #cbb08c;
+  --paper-cream: #faf5e8;
+  --seal-red: #c92a2a;
+  --seal-red-dark: #961b1b;
+  --strike-red: #e03131;
+  --led-green: #20c997;
+  --led-red: #ff4d4f;
+  --led-bg: #121814;
+  --news-blue: #0b3954;
+  --news-red: #bf1a2f;
+  --news-yellow: #f8e16c;
+  --postit-yellow: #fff3bf;
+  --postit-pink: #ffd6e0;
+  --postit-orange: #ffe8cc;
+  --text-dark: #212529;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  background-color: var(--wood-dark);
+  color: var(--text-dark);
+}
+
+/* 辦公桌主框架 */
+#office-desk-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at center, #633f23 0%, #3a2010 70%, #1a0d05 100%);
+  border: 14px solid #331908;
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.8);
+}
+
+/* 頂部電視快訊欄 */
+#cable-news-banner {
+  height: 58px;
+  background: linear-gradient(90deg, var(--news-blue) 0%, #102a45 50%, var(--news-blue) 100%);
+  border-bottom: 3px solid #ffcc00;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 100;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.news-badge {
+  background: var(--news-red);
+  color: #fff;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 0 16px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  letter-spacing: 2px;
+  animation: pulseBadge 2s infinite;
+  border-right: 2px solid #ffcc00;
+  flex-shrink: 0;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { background: var(--news-red); }
+  50% { background: #ff2a44; }
+}
+
+.news-ticker-wrap {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.news-ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+  animation: tickerSlide 25s linear infinite;
+}
+
+@keyframes tickerSlide {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+/* 市長語錄浮動卡 */
+.mayor-quote-box {
+  background: rgba(0, 0, 0, 0.7);
+  border-left: 3px solid #ffcc00;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  flex-shrink: 0;
+  max-width: 420px;
+}
+
+.mayor-avatar {
+  font-size: 24px;
+}
+
+.mayor-text {
+  font-size: 13px;
+  color: #f8e16c;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 手語翻譯員 */
+.interpreter-box {
+  width: 140px;
+  height: 100%;
+  background: #111;
+  border-left: 2px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.interpreter-face {
+  font-size: 26px;
+  animation: interpreterBob 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes interpreterBob {
+  0% { transform: translateY(-2px) rotate(-3deg); }
+  100% { transform: translateY(2px) rotate(3deg); }
+}
+
+.interpreter-label {
+  font-size: 11px;
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+}
+
+.interpreter-title {
+  color: #61dafb;
+  font-weight: bold;
+}
+
+/* 主工作區 (沙盤 + 左右面板) */
+#main-viewport-layout {
+  flex: 1;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+}
+
+/* 3D 沙盤畫布容器 */
+#diorama-3d-wrapper {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  transition: filter 0.3s ease;
+}
+
+#diorama-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 當公文開啟時的景深模糊 (Bokeh) */
+.bokeh-blur {
+  filter: blur(8px) saturate(0.8) brightness(0.7);
+}
+
+/* 實體沙盤底座與儀表板 */
+#diorama-base-dashboard {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 85px;
+  background: linear-gradient(180deg, #2b170c 0%, #150a04 100%);
+  border-top: 5px solid #633f23;
+  box-shadow: 0 -8px 25px rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  z-index: 10;
+}
+
+/* LED 預算顯示器 */
+.led-panel {
+  background: var(--led-bg);
+  border: 4px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 6px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.9), 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.led-title {
+  font-size: 11px;
+  color: #888;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.led-value {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--led-green);
+  text-shadow: 0 0 10px rgba(32, 201, 151, 0.8);
+  letter-spacing: 2px;
+  transition: color 0.3s;
+}
+
+.led-deficit {
+  color: var(--led-red) !important;
+  text-shadow: 0 0 12px rgba(255, 77, 79, 1), 0 0 20px rgba(255, 0, 0, 0.8) !important;
+  animation: ledGlitch 0.4s infinite alternate;
+}
+
+@keyframes ledGlitch {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.02); }
+  100% { opacity: 0.95; transform: scale(0.99); }
+}
+
+/* 核心指標進度條組 */
+.stats-strip {
+  display: flex;
+  gap: 25px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 140px;
+}
+
+.stat-label-wrap {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: bold;
+  color: #e9ecef;
+}
+
+.stat-bar-bg {
+  width: 100%;
+  height: 10px;
+  background: #212529;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #495057;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  width: 20%;
+  transition: width 0.4s ease;
+}
+
+.bar-tourism { background: linear-gradient(90deg, #ff922b, #ff6b6b); }
+.bar-admin { background: linear-gradient(90deg, #fab005, #f03e3e); }
+.bar-complaints { background: linear-gradient(90deg, #845ef7, #fa5252); }
+
+/* 章節與回合指示牌 */
+.turn-plaque {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+  color: #1a1005;
+  border: 2px solid #fff3bf;
+  border-radius: 6px;
+  padding: 6px 16px;
+  text-align: center;
+  font-weight: 900;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.turn-chapter {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.turn-number {
+  font-size: 22px;
+}
+
+/* 右側建設抽屜按鈕列 */
+#action-drawer {
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 20;
+}
+
+.action-btn {
+  background: linear-gradient(180deg, #f8f9fa 0%, #dee2e6 100%);
+  border: 2px solid #adb5bd;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #212529;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 220px;
+  transition: all 0.15s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+  background: #ffffff;
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.action-btn.btn-disabled {
+  opacity: 0.5;
+  filter: grayscale(1);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.action-btn .cost-badge {
+  background: #343a40;
+  color: #ffec99;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* 建設目標區域選擇彈窗 (Zone Selector Modal) */
+#zone-picker-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--paper-cream);
+  border: 4px solid var(--wood-desk);
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+  padding: 24px;
+  z-index: 150;
+  display: none;
+  width: 440px;
+}
+
+.zone-picker-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--wood-dark);
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 2px dashed #ced4da;
+  padding-bottom: 8px;
+}
+
+.zone-options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.zone-select-card {
+  background: #fff;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zone-select-card:hover {
+  border-color: #f76707;
+  background: #fff9db;
+  transform: translateX(4px);
+}
+
+.modal-cancel-btn {
+  width: 100%;
+  background: #ced4da;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 螢幕周圍便利貼堆疊 (Sticky Notes Clutter) */
+#sticky-notes-zone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+  overflow: hidden;
+}
+
+.sticky-note {
+  position: absolute;
+  width: 140px;
+  min-height: 120px;
+  padding: 12px;
+  box-shadow: 3px 6px 15px rgba(0,0,0,0.3);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+  border-top: 8px solid rgba(0,0,0,0.1);
+  pointer-events: auto;
+  cursor: grab;
+  transition: transform 0.2s;
+}
+
+.sticky-note:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  z-index: 50;
+}
+
+.note-yellow { background: var(--postit-yellow); color: #7a5800; }
+.note-pink { background: var(--postit-pink); color: #9c143c; }
+.note-orange { background: var(--postit-orange); color: #a34e00; }
+.note-blue { background: #d0ebff; color: #1864ab; }
+.note-medical { background: #ffe3e3; color: #c92a2a; border-top-color: #ff8787; }
+
+/* 財政局長 3 階段崩潰實體道具 */
+#director-meltdown-props {
+  position: absolute;
+  left: 20px;
+  bottom: 100px;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.iv-drip-bag {
+  width: 60px;
+  height: 90px;
+  background: rgba(255,255,255,0.7);
+  border: 2px solid #adb5bd;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.iv-liquid {
+  width: 80%;
+  height: 60%;
+  background: #ffc9c9;
+  border-radius: 4px;
+}
+
+.hospital-chart {
+  background: #fff;
+  border: 2px solid #fa5252;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 11px;
+  color: #c92a2a;
+  font-weight: bold;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   公文蓋章系統 (The Bureaucratic Document & Seal)
+   ========================================================================== */
+
+#document-overlay-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 牛皮紙公文卷宗 */
+#official-document {
+  width: 680px;
+  min-height: 520px;
+  background: var(--kraft-paper);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,0.04) 28px);
+  border: 4px solid var(--kraft-dark);
+  border-radius: 4px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.7), inset 0 0 40px rgba(117, 76, 36, 0.2);
+  padding: 35px 45px;
+  position: relative;
+  transform: translateY(-80px) rotate(-1deg);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+#official-document.doc-active {
+  transform: translateY(0) rotate(0deg);
+  opacity: 1;
+}
+
+/* 公文表頭 */
+.doc-header {
+  border-bottom: 3px double #8c6d48;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.doc-gov-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #5c3b1e;
+  letter-spacing: 3px;
+}
+
+.doc-id-stamp {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: #7d5a36;
+  border: 1px dashed #7d5a36;
+  padding: 2px 8px;
+}
+
+.doc-subject {
+  font-size: 19px;
+  font-weight: 900;
+  color: #2b1d0c;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.doc-disclaimer {
+  font-size: 12px;
+  color: #8c6d48;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+/* 決行選項欄 */
+.doc-choices-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.choice-box {
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid #ba9c79;
+  border-radius: 6px;
+  padding: 16px 20px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.choice-box:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--seal-red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.choice-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.choice-name {
+  font-size: 17px;
+  font-weight: 900;
+  color: #3b220c;
+}
+
+.choice-deltas {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.delta-budget { color: #d6336c; }
+.delta-tourism { color: #d9480f; }
+.delta-admin { color: #e67700; }
+.delta-complaints { color: #7048e8; }
+
+/* 官印蓋印特效 (Stamp VFX) */
+.stamp-seal {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-12deg);
+  width: 90px;
+  height: 90px;
+  border: 4px solid var(--seal-red);
+  color: var(--seal-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  pointer-events: none;
+  opacity: 0;
+  transition: transform 0.1s ease-out, opacity 0.1s;
+  mask-image: radial-gradient(circle, black 70%, transparent 100%);
+}
+
+.stamp-active {
+  opacity: 0.9 !important;
+  animation: slamStamp 0.15s ease-out forwards;
+}
+
+@keyframes slamStamp {
+  0% { transform: translateY(-50%) scale(2) rotate(15deg); opacity: 0; }
+  80% { transform: translateY(-50%) scale(0.9) rotate(-15deg); opacity: 1; }
+  100% { transform: translateY(-50%) scale(1) rotate(-12deg); opacity: 0.9; }
+}
+
+/* 另一選項被紅筆粗暴劃掉 */
+.struck-out::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  height: 5px;
+  background: var(--strike-red);
+  transform: rotate(-3deg);
+  box-shadow: 0 0 4px rgba(224, 49, 49, 0.6);
+  pointer-events: none;
+  animation: strikeAnimation 0.2s ease-in forwards;
+}
+
+@keyframes strikeAnimation {
+  0% { width: 0; }
+  100% { width: 90%; }
+}
+
+/* 螢幕震動 (Camera Shake) */
+.screen-shake {
+  animation: shakeViewport 0.25s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shakeViewport {
+  10%, 90% { transform: translate3d(-3px, 2px, 0); }
+  20%, 80% { transform: translate3d(4px, -3px, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 4px, 0); }
+  40%, 60% { transform: translate3d(6px, -4px, 0); }
+}
+
+/* 成就解鎖通知 (Achievement Toast) */
+#achievement-toast-container {
+  position: absolute;
+  top: 75px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 300;
+  pointer-events: none;
+}
+
+.achievement-toast {
+  background: #1a1a1a;
+  border: 2px solid #ffd43b;
+  border-radius: 8px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  color: #fff;
+  min-width: 300px;
+  transform: translateX(120%);
+  transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.achievement-toast.toast-show {
+  transform: translateX(0);
+}
+
+.toast-icon {
+  font-size: 32px;
+}
+
+.toast-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-sub {
+  font-size: 11px;
+  color: #ffd43b;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.toast-title {
+  font-size: 15px;
+  font-weight: bold;
+}

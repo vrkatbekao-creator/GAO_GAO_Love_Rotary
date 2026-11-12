@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>《高高平等：人人有輪坐》 — 市政諷刺模擬</title>
+  <link rel="stylesheet" href="css/desk.css">
+</head>
+<body>
+  <div id="office-desk-container">
+    
+    <!-- 頂部有線電視新聞快訊欄 -->
+    <header id="cable-news-banner">
+      <div class="news-badge">⚡ 獨家快訊</div>
+      <div class="news-ticker-wrap">
+        <div id="news-ticker-text" class="news-ticker-content">
+          【快訊】舊城區天空消失第三天，居民自發舉辦「尋找太陽」燭光晚會。
+        </div>
+      </div>
+      
+      <!-- 市長 5 大幹話發言盒 -->
+      <div class="mayor-quote-box">
+        <div class="mayor-avatar">🎩</div>
+        <div id="mayor-quote-text" class="mayor-text">
+          愛情不是感覺，愛情是本市下個季度的 GDP！
+        </div>
+      </div>
+
+      <!-- 手語翻譯員 AI 模組 -->
+      <div class="interpreter-box">
+        <div id="interpreter-face" class="interpreter-face">😊</div>
+        <div class="interpreter-label">
+          <span class="interpreter-title">手語翻譯</span>
+          <span id="interpreter-mood">專業微笑</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主工作區 (3D 微縮沙盤 + 2D 桌面物件) -->
+    <main id="main-viewport-layout">
+      
+      <!-- 3D 沙盤畫布容器 -->
+      <div id="diorama-3d-wrapper">
+        <canvas id="diorama-canvas"></canvas>
+      </div>
+
+      <!-- 螢幕周遭便利貼遮擋層 (受行政負擔驅動) -->
+      <div id="sticky-notes-zone"></div>
+
+      <!-- 財政局長崩潰進程道具 (受預算赤字驅動) -->
+      <div id="director-meltdown-props"></div>
+
+      <!-- 右側建設行動抽屜按鈕列 -->
+      <nav id="action-drawer">
+        <button class="action-btn" data-action="wheel">
+          <span>🎡 愛情摩天輪</span>
+          <span class="cost-badge">$8億 / 2回</span>
+        </button>
+        <button class="action-btn" data-action="shuttle">
+          <span>🚌 愛情接駁線</span>
+          <span class="cost-badge">$3億 / 即時</span>
+        </button>
+        <button class="action-btn" data-action="market">
+          <span>🏪 愛情商圈</span>
+          <span class="cost-badge">$3億 / 1回</span>
+        </button>
+        <button class="action-btn" data-action="event">
+          <span>💕 巡迴充氣活動</span>
+          <span class="cost-badge">$2億 / 即時</span>
+        </button>
+        <button class="action-btn" data-action="hearing">
+          <span>📋 召開公聽會</span>
+          <span class="cost-badge">$1億 / 催眠</span>
+        </button>
+        <button class="action-btn" data-action="repay">
+          <span>💰 償還債務</span>
+          <span class="cost-badge">上限現金</span>
+        </button>
+        <button class="action-btn" data-action="rest" style="background:#e9ecef;">
+          <span>☕ 暫停建設 (休息)</span>
+          <span class="cost-badge">$0</span>
+        </button>
+      </nav>
+
+      <!-- 行政區/端點選取彈窗 (Zone Selector Modal) -->
+      <div id="zone-picker-modal">
+        <div id="zone-modal-title" class="zone-picker-title">選擇目標行政區</div>
+        <div id="zone-options-grid" class="zone-options-grid"></div>
+        <button id="zone-modal-cancel" class="modal-cancel-btn">取消本項行動</button>
+      </div>
+
+      <!-- 成就解鎖提示浮窗容器 -->
+      <div id="achievement-toast-container"></div>
+    </main>
+
+    <!-- 沙盤底座實體化儀表板 -->
+    <footer id="diorama-base-dashboard">
+      <!-- 7 段 LED 預算顯示器 -->
+      <div class="led-panel">
+        <span class="led-title">NET BUDGET 淨預算餘額</span>
+        <span id="led-budget-val" class="led-value">$24.0 億</span>
+      </div>
+
+      <!-- 核心三項市政指標進度條組 -->
+      <div class="stats-strip">
+        <div class="stat-item">
+          <div class="stat-label-wrap">
+            <span>觀光活力</span>
+            <span id="val-tourism">20</span>
+          </div>
+          <div class="stat-bar-bg">
+            <div id="bar-tourism-fill" class="stat-bar-fill bar-tourism" style="width: 20%;"></div>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label-wrap">
+            <span>行政負擔</span>
+            <span id="val-admin">20</span>
+          </div>
+          <div class="stat-bar-bg">
+            <div id="bar-admin-fill" class="stat-bar-fill bar-admin" style="width: 20%;"></div>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label-wrap">
+            <span>陳情壓力</span>
+            <span id="val-complaints">20</span>
+          </div>
+          <div class="stat-bar-bg">
+            <div id="bar-complaints-fill" class="stat-bar-fill bar-complaints" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 章節與回合進度紀念金屬牌 -->
+      <div class="turn-plaque">
+        <div id="chapter-text" class="turn-chapter">第 1 章</div>
+        <div id="turn-text" class="turn-number">第 1 / 12 回合</div>
+      </div>
+    </footer>
+
+    <!-- 公文蓋章決行覆蓋層 (Document Overlay Modal) -->
+    <div id="document-overlay-modal">
+      <div id="official-document">
+        <div class="doc-header">
+          <div>
+            <div class="doc-gov-title">高雄市市政重大決策簽呈</div>
+            <div id="doc-chapter-label" style="font-size:12px;color:#7d5a36;font-weight:bold;">第 1 章決行</div>
+          </div>
+          <div id="doc-id" class="doc-id-stamp">EV01</div>
+        </div>
+        
+        <div id="doc-title" class="doc-subject">主旨：市長要求超大型願景背板</div>
+        <div class="doc-disclaimer">※ 備註：以下各項方案均屬虛構市政決策，後續影響將由主政首長承擔全責。</div>
+
+        <div id="doc-choices" class="doc-choices-wrap"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 引入遊戲主程式 -->
+  <script type="module">
+    import { GameManager } from './js/game_manager.js';
+    import { DeskUI } from './js/desk_ui.js';
+
+    // 初始化核心實例
+    window.game = new GameManager(42);
+    window.ui = new DeskUI(window.game, {
+      onActionChosen: (action) => {
+        console.log('[Action Chosen]:', action);
+      },
+      onDocumentOpen: () => {
+        console.log('[Document Opened]');
+      },
+      onStampSlam: () => {
+        console.log('[Stamp Slammed]');
+      },
+      onVfxCallback: (vfx) => {
+        console.log('[VFX Triggered]:', vfx);
+      },
+      onGameFinished: (endingKey, snapshot) => {
+        console.log('[Game Finished]:', endingKey, snapshot);
+      }
+    });
+  </script>
+</body>
+</html>
