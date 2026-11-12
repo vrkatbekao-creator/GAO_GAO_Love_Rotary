@@ -1,16 +1,24 @@
 {
   "name": "web",
   "version": "1.0.0",
-  "description": "",
+  "description": "GAO GAO Love Rotary — multilingual satirical municipal strategy game for desktop and mobile",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "node tests/test_game_manager.js && node tests/test_ending_dossier.js && node tests/test_p0_p1_regressions.js && node tests/test_wheel_capacity.js && node tests/test_p2_ending_branches.js && node tests/test_p2_diorama_lifecycle.js && node tests/test_p2_ending_playthroughs.js && node tests/test_zone_picker_scroll.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "game",
+    "browser-game",
+    "threejs",
+    "satire",
+    "strategy",
+    "multilingual",
+    "responsive"
+  ],
+  "author": "VRKatBE (vrkatbekao-creator)",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "three": "^0.187.0"
