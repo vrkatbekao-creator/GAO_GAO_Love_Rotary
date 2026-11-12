@@ -47,7 +47,31 @@ Four ending keys **were not observed** in that sample:
 - `招商成功，命名失敗`
 - `低調完成任務`
 
-The new `test_p2_ending_branches.js` checks that the current JavaScript ending function recognizes all nine keys from synthetic final-state fixtures, including priority when multiple conditions are met. **Synthetic branch coverage is not proof of reachability by valid actions in 12 turns.** Next balance-design pass: search for legal 12-turn action/choice sequences under the zero-/negative-base budgets and log seed, decisions, costs and ending. Do not adjust thresholds without that evidence.
+The `test_p2_ending_branches.js` suite checks the nine ending *conditions* using synthetic states. This is distinct from the following independent **constructive reachability evidence**.
+
+### New: all nine endings reached through legal zero-base JavaScript playthroughs (13/11/2026)
+
+The new `web/tests/test_p2_ending_playthroughs.js` replays nine **complete and legal** 12-round games with exact event IDs and A/B decisions. It asserts validation and final outcome without mutating the engine's internal state.
+
+| Ending | JavaScript seed |
+|---|---:|
+| `預算追加申請中` | 1 |
+| `HIDDEN_S` | 1 |
+| `一城五輪` | 1 |
+| `全市愛情接駁網` | 6 |
+| `仍在協商中的愛情城市` | 4 |
+| `摩天輪旁的夜市` | 11 |
+| `招商成功，命名失敗` | 2421 |
+| `低調完成任務` | 14 |
+| `永遠開不完的協調會` | 3374 |
+
+See `reports/ending_reachability.md` for reproducible strategy descriptions and audited states.
+
+**Execution evidence:** The actual `GameManager`, P0/P1, P2 synthetic-ending, Ferris-wheel picker, and new nine-ending playthrough tests were executed from the fetched GitHub JavaScript source in an isolated V8 runtime. The P2 Three.js lifecycle test logic was also evaluated with minimal Three.js mocks; it was **not** an actual WebGL render test. The full `npm test` and real-browser WebGL QA remain unexecuted.
+
+**What this does and does not prove:** Every ending is attainable for *at least one seed* under the +0.5 億 default fiscal scenario. It does not prove equal probability, high discoverability, or reachability under all three negative-base starting budgets. Historical counts above remain valid as historical sampling statistics, not contradictions.
+
+Do not rebalance thresholds solely because four endings were absent from the old six-strategy simulation suite.
 
 ## Known design questions (not resolved by P2 stability work)
 
