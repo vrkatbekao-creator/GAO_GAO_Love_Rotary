@@ -43,6 +43,7 @@ export class GameManager {
     this.hearing_count = 0;
     this.rapid_stamp_streak = 0;
     this.sponsored_wheel = false;
+    this.pendingEvent = null; // Freeze the displayed event until that turn is resolved
   }
 
   get net_budget() {
@@ -79,9 +80,11 @@ export class GameManager {
   }
 
   covered() {
+    // The end-of-game snapshot is for turn 12, not the next (unplayed) turn.
+    const activeTurn = Math.min(this.turn, CONFIG.rounds);
     const wheelZones = new Set(
       this.buildings
-        .filter(b => b.type === 'wheel' && b.ready_turn <= this.turn && b.zone)
+        .filter(b => b.type === 'wheel' && b.ready_turn <= activeTurn && b.zone)
         .map(b => b.zone)
     );
 
@@ -91,7 +94,7 @@ export class GameManager {
     }
 
     for (const b of this.buildings) {
-      if (b.type === 'shuttle' && b.ready_turn <= this.turn && b.zone && b.to_zone) {
+      if (b.type === 'shuttle' && b.ready_turn <= activeTurn && b.zone && b.to_zone) {
         adj[b.zone].add(b.to_zone);
         adj[b.to_zone].add(b.zone);
       }
@@ -125,29 +128,33 @@ export class GameManager {
   }
 
   peekCurrentEvent() {
-    const chapter = Math.floor((this.turn - 1) / 3) + 1;
-    const candidates = EVENTS.filter(
-      e => e.chapter === chapter && !this.used_events.includes(e.id) && this.eligible(e)
-    );
-    const fixed = candidates.find(e => e.fixed_turn === this.turn);
-    if (fixed) return fixed;
-    const pool = candidates.filter(e => e.fixed_turn == null);
-    if (pool.length === 0) throw new Error(`No eligible events in turn ${this.turn}`);
-    // Deterministic selection based on current RNG state snapshot without consuming permanently or using turn
-    return pool[0];
+    // The first peek selects and caches the event; subsequent peeks do not advance RNG.
+    return this.select_event();
   }
 
   select_event() {
+    if (this.pendingEvent?.turn === this.turn) {
+      return this.pendingEvent.event;
+    }
+
     const chapter = Math.floor((this.turn - 1) / 3) + 1;
     const candidates = EVENTS.filter(
       e => e.chapter === chapter && !this.used_events.includes(e.id) && this.eligible(e)
     );
     const fixed = candidates.find(e => e.fixed_turn === this.turn);
-    if (fixed) return fixed;
-    const pool = candidates.filter(e => e.fixed_turn == null);
-    if (pool.length === 0) throw new Error(`No eligible events in turn ${this.turn}`);
-    const index = Math.floor(this.rng() * pool.length);
-    return pool[index];
+    let selected = fixed;
+    if (!selected) {
+      const pool = candidates.filter(e => e.fixed_turn == null);
+      if (pool.length === 0) throw new Error(`No eligible events in turn ${this.turn}`);
+      selected = pool[Math.floor(this.rng() * pool.length)];
+    }
+    this.pendingEvent = { turn: this.turn, event: selected };
+    return selected;
+  }
+
+  validateAction(action) {
+    this._validate_action(action);
+    return true;
   }
 
   _validate_action(a) {
@@ -266,10 +273,13 @@ export class GameManager {
     this.complaints = Math.max(0, Math.min(100, this.complaints));
   }
 
-  play(action, event_choice = 'A', response_ms = 2000.0) {
+  play(action, event_choice = 'A', response_ms = 2000.0, expected_event_id = null) {
     if (this.finished) throw new Error('Game is already finished');
     this._validate_action(action);
     const e = this.select_event();
+    if (expected_event_id !== null && e.id !== expected_event_id) {
+      throw new Error(`Event mismatch: expected ${expected_event_id}, selected ${e.id}`);
+    }
     if (!['A', 'B'].includes(event_choice)) throw new Error('Invalid event choice');
     const card_choice = e.choices.find(c => c.id === event_choice);
     const old_turn = this.turn;
@@ -317,6 +327,11 @@ export class GameManager {
     }
 
     this.used_events.push(e.id);
+    this.pendingEvent = null;
+    // Award the turn-12 exact-balance achievement before copying achievements into history.
+    if (this.turn === CONFIG.rounds && this.net_budget === 0 && !this.achievements.includes('ACH06')) {
+      this.achievements.push('ACH06');
+    }
     const vfx = e.vfx_callback || 'DEFAULT_EFFECT';
 
     const rec = {
@@ -339,11 +354,8 @@ export class GameManager {
 
     this.history.push(rec);
     this.turn++;
-    if (this.turn === 13) {
+    if (this.turn > CONFIG.rounds) {
       this.finished = true;
-      if (this.net_budget === 0 && !this.achievements.includes('ACH06')) {
-        this.achievements.push('ACH06');
-      }
     }
     return rec;
   }
