@@ -508,7 +508,10 @@ export class DeskUI {
       }
       this.zoneOptionsGrid.appendChild(card);
     }
-    this.zoneModal.style.display = 'block';
+    // Start at the top when a new list is opened; title and cancel stay fixed.
+    this.zoneOptionsGrid.scrollTop = 0;
+    this.zoneModal.style.display = 'flex';
+    this.zoneOptionsGrid.focus?.({ preventScroll: true });
   }
 
   openShuttleModal(callback) {
@@ -559,7 +562,10 @@ export class DeskUI {
       }
       this.zoneOptionsGrid.appendChild(card);
     }
-    this.zoneModal.style.display = 'block';
+    // Start at the top when a new list is opened; title and cancel stay fixed.
+    this.zoneOptionsGrid.scrollTop = 0;
+    this.zoneModal.style.display = 'flex';
+    this.zoneOptionsGrid.focus?.({ preventScroll: true });
   }
 
   closeZoneModal() {
