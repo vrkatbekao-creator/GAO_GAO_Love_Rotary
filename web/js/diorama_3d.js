@@ -279,6 +279,49 @@ export class Diorama3D {
     this.zoneMeshes['山城區'] = mountainGroup;
   }
 
+  reset() {
+    // Rebuild a clean scene including citizens, buses, effects and meshes.
+    // Keep the existing renderer and camera; never start a second animation loop.
+    const previous = this.scene;
+    const disposeMaterial = material => {
+      if (Array.isArray(material)) material.forEach(disposeMaterial);
+      else if (material) material.dispose?.();
+    };
+    previous.traverse(obj => {
+      obj.geometry?.dispose?.();
+      disposeMaterial(obj.material);
+    });
+    this.wheels = [];
+    this.shuttles = [];
+    this.markets = [];
+    this.inflatables = [];
+    this.particles = [];
+    this.disasterObjects = [];
+    const camera = this.camera;
+    const renderer = this.renderer;
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0x352115);
+    this.scene.fog = new THREE.FogExp2(0x352115, 0.018);
+    this.camera = camera;
+    this.renderer = renderer;
+    const ambient = new THREE.AmbientLight(0xfff3e6, 0.75);
+    this.scene.add(ambient);
+    const sun = new THREE.DirectionalLight(0xfffaed, 1.3);
+    sun.position.set(25, 35, 20);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.near = 0.5;
+    sun.shadow.camera.far = 80;
+    Object.assign(sun.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16 });
+    this.scene.add(sun);
+    const neon = new THREE.PointLight(0x00f5d4, 1.5, 18);
+    neon.position.set(6, 5, 4);
+    this.scene.add(neon);
+    this.createDioramaBase();
+    this.createZones();
+    this.citizenAI = new CitizenAI(this);
+  }
+
   /**
    * 上帝之手空投摩天輪 (God-Hand Airdrop)
    */

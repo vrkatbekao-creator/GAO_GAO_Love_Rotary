@@ -1,32 +1,25 @@
 # 《高高平等：人人有輪坐》 — v0.4 multi-agent development kit
 
-**Version:** v0.4 design + deterministic engine prototype (2026-11-05)
+**Version:** Browser prototype + deterministic engine (zero-/negative-base fiscal edition). The P0/P1 fixes are proposed on a review branch, pending browser QA.
 
 ## Important distinction
 
-The **AI agents design and review the game**. They are **not NPCs inside the game**. The playable game remains a 12-round, 5-zone, policy-event-driven management satire.
+The **AI agents design and review the game**. They are **not NPCs inside the game**. The playable game remains a 12-round, 5-zone, policy-event-driven management satire. The default start is **+0.5 億 net budget**, with selectable **−6 / −12 / −18 億** negative-base scenarios and custom starts within +0.5 to −18; the old +24 億 opening is legacy test data, not the current default.
 
-This directory is a handoff package for an external multi-agent coding system. It supplies six specialist role specifications, an orchestrator workflow, canonical game data, a runnable rules prototype, and reproducible tests. **The roles have not been instantiated as six independently running LLMs in this session.** The provided Python tests are real and were executed; the role prompt files are ready for an external agent runner.
+This repository includes a playable browser prototype in `web/`, a standalone Python engine, canonical data, and reproducible tests. External development agents are **not** in-game NPCs. The previously documented `agents/` role prompts were removed from the current repository; the multi-agent workflow document remains as historical planning material. Prior Python QA results are recorded in `reports/`, but they are not a substitute for browser regression testing.
 
 ## File map
 
-- `agents/orchestrator.md` — ownership, dependency graph, review/merge process
-- `agents/A1_game_design.md` — gameplay specialist prompt
-- `agents/A2_economy.md` — balancing specialist prompt
-- `agents/A3_narrative.md` — event/story specialist prompt
-- `agents/A4_engineering.md` — implementation specialist prompt
-- `agents/A5_ui_ux.md` — interface specialist prompt
-- `agents/A6_qa_redteam.md` — independent QA specialist prompt
-- `docs/game_rules.md` — v0.4 gameplay contract
-- `docs/multiagent_workflow.md` — staged orchestration, contracts and gates
-- `docs/ui_spec.md` — UI/UX structure for future playable browser build
-- `data/events.json` — 36 Chinese event cards, 4 fixed chapter events
-- `data/buildings.json` — cost and economic model
-- `src/engine.py` — playable-in-code rule engine; no browser UI yet
-- `tests/test_engine.py` — functional unit tests
-- `tests/balance_sim.py` — six scripted (non-LLM) test policies × 200 seeds
-- `reports/balance_report.json` — measured simulation results
-- `reports/qa_report.md` — validation findings and gaps
+- `web/index.html` — playable browser entry point, 3D diorama and document-stamping interaction
+- `web/js/game_manager.js` — browser rules engine, events and endings
+- `web/js/desk_ui.js` — turn UI and language / budget controls
+- `web/js/diorama_3d.js` — Three.js visualization and scene reset
+- `web/tests/` — JavaScript unit and regression checks
+- `docs/game_rules.md` — current canonical fiscal rules
+- `docs/multiagent_workflow.md` — historical external development-agent design
+- `data/events.json` / `data/buildings.json` — canonical gameplay data
+- `src/engine.py` — standalone Python simulation engine
+- `tests/` / `reports/` — Python tests and previously recorded balance simulation results
 
 ## Run locally (Python 3.10+)
 
@@ -36,7 +29,7 @@ python tests/balance_sim.py
 python src/engine.py
 ```
 
-There are no external Python dependencies.
+To play in a browser, run `python -m http.server 8000` in the repo root and open `http://localhost:8000/web/` (or use `start_game.bat` on Windows). For JavaScript tests run `cd web && npm test` with Node.js installed. Python has no external dependencies; the browser bundles Three.js locally. **Browser QA and cross-engine parity remain to be verified.**
 
 ## Policy/fiction notice
 
