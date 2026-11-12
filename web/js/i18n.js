@@ -522,35 +522,85 @@ export const MAYOR_QUOTES = {
     "地球是圓的，經濟不能是平的！讓整座城市跟著摩天輪轉出偉大！",
     "這不叫浪費預算，這叫浪漫的基礎建設！",
     "貨櫃裡裝的不再是零件，而是純粹的愛情！",
-    "年輕人談戀愛看存摺嗎？這不叫赤字，這叫愛情的先行投資！"
+    "年輕人談戀愛看存摺嗎？這不叫赤字，這叫愛情的先行投資！",
+    "誰說太平島只能採石油？只要心中有愛，挖出來的每一滴都是玫瑰精油！",
+    "貨出得去，人進得來，情侶全部留下來，整座城市發大財！",
+    "迪士尼不來是他們的損失！我們自己蓋的摩天輪，比白雪公主的城堡壯觀十倍！",
+    "立足市府、放眼世界、征服宇宙！外星人坐飛碟來，第一站也是要來坐摩天輪！",
+    "外界對我們愛情赤字的批評，就像假睫毛一樣，大風一吹就現出原形！",
+    "頭痛醫頭、腳痛醫腳，愛情不順就來坐摩天輪，轉一圈保證藥到病除！",
+    "公務員不要老想著吹冷氣！預算赤字心裡發慌，就去洗冷水澡，腦袋馬上清醒！",
+    "蓋摩天輪引來的是金鳳凰！那些嫌80度接駁公車太陡會吐的，根本不懂翱翔的滋味！",
+    "香港有賽馬、澳門有賭場，我們要打造全球第一條『純愛賽人道』，跑贏的送摩天輪產權！",
+    "我已經親自寫信給好萊塢巨星，等他搭完我們的雲霄接駁車，保證全球票房破百億！"
   ],
   en: [
     "Love isn't just a feeling; love is this city's next quarter GDP!",
     "The Earth is round, the economy can't be flat! Spin the city into greatness!",
     "This isn't wasting the budget; this is romantic infrastructure!",
     "The containers at the port no longer hold auto parts, but pure romance!",
-    "Do young lovers check their bank balance? This isn't a deficit, it's an advance in love!"
+    "Do young lovers check their bank balance? This isn't a deficit, it's an advance in love!",
+    "Who says Taiping Island can only pump oil? With love in our hearts, every drop we drill is rose essential oil!",
+    "Goods flow out, people flood in, lovers stay forever, and the whole city strikes it rich!",
+    "Disney refusing to come is Disney's loss! Our own Ferris wheel is ten times grander than Snow White's castle!",
+    "Anchored in City Hall, eyeing the world, conquering the universe! Even aliens in UFOs will queue for our wheel!",
+    "Criticism of our romance deficit is just like fake eyelashes—one gust of wind and truth is revealed!",
+    "Pills cure headaches, but for heartbreak, ride our Ferris wheel—one rotation cures every disease!",
+    "Civil servants shouldn't dream of air conditioning! Panicking over deficits? Take a cold shower to clear your head!",
+    "Building Ferris wheels attracts golden phoenixes! Those crying over 80° shuttle nausea don't know the thrill of soaring!",
+    "Hong Kong has horse races, Macau has casinos; we shall build the world's first 'Pure Love Sprint Track'!",
+    "I personally wrote to Hollywood superstars; once they ride our roller-coaster shuttle, global box offices will explode!"
   ],
   ja: [
     "愛は感情ではない。愛は我が市の次期四半期GDPである！",
     "地球は丸い、経済を平坦にしてはならない！観覧車とともに偉大になろう！",
     "これは予算の無駄遣いではない、ロマンチックなインフラ整備だ！",
     "港のコンテナに詰まっているのは部品ではなく、純粋な愛だ！",
-    "若者が恋をするのに預金通帳を見るかね？これは赤字ではなく愛の先行投資だ！"
+    "若者が恋をするのに預金通帳を見るかね？これは赤字ではなく愛の先行投資だ！",
+    "孤島で石油しか掘れないと誰が決めた？心に愛さえあれば、湧き出る一滴一滴がローズアロマオイルだ！",
+    "モノは外へ、ヒトは中へ、カップルは永遠に留まり、我が市は大儲けだ！",
+    "ディズニーが来ないのはあちらの損失だ！我らの観覧車は白雪姫の城の十倍雄大である！",
+    "市庁舎に立ち、世界を見据え、宇宙を征服する！UFOの宇宙人も最初に並ぶのは我が観覧車だ！",
+    "我が市のロマンス赤字への批判などつけまつげと同じだ。突風が吹けばたちまち剥がれ落ちる！",
+    "頭痛には頭の薬、足痛には足の薬、失恋したら観覧車に乗れ！一回転で万病退散だ！",
+    "公務員はエアコンばかり気にするな！赤字でパニックになったら冷水シャワーを浴びれば頭は即座に冴え渡る！",
+    "観覧車が呼び寄せるのは黄金の不死鳥だ！80度バスで吐き気を訴える連中は大空を翔ける快感を知らんのだ！",
+    "香港に競馬、マカオにカジノがあるなら、我が市には世界初の『純愛徒競走』だ！勝者には観覧車の所有権を授与する！",
+    "ハリウッドの大スターに親書を送った。当市の絶叫シャトルに乗れば世界興行収入100億ドル突破は確実だ！"
   ],
   fr: [
     "L'amour n'est pas un sentiment, l'amour est le PIB du prochain trimestre !",
     "La Terre est ronde, l'économie ne peut être plate ! Que la Grande Roue nous rende grands !",
     "Ce n'est pas du gaspillage d'argent public, c'est de l'infrastructure romantique !",
     "Nos conteneurs portuaires ne contiennent plus de pièces, mais de l'amour pur !",
-    "Les jeunes regardent-ils leur compte en banque quand ils s'aiment ? C'est un investissement !"
+    "Les jeunes regardent-ils leur compte en banque quand ils s'aiment ? C'est un investissement !",
+    "Qui a dit qu'on ne pouvait forer que du pétrole ? Avec de l'amour, chaque goutte extraite est de l'huile de rose !",
+    "Les marchandises sortent, les foules entrent, les amoureux restent, et la ville fait fortune !",
+    "Si Disney refuse de venir, c'est leur perte ! Notre Grande Roue est dix fois plus grandiose que le château de Blanche-Neige !",
+    "Ancrés à la mairie, regardant le monde, conquérant l'univers ! Même les extraterrestres feront la queue pour la Grande Roue !",
+    "Les critiques sur notre déficit romantique sont comme de faux cils : un coup de vent et la vérité apparaît !",
+    "Des cachets contre le mal de tête, mais pour un chagrin d'amour, un tour de Grande Roue guérit tous les maux !",
+    "Les fonctionnaires ne doivent pas rêver de clim ! Paniqué par le déficit ? Une douche froide et l'esprit s'illumine !",
+    "Construire des Grandes Roues attire les phénix dorés ! Ceux qui vomissent dans la navette à 80° ignorent le frisson de l'envol !",
+    "Hong Kong a ses courses, Macao ses casinos ; nous aurons la première 'Piste de Sprint Amour Pur' du monde !",
+    "J'ai écrit personnellement aux superstars d'Hollywood ; une fois dans notre navette grand huit, le box-office mondial explosera !"
   ],
   nl: [
     "Liefde is geen gevoel; liefde is het bbp van deze stad voor het komende kwartaal!",
     "De aarde is rond, onze economie mag niet plat zijn! Laat het reuzenrad ons groot maken!",
     "Dit is geen belastingverspilling, dit is romantische infrastructuur!",
     "Onze havencontainers bevatten geen auto-onderdelen meer, maar pure romantiek!",
-    "Kijken verliefde jongeren naar hun spaarrekening? Dit is geen tekort, dit is voorinvestering!"
+    "Kijken verliefde jongeren naar hun spaarrekening? Dit is geen tekort, dit is voorinvestering!",
+    "Wie zegt dat we alleen olie kunnen boren? Met liefde in ons hart is elke geboorde druppel pure rozenolie!",
+    "Goederen gaan naar buiten, mensen stomen binnen, verliefden blijven voorgoed, en de stad wordt schathemelrijk!",
+    "Als Disney niet wil komen, is dat hún verlies! Ons eigen reuzenrad is tien keer grootser dan het kasteel van Sneeuwwitje!",
+    "Verankerd in het stadhuis, kijkend naar de wereld, het heelal veroverend! Zelfs aliens in ufo's zullen in de rij staan voor ons rad!",
+    "Kritiek op ons romantiektekort is net als valse wimpers: één windvlaag en de waarheid ligt op straat!",
+    "Pillen voor hoofdpijn, maar bij liefdesverdriet neem je het reuzenrad: één rondje en alle kwalen zijn genezen!",
+    "Ambtenaren moeten niet dromen van airco! Paniek door tekorten? Neem een koude douche en je hoofd is meteen weer helder!",
+    "Reuzenraderen bouwen lokt gouden feniksen! Wie klaagt over kotsen in de 80°-shuttle kent de sensatie van het vliegen niet!",
+    "Hongkong heeft paardenraces, Macau casino's; wij bouwen 's werelds eerste 'Pure Liefde Sprintbaan'!",
+    "Ik heb persoonlijk Hollywood-sterren aangeschreven; na een rit in onze achtbaanshuttle ontploft de wereldwijde box office!"
   ]
 };
 
