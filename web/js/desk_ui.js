@@ -1,5 +1,8 @@
 import { GameManager } from './game_manager.js';
 import { CONFIG, NARRATIVE } from './game_data.js';
+import { t, getLocale, setLocale, ZONE_NAMES, MAYOR_QUOTES, NEWS_TICKER, INTERPRETER_MOODS } from './i18n.js';
+import { getLocalizedEvent } from './i18n_events.js';
+import { ACHIEVEMENTS_I18N } from './i18n_endings.js';
 
 export class DeskUI {
   constructor(gameManager, options = {}) {
@@ -8,10 +11,13 @@ export class DeskUI {
     this.currentPendingAction = null;
     this.docOpenedTimestamp = 0;
     this.displayedAchievements = new Set();
+    this.quoteIdx = 0;
+    this.tickerIdx = 0;
 
     this.initDOMElements();
     this.bindEvents();
     this.startBackgroundSimulations();
+    this.updateLanguageStrings();
     this.updateAllDisplays();
   }
 
@@ -29,10 +35,13 @@ export class DeskUI {
     this.chapterText = document.getElementById('chapter-text');
 
     // News banner
+    this.newsBadge = document.querySelector('.news-badge');
     this.newsTicker = document.getElementById('news-ticker-text');
     this.mayorQuote = document.getElementById('mayor-quote-text');
     this.interpreterFace = document.getElementById('interpreter-face');
     this.interpreterMood = document.getElementById('interpreter-mood');
+    this.interpreterTitle = document.getElementById('label-interpreter-title');
+    this.langSelect = document.getElementById('lang-select');
 
     // Props & modals
     this.stickyNotesZone = document.getElementById('sticky-notes-zone');
@@ -42,6 +51,10 @@ export class DeskUI {
     this.docModal = document.getElementById('document-overlay-modal');
     this.officialDoc = document.getElementById('official-document');
     this.toastContainer = document.getElementById('achievement-toast-container');
+
+    if (this.langSelect) {
+      this.langSelect.value = getLocale();
+    }
   }
 
   bindEvents() {
@@ -56,6 +69,67 @@ export class DeskUI {
     document.getElementById('zone-modal-cancel')?.addEventListener('click', () => {
       this.closeZoneModal();
     });
+
+    // Language dropdown change
+    if (this.langSelect) {
+      this.langSelect.addEventListener('change', (e) => {
+        setLocale(e.target.value);
+        this.updateLanguageStrings();
+        this.updateAllDisplays();
+      });
+    }
+  }
+
+  updateLanguageStrings() {
+    const lang = getLocale();
+    document.title = t('app_title');
+
+    if (this.newsBadge) this.newsBadge.textContent = t('news_badge');
+    if (this.interpreterTitle) this.interpreterTitle.textContent = t('interpreter_title');
+
+    // Dashboard labels
+    const ledTitle = document.querySelector('.led-title');
+    if (ledTitle) ledTitle.textContent = t('net_budget_label');
+
+    const statLabels = document.querySelectorAll('.stat-label-wrap span:first-child');
+    if (statLabels[0]) statLabels[0].textContent = t('tourism_label');
+    if (statLabels[1]) statLabels[1].textContent = t('admin_label');
+    if (statLabels[2]) statLabels[2].textContent = t('complaints_label');
+
+    // Action buttons labels
+    const actionDefs = [
+      { type: 'wheel', title: 'act_wheel', cost: 'act_wheel_cost' },
+      { type: 'shuttle', title: 'act_shuttle', cost: 'act_shuttle_cost' },
+      { type: 'market', title: 'act_market', cost: 'act_market_cost' },
+      { type: 'event', title: 'act_event', cost: 'act_event_cost' },
+      { type: 'hearing', title: 'act_hearing', cost: 'act_hearing_cost' },
+      { type: 'repay', title: 'act_repay', cost: 'act_repay_cost' },
+      { type: 'rest', title: 'act_rest', cost: 'act_rest_cost' }
+    ];
+
+    actionDefs.forEach(def => {
+      const btn = document.querySelector(`[data-action="${def.type}"]`);
+      if (btn) {
+        const titleSpan = btn.querySelector('span:first-child');
+        const costBadge = btn.querySelector('.cost-badge');
+        if (titleSpan) titleSpan.textContent = t(def.title);
+        if (costBadge) costBadge.textContent = t(def.cost);
+      }
+    });
+
+    // Modal cancel button
+    const cancelBtn = document.getElementById('zone-modal-cancel');
+    if (cancelBtn) cancelBtn.textContent = t('modal_cancel');
+
+    // Current quotes & ticker
+    const quotes = MAYOR_QUOTES[lang] || MAYOR_QUOTES.zh;
+    if (this.mayorQuote) {
+      this.mayorQuote.textContent = quotes[this.quoteIdx % quotes.length];
+    }
+    const tickers = NEWS_TICKER[lang] || NEWS_TICKER.zh;
+    if (this.newsTicker) {
+      this.newsTicker.textContent = tickers[this.tickerIdx % tickers.length];
+    }
   }
 
   handleActionClick(type) {
@@ -63,7 +137,7 @@ export class DeskUI {
 
     // Turn 1 mandatory constraint reminder
     if (this.gm.turn === 1 && type !== 'wheel') {
-      alert('【市長重大指示】第 1 回合為「愛情起飛」！\n長官要求必須先在某一行政區空投第一座「🎡 愛情摩天輪」作為城市標竿！');
+      alert(t('turn1_mandatory_alert'));
       return;
     }
 
@@ -86,29 +160,35 @@ export class DeskUI {
   }
 
   openZoneModal(actionType, callback) {
+    const lang = getLocale();
     const titles = {
-      wheel: '🎡 選擇摩天輪空投行政區 (花費 $8 億)',
-      market: '🏪 選擇愛情商圈進駐行政區 (花費 $3 億)',
-      event: '💕 選擇免洗巡迴活動舉辦區 (花費 $2 億)'
+      wheel: t('zone_select_title_wheel'),
+      shuttle: t('zone_select_title_shuttle'),
+      market: t('zone_select_title_market'),
+      event: t('zone_select_title_event')
     };
-    document.getElementById('zone-modal-title').textContent = titles[actionType] || '選擇目標區域';
+    document.getElementById('zone-modal-title').textContent = titles[actionType] || 'Select Zone';
     this.zoneOptionsGrid.innerHTML = '';
+
+    const zoneDict = ZONE_NAMES[lang] || ZONE_NAMES.zh;
 
     for (const z of CONFIG.zones) {
       const meta = CONFIG.zone_metadata[z];
+      const zInfo = zoneDict[z] || { display: meta.display_name, desc: meta.description };
+
       const card = document.createElement('div');
       card.className = 'zone-select-card';
       
       const count = this.gm.count_zone(actionType, z);
-      let statusText = `現有: ${count}`;
+      let statusText = t('zone_status_existing', count);
       if (actionType === 'wheel' && z === '舊城區') {
-        statusText += ' (上限 3 座可穿模)';
+        statusText = t('zone_status_old_town', count);
       }
       
       card.innerHTML = `
         <div>
-          <strong>${meta.display_name}</strong> (高度 ${meta.elevation})
-          <div style="font-size:11px;color:#666;">${meta.description}</div>
+          <strong>${zInfo.display}</strong> (Elev. ${meta.elevation})
+          <div style="font-size:11px;color:#666;">${zInfo.desc}</div>
         </div>
         <span style="font-size:12px;color:#d9480f;font-weight:bold;">${statusText}</span>
       `;
@@ -123,8 +203,11 @@ export class DeskUI {
   }
 
   openShuttleModal(callback) {
-    document.getElementById('zone-modal-title').textContent = '🚌 選擇長官紅筆接駁軌道端點 (花費 $3 億)';
+    const lang = getLocale();
+    document.getElementById('zone-modal-title').textContent = t('zone_select_title_shuttle');
     this.zoneOptionsGrid.innerHTML = '';
+
+    const zoneDict = ZONE_NAMES[lang] || ZONE_NAMES.zh;
 
     const pairs = [];
     for (let i = 0; i < CONFIG.zones.length; i++) {
@@ -146,14 +229,17 @@ export class DeskUI {
 
       let specialTag = '';
       if ([p.z1, p.z2].includes('港灣區') && [p.z1, p.z2].includes('山城區')) {
-        specialTag = '<span style="color:#e03131;font-weight:bold;"> [80度落差-解鎖牛頓眼淚]</span>';
+        specialTag = `<span style="color:#e03131;font-weight:bold;">${t('shuttle_newton_tag')}</span>`;
       }
+
+      const name1 = zoneDict[p.z1]?.display || p.z1;
+      const name2 = zoneDict[p.z2]?.display || p.z2;
 
       card.innerHTML = `
         <div>
-          <strong>${CONFIG.zone_metadata[p.z1].display_name} ⟷ ${CONFIG.zone_metadata[p.z2].display_name}</strong>${specialTag}
+          <strong>${name1} ⟷ ${name2}</strong>${specialTag}
         </div>
-        <span style="font-size:12px;color:#2b8a3e;font-weight:bold;">${p.exists ? '已連通' : '點擊拉線'}</span>
+        <span style="font-size:12px;color:#2b8a3e;font-weight:bold;">${p.exists ? t('shuttle_connected') : t('shuttle_build')}</span>
       `;
 
       if (!p.exists) {
@@ -173,34 +259,31 @@ export class DeskUI {
 
   executeTurnAction(action) {
     this.currentPendingAction = action;
-    // Broadcast action event for 3D diorama VFX in Stage 3
     if (this.options.onActionChosen) {
       this.options.onActionChosen(action);
     }
-    // Present the event document for stamping
     this.presentEventDocument();
   }
 
   presentEventDocument() {
-    // Select the event for this turn
-    let ev;
+    let rawEv;
     try {
-      ev = this.gm.select_event();
+      rawEv = this.gm.select_event();
     } catch (err) {
       console.error(err);
       return;
     }
 
-    this.currentEvent = ev;
+    const lang = getLocale();
+    const ev = getLocalizedEvent(rawEv, lang);
+    this.currentEvent = rawEv; // Keep raw event for GameManager
     this.docOpenedTimestamp = performance.now();
 
-    // Trigger Bokeh Blur on 3D Diorama
     this.dioramaWrapper.classList.add('bokeh-blur');
 
-    // Populate document content
     document.getElementById('doc-id').textContent = ev.id;
-    document.getElementById('doc-chapter-label').textContent = `第 ${ev.chapter} 章決行`;
-    document.getElementById('doc-title').textContent = `主旨：${ev.title}`;
+    document.getElementById('doc-chapter-label').textContent = t('chapter_format', ev.chapter);
+    document.getElementById('doc-title').textContent = `${ev.title}`;
 
     const choicesContainer = document.getElementById('doc-choices');
     choicesContainer.innerHTML = '';
@@ -211,17 +294,18 @@ export class DeskUI {
       box.id = `choice-box-${ch.id}`;
 
       const deltaSpans = [];
-      if (ch.delta.budget !== 0) deltaSpans.push(`<span class="delta-budget">預算 ${ch.delta.budget > 0 ? '+' : ''}${ch.delta.budget}億</span>`);
-      if (ch.delta.tourism !== 0) deltaSpans.push(`<span class="delta-tourism">觀光 ${ch.delta.tourism > 0 ? '+' : ''}${ch.delta.tourism}</span>`);
-      if (ch.delta.admin !== 0) deltaSpans.push(`<span class="delta-admin">行政負擔 ${ch.delta.admin > 0 ? '+' : ''}${ch.delta.admin}</span>`);
-      if (ch.delta.complaints !== 0) deltaSpans.push(`<span class="delta-complaints">陳情 ${ch.delta.complaints > 0 ? '+' : ''}${ch.delta.complaints}</span>`);
+      const unit = t('unit_yi');
+      if (ch.delta.budget !== 0) deltaSpans.push(`<span class="delta-budget">${t('net_budget_label')}: ${ch.delta.budget > 0 ? '+' : ''}${ch.delta.budget}${unit}</span>`);
+      if (ch.delta.tourism !== 0) deltaSpans.push(`<span class="delta-tourism">${t('tourism_label')}: ${ch.delta.tourism > 0 ? '+' : ''}${ch.delta.tourism}</span>`);
+      if (ch.delta.admin !== 0) deltaSpans.push(`<span class="delta-admin">${t('admin_label')}: ${ch.delta.admin > 0 ? '+' : ''}${ch.delta.admin}</span>`);
+      if (ch.delta.complaints !== 0) deltaSpans.push(`<span class="delta-complaints">${t('complaints_label')}: ${ch.delta.complaints > 0 ? '+' : ''}${ch.delta.complaints}</span>`);
 
       box.innerHTML = `
         <div class="choice-label-row">
-          <span class="choice-name">【方案 ${ch.id}】 ${ch.label}</span>
-          <div class="choice-deltas">${deltaSpans.join('') || '<span style="color:#888;">無數值異動</span>'}</div>
+          <span class="choice-name">【${ch.id}】 ${ch.label}</span>
+          <div class="choice-deltas">${deltaSpans.join(' | ') || '<span style="color:#888;">0</span>'}</div>
         </div>
-        <div class="stamp-seal" id="seal-${ch.id}">如擬</div>
+        <div class="stamp-seal" id="seal-${ch.id}">${t('stamp_approved')}</div>
       `;
 
       box.addEventListener('click', () => {
@@ -236,7 +320,6 @@ export class DeskUI {
       this.officialDoc.classList.add('doc-active');
     });
 
-    // Notify Audio engine of document slide-in (ducking)
     if (this.options.onDocumentOpen) {
       this.options.onDocumentOpen();
     }
@@ -248,29 +331,23 @@ export class DeskUI {
     const otherChoiceId = choiceId === 'A' ? 'B' : 'A';
     const otherBox = document.getElementById(`choice-box-${otherChoiceId}`);
 
-    // Wooden seal slam animation
     if (seal) seal.classList.add('stamp-active');
-    // Struck-out red pen line on rejected choice
     if (otherBox) otherBox.classList.add('struck-out');
 
-    // 0.2s Screen shake
     this.container.classList.add('screen-shake');
     setTimeout(() => {
       this.container.classList.remove('screen-shake');
     }, 250);
 
-    // Audio callback on stamp slam
     if (this.options.onStampSlam) {
       this.options.onStampSlam();
     }
 
-    // Resolve turn after stamp animation finishes
     setTimeout(() => {
       this.officialDoc.classList.remove('doc-active');
       this.dioramaWrapper.classList.remove('bokeh-blur');
       this.docModal.style.display = 'none';
 
-      // Execute in GameManager
       try {
         const turnResult = this.gm.play(this.currentPendingAction, choiceId, elapsedMs);
         this.onTurnResolved(turnResult);
@@ -283,12 +360,10 @@ export class DeskUI {
   onTurnResolved(result) {
     this.updateAllDisplays();
 
-    // Trigger VFX callback for 3D stage
     if (this.options.onVfxCallback && result.vfx_callback) {
       this.options.onVfxCallback(result.vfx_callback);
     }
 
-    // Check newly unlocked achievements
     for (const achId of result.achievements) {
       if (!this.displayedAchievements.has(achId)) {
         this.displayedAchievements.add(achId);
@@ -296,7 +371,6 @@ export class DeskUI {
       }
     }
 
-    // Game Finished check
     if (this.gm.finished) {
       setTimeout(() => {
         if (this.options.onGameFinished) {
@@ -307,16 +381,21 @@ export class DeskUI {
   }
 
   showAchievementToast(achId) {
-    const ach = NARRATIVE.achievements.find(a => a.id === achId);
+    const lang = getLocale();
+    const ach = ACHIEVEMENTS_I18N[achId]?.[lang] || ACHIEVEMENTS_I18N[achId]?.zh;
     if (!ach) return;
+
+    const icons = {
+      ACH01: '🎢', ACH02: '⚡', ACH03: '🎡', ACH04: '💤', ACH05: '🤖', ACH06: '🎯'
+    };
 
     const toast = document.createElement('div');
     toast.className = 'achievement-toast';
     toast.innerHTML = `
-      <div class="toast-icon">${ach.icon}</div>
+      <div class="toast-icon">${icons[achId] || '🏆'}</div>
       <div class="toast-text">
-        <span class="toast-sub">★ 達成成就 UNLOCKED</span>
-        <span class="toast-title">${ach.title}：${ach.description}</span>
+        <span class="toast-sub">${t('unlocked_achievement')}</span>
+        <span class="toast-title">${ach.title}：${ach.desc}</span>
       </div>
     `;
 
@@ -332,16 +411,15 @@ export class DeskUI {
   }
 
   updateAllDisplays() {
-    // LED Budget
     const nb = this.gm.net_budget;
-    this.ledBudget.textContent = `${nb >= 0 ? '$' : '-$'}${Math.abs(nb).toFixed(1)} 億`;
+    const unit = t('unit_yi');
+    this.ledBudget.textContent = `${nb >= 0 ? '$' : '-$'}${Math.abs(nb).toFixed(1)} ${unit}`;
     if (nb < 0) {
       this.ledBudget.classList.add('led-deficit');
     } else {
       this.ledBudget.classList.remove('led-deficit');
     }
 
-    // Stats progress bars
     this.barTourism.style.width = `${this.gm.tourism}%`;
     this.valTourism.textContent = `${this.gm.tourism}`;
     this.barAdmin.style.width = `${this.gm.admin}%`;
@@ -349,19 +427,13 @@ export class DeskUI {
     this.barComplaints.style.width = `${this.gm.complaints}%`;
     this.valComplaints.textContent = `${this.gm.complaints}`;
 
-    // Turn / Chapter
     const currentChapter = Math.min(4, Math.floor((this.gm.turn - 1) / 3) + 1);
     const displayTurn = Math.min(12, this.gm.turn);
-    this.turnText.textContent = `第 ${displayTurn} / 12 回合`;
-    this.chapterText.textContent = `第 ${currentChapter} 章`;
+    this.turnText.textContent = t('turn_format', displayTurn);
+    this.chapterText.textContent = t('chapter_format', currentChapter);
 
-    // Dynamic sticky notes based on Admin burden
     this.renderStickyNotes();
-
-    // Finance director meltdown props
     this.renderMeltdownProps();
-
-    // Disable unaffordable build actions
     this.updateActionButtonsAvailability();
   }
 
@@ -370,7 +442,6 @@ export class DeskUI {
       const type = btn.dataset.action;
       const bInfo = CONFIG.buildings[type];
       
-      // Turn 1 guidance
       if (this.gm.turn === 1) {
         if (type === 'wheel') {
           btn.style.boxShadow = '0 0 15px #ffd43b, 0 4px 10px rgba(0,0,0,0.5)';
@@ -416,7 +487,6 @@ export class DeskUI {
       note.className = `sticky-note ${colors[i % colors.length]}`;
       const rot = (i % 2 === 0 ? -1 : 1) * (5 + (i * 4) % 15);
       
-      // Position around perimeter
       if (i < 2) {
         note.style.left = `${15 + i * 160}px`;
         note.style.top = '70px';
@@ -465,19 +535,20 @@ export class DeskUI {
   }
 
   startBackgroundSimulations() {
-    // Mayor quote rotation every 10 seconds
-    let quoteIdx = 0;
+    // Mayor quote rotation
     setInterval(() => {
-      quoteIdx = (quoteIdx + 1) % NARRATIVE.mayor_quotes.length;
+      this.quoteIdx++;
+      const lang = getLocale();
+      const quotes = MAYOR_QUOTES[lang] || MAYOR_QUOTES.zh;
       if (this.mayorQuote) {
-        this.mayorQuote.textContent = NARRATIVE.mayor_quotes[quoteIdx];
+        this.mayorQuote.textContent = quotes[this.quoteIdx % quotes.length];
       }
-      // Update interpreter avatar based on quote content
-      if (quoteIdx % 4 === 0) {
+      
+      if (this.quoteIdx % 4 === 0) {
         this.setInterpreterState('facepalm');
-      } else if (quoteIdx % 3 === 0) {
+      } else if (this.quoteIdx % 3 === 0) {
         this.setInterpreterState('frown');
-      } else if (quoteIdx % 5 === 0) {
+      } else if (this.quoteIdx % 5 === 0) {
         this.setInterpreterState('strike_x');
       } else {
         this.setInterpreterState('calm');
@@ -485,17 +556,20 @@ export class DeskUI {
     }, 9000);
 
     // News ticker rotation
-    let tickerIdx = 0;
     setInterval(() => {
-      tickerIdx = (tickerIdx + 1) % NARRATIVE.news_ticker.length;
+      this.tickerIdx++;
+      const lang = getLocale();
+      const tickers = NEWS_TICKER[lang] || NEWS_TICKER.zh;
       if (this.newsTicker) {
-        this.newsTicker.textContent = NARRATIVE.news_ticker[tickerIdx].text;
+        this.newsTicker.textContent = tickers[this.tickerIdx % tickers.length];
       }
     }, 12000);
   }
 
   setInterpreterState(stateKey) {
-    const state = NARRATIVE.interpreter_states[stateKey] || NARRATIVE.interpreter_states.calm;
+    const lang = getLocale();
+    const moodDict = INTERPRETER_MOODS[lang] || INTERPRETER_MOODS.zh;
+    const state = moodDict[stateKey] || moodDict.calm;
     if (this.interpreterFace) this.interpreterFace.textContent = state.icon;
     if (this.interpreterMood) this.interpreterMood.textContent = state.mood;
   }

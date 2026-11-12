@@ -170,6 +170,39 @@ body, html {
   font-weight: bold;
 }
 
+/* 語言選擇器 */
+.lang-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1e293b;
+  border-left: 2px solid #ffcc00;
+  padding: 0 14px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.lang-icon {
+  font-size: 16px;
+}
+
+.lang-select-dropdown {
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid #d4af37;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+
+.lang-select-dropdown:hover {
+  background: #1e293b;
+  border-color: #ffd700;
+}
+
 /* 主工作區 (沙盤 + 左右面板) */
 #main-viewport-layout {
   flex: 1;
