@@ -161,16 +161,29 @@
 
   </div>
 
-  <!-- 引入遊戲主程式 -->
+  <!-- 引入遊戲主程式與 3D 沙盤模組 -->
   <script type="module">
     import { GameManager } from './js/game_manager.js';
     import { DeskUI } from './js/desk_ui.js';
+    import { Diorama3D } from './js/diorama_3d.js';
 
-    // 初始化核心實例
+    // 初始化 3D 沙盤實例
+    window.diorama = new Diorama3D('diorama-canvas');
+
+    // 初始化核心遊戲實例
     window.game = new GameManager(42);
     window.ui = new DeskUI(window.game, {
       onActionChosen: (action) => {
         console.log('[Action Chosen]:', action);
+        if (action.type === 'wheel') {
+          window.diorama.spawnWheel(action.zone);
+        } else if (action.type === 'shuttle') {
+          window.diorama.buildShuttle(action.zone, action.to_zone);
+        } else if (action.type === 'market') {
+          window.diorama.buildMarket(action.zone);
+        } else if (action.type === 'event') {
+          window.diorama.spawnInflatableCupid(action.zone);
+        }
       },
       onDocumentOpen: () => {
         console.log('[Document Opened]');
@@ -180,6 +193,7 @@
       },
       onVfxCallback: (vfx) => {
         console.log('[VFX Triggered]:', vfx);
+        window.diorama.triggerVfx(vfx);
       },
       onGameFinished: (endingKey, snapshot) => {
         console.log('[Game Finished]:', endingKey, snapshot);
