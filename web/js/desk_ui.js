@@ -61,6 +61,12 @@ export class DeskUI {
   handleActionClick(type) {
     if (this.gm.finished) return;
 
+    // Turn 1 mandatory constraint reminder
+    if (this.gm.turn === 1 && type !== 'wheel') {
+      alert('【市長重大指示】第 1 回合為「愛情起飛」！\n長官要求必須先在某一行政區空投第一座「🎡 愛情摩天輪」作為城市標竿！');
+      return;
+    }
+
     if (type === 'rest') {
       this.executeTurnAction({ type: 'rest' });
     } else if (type === 'hearing') {
@@ -363,6 +369,24 @@ export class DeskUI {
     document.querySelectorAll('[data-action]').forEach(btn => {
       const type = btn.dataset.action;
       const bInfo = CONFIG.buildings[type];
+      
+      // Turn 1 guidance
+      if (this.gm.turn === 1) {
+        if (type === 'wheel') {
+          btn.style.boxShadow = '0 0 15px #ffd43b, 0 4px 10px rgba(0,0,0,0.5)';
+          btn.style.borderColor = '#f59f00';
+          btn.style.background = '#fff9db';
+        } else {
+          btn.style.boxShadow = '';
+          btn.style.borderColor = '';
+          btn.style.background = '';
+        }
+      } else {
+        btn.style.boxShadow = '';
+        btn.style.borderColor = '';
+        btn.style.background = '';
+      }
+
       if (bInfo) {
         const shortfall = Math.max(0, bInfo.cost - this.gm.budget);
         if (this.gm.debt + shortfall > 12) {

@@ -39,16 +39,22 @@ export class Diorama3D {
     this.camera.position.set(18, 20, 22);
     this.camera.lookAt(0, 2.5, 0);
 
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-      antialias: true,
-      alpha: true,
-      preserveDrawingBuffer: true // Required for Polaroid snapshot in ending dossier
-    });
-    this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    try {
+      this.renderer = new THREE.WebGLRenderer({
+        canvas: this.canvas,
+        antialias: true,
+        alpha: true,
+        preserveDrawingBuffer: true // Required for Polaroid snapshot in ending dossier
+      });
+      this.renderer.setSize(this.canvas.clientWidth || 800, this.canvas.clientHeight || 600);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.webglSupported = true;
+    } catch (e) {
+      console.warn('WebGL Renderer could not initialize:', e);
+      this.webglSupported = false;
+    }
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0xfff3e6, 0.75);
@@ -656,6 +662,8 @@ export class Diorama3D {
       }
     }
 
-    this.renderer.render(this.scene, this.camera);
+    if (this.webglSupported && this.renderer) {
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 }

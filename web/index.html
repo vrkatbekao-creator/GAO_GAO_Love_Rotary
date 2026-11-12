@@ -179,8 +179,21 @@
       }
     }, { once: true });
 
-    // 初始化 3D 沙盤實例
-    window.diorama = new Diorama3D('diorama-canvas');
+    // 初始化 3D 沙盤實例 (具備容錯降級機制)
+    try {
+      window.diorama = new Diorama3D('diorama-canvas');
+    } catch (e) {
+      console.warn('3D Diorama init failed, using fallback:', e);
+      window.diorama = {
+        canvas: document.getElementById('diorama-canvas'),
+        spawnWheel: () => {},
+        buildShuttle: () => {},
+        buildMarket: () => {},
+        spawnInflatableCupid: () => {},
+        triggerVfx: () => {},
+        applyCourtSeizure: () => {}
+      };
+    }
 
     // 初始化結算卷宗模組
     window.dossier = new DossierEnding('office-desk-container');
