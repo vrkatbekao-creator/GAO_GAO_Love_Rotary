@@ -142,6 +142,10 @@ export class DeskUI {
     // Keyboard shortcuts: 'B' toggles actions, 'S' / 'O' toggles settings, 'Escape' closes drawer
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        if (this.zoneModal?.style.display === 'flex') {
+          this.closeZoneModal();
+          return;
+        }
         if (this.actionDrawer?.classList.contains('drawer-open')) {
           this.closeDrawer();
         }
@@ -508,9 +512,9 @@ export class DeskUI {
       }
       this.zoneOptionsGrid.appendChild(card);
     }
-    // Start at the top when a new list is opened; title and cancel stay fixed.
-    this.zoneOptionsGrid.scrollTop = 0;
+    // Reveal the scroll container before resetting its offset.
     this.zoneModal.style.display = 'flex';
+    this.zoneOptionsGrid.scrollTop = 0;
     this.zoneOptionsGrid.focus?.({ preventScroll: true });
   }
 
@@ -562,9 +566,9 @@ export class DeskUI {
       }
       this.zoneOptionsGrid.appendChild(card);
     }
-    // Start at the top when a new list is opened; title and cancel stay fixed.
-    this.zoneOptionsGrid.scrollTop = 0;
+    // Reveal the scroll container before resetting its offset.
     this.zoneModal.style.display = 'flex';
+    this.zoneOptionsGrid.scrollTop = 0;
     this.zoneOptionsGrid.focus?.({ preventScroll: true });
   }
 
