@@ -640,7 +640,12 @@ export class DeskUI {
         const turnResult = this.gm.play(this.currentPendingAction, choiceId, elapsedMs, this.currentEvent.id);
         this.currentPendingAction = null;
         this.currentEvent = null;
-        this.options.onActionChosen?.(turnResult.action, turnResult);
+        // Rendering failures must not conceal an already committed turn.
+        try {
+          this.options.onActionChosen?.(turnResult.action, turnResult);
+        } catch (visualError) {
+          console.error('3D action rendering failed:', visualError);
+        }
         this.onTurnResolved(turnResult);
       } catch (err) {
         console.error('Play error:', err);
