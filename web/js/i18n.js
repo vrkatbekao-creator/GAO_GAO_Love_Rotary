@@ -11,7 +11,7 @@ export const SUPPORTED_LANGS = [
   { code: 'nl', label: 'Nederlands' }
 ];
 
-let currentLocale = localStorage.getItem('gaogao_lang') || 'zh';
+let currentLocale = (typeof localStorage !== 'undefined' ? localStorage.getItem('gaogao_lang') : null) || 'zh';
 if (!SUPPORTED_LANGS.some(l => l.code === currentLocale)) {
   currentLocale = 'zh';
 }
@@ -23,7 +23,9 @@ export function getLocale() {
 export function setLocale(lang) {
   if (SUPPORTED_LANGS.some(l => l.code === lang)) {
     currentLocale = lang;
-    localStorage.setItem('gaogao_lang', lang);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('gaogao_lang', lang);
+    }
   }
 }
 

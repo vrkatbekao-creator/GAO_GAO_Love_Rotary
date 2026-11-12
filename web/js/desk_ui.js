@@ -442,11 +442,18 @@ export class DeskUI {
     }
 
     if (this.gm.finished) {
+      this.closeActionDrawer();
       setTimeout(() => {
         if (this.options.onGameFinished) {
-          this.options.onGameFinished(this.gm.ending(), this.gm.snapshot());
+          try {
+            const endingKey = this.gm.ending();
+            const snapshot = this.gm.snapshot();
+            this.options.onGameFinished(endingKey, snapshot);
+          } catch (err) {
+            console.error('Error triggering game ending:', err);
+          }
         }
-      }, 1000);
+      }, 800);
     }
   }
 
@@ -508,6 +515,13 @@ export class DeskUI {
   }
 
   updateActionButtonsAvailability() {
+    if (this.gm.finished) {
+      document.querySelectorAll('[data-action]').forEach(btn => {
+        btn.classList.add('btn-disabled');
+      });
+      return;
+    }
+
     document.querySelectorAll('[data-action]').forEach(btn => {
       const type = btn.dataset.action;
       const bInfo = CONFIG.buildings[type];

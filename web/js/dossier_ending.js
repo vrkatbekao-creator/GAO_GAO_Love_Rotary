@@ -21,16 +21,22 @@ export class DossierEnding {
       console.warn('Could not capture diorama screenshot:', e);
     }
 
-    const defaultDossier = NARRATIVE.endings_dossier[endingKey] || NARRATIVE.endings_dossier['仍在協商中的愛情城市'];
-    const localizedDossier = ENDINGS_I18N[endingKey]?.[lang] || ENDINGS_I18N[endingKey]?.zh || {};
+    const endingsDict = NARRATIVE?.endings_dossier || {};
+    const defaultDossier = endingsDict[endingKey] || endingsDict['仍在協商中的愛情城市'] || {
+      title: endingKey,
+      rank: 'A',
+      official_propaganda: { headline: '市政重大決策成果', gold_stamp: '存查結案', story: '', polaroid_caption: '' },
+      thermal_receipt: { title: '市政決算表', items: [], memo: '' }
+    };
+    const localizedDossier = ENDINGS_I18N[endingKey]?.[lang] || ENDINGS_I18N[endingKey]?.zh || ENDINGS_I18N['仍在協商中的愛情城市']?.[lang] || {};
 
-    const title = localizedDossier.title || defaultDossier.title;
-    const goldStamp = localizedDossier.gold_stamp || defaultDossier.official_propaganda.gold_stamp;
-    const headline = localizedDossier.official_headline || defaultDossier.official_propaganda.headline;
-    const polaroidCaption = localizedDossier.polaroid_caption || defaultDossier.official_propaganda.polaroid_caption;
-    const story = localizedDossier.story || defaultDossier.official_propaganda.story;
-    const receiptTitle = localizedDossier.receipt_title || defaultDossier.thermal_receipt.title;
-    const memo = localizedDossier.memo || defaultDossier.thermal_receipt.memo;
+    const title = localizedDossier.title || defaultDossier.title || endingKey;
+    const goldStamp = localizedDossier.gold_stamp || defaultDossier.official_propaganda?.gold_stamp || '存查結案';
+    const headline = localizedDossier.official_headline || defaultDossier.official_propaganda?.headline || '市政重大成果報告';
+    const polaroidCaption = localizedDossier.polaroid_caption || defaultDossier.official_propaganda?.polaroid_caption || '';
+    const story = localizedDossier.story || defaultDossier.official_propaganda?.story || '';
+    const receiptTitle = localizedDossier.receipt_title || defaultDossier.thermal_receipt?.title || '決算明細表';
+    const memo = localizedDossier.memo || defaultDossier.thermal_receipt?.memo || '';
     const rank = defaultDossier.rank || 'A';
 
     // Build Blue Tarp & Dossier HTML
@@ -39,7 +45,8 @@ export class DossierEnding {
     overlay.className = 'tarp-drop-in';
 
     // Build receipt items list
-    const receiptItemsHtml = defaultDossier.thermal_receipt.items.map(it => `
+    const items = defaultDossier.thermal_receipt?.items || [];
+    const receiptItemsHtml = items.map(it => `
       <div class="receipt-row">
         <span>${it.name}</span>
         <span class="receipt-cost">${it.cost}</span>
@@ -132,7 +139,8 @@ export class DossierEnding {
       </div>
     `;
 
-    document.body.appendChild(overlay);
+    const mountPoint = this.container || document.getElementById('office-desk-container') || document.body;
+    mountPoint.appendChild(overlay);
 
     document.getElementById('btn-dossier-restart')?.addEventListener('click', () => {
       window.location.reload();
