@@ -217,10 +217,10 @@
       </nav>
 
       <!-- 行政區/端點選取彈窗 (Zone Selector Modal) -->
-      <div id="zone-picker-modal">
+      <div id="zone-picker-modal" role="dialog" aria-labelledby="zone-modal-title">
         <div id="zone-modal-title" class="zone-picker-title">選擇目標行政區</div>
-        <div id="zone-options-grid" class="zone-options-grid"></div>
-        <button id="zone-modal-cancel" class="modal-cancel-btn">取消本項行動</button>
+        <div id="zone-options-grid" class="zone-options-grid" role="region" aria-labelledby="zone-modal-title" tabindex="0"></div>
+        <button id="zone-modal-cancel" class="modal-cancel-btn" type="button">取消本項行動</button>
       </div>
 
       <!-- 成就解鎖提示浮窗容器 -->
