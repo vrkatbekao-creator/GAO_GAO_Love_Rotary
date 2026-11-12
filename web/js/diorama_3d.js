@@ -20,13 +20,16 @@ export class Diorama3D {
     this.particles = [];
     this.disasterObjects = [];
     this.clock = new THREE.Clock();
+    this.sceneGeneration = 0;
+    this.renderer = null;
+    this.webglSupported = false;
 
     this.initScene();
     this.createDioramaBase();
     this.createZones();
     this.citizenAI = new CitizenAI(this);
     this.bindWindowResize();
-    this.animate();
+    if (this.webglSupported && this.renderer) this.animate();
   }
 
   initScene() {
@@ -53,6 +56,8 @@ export class Diorama3D {
       this.webglSupported = true;
     } catch (e) {
       console.warn('WebGL Renderer could not initialize:', e);
+      this.renderer?.dispose?.();
+      this.renderer = null;
       this.webglSupported = false;
     }
 
@@ -280,6 +285,8 @@ export class Diorama3D {
   }
 
   reset() {
+    this.sceneGeneration++;
+    this.citizenAI?.dispose?.();
     // Rebuild a clean scene including citizens, buses, effects and meshes.
     // Keep the existing renderer and camera; never start a second animation loop.
     const previous = this.scene;
@@ -427,9 +434,14 @@ export class Diorama3D {
     grid.position.copy(basePos).add(offset);
     grid.position.y = targetY + 0.05;
     this.scene.add(grid);
-
+    const scene = this.scene;
+    const generation = this.sceneGeneration;
     setTimeout(() => {
-      this.scene.remove(grid);
+      // A reset disposes this grid together with the previous scene.
+      if (generation !== this.sceneGeneration) return;
+      scene.remove(grid);
+      grid.geometry.dispose();
+      grid.material.dispose();
     }, 3500);
   }
 
@@ -645,9 +657,10 @@ export class Diorama3D {
 
   bindWindowResize() {
     window.addEventListener('resize', () => {
-      if (!this.canvas) return;
-      const width = this.canvas.clientWidth;
-      const height = this.canvas.clientHeight;
+      // WebGL can fail while the rest of the 2D game remains playable.
+      if (!this.canvas || !this.camera || !this.webglSupported || !this.renderer) return;
+      const width = Math.max(1, this.canvas.clientWidth || 800);
+      const height = Math.max(1, this.canvas.clientHeight || 600);
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(width, height);
