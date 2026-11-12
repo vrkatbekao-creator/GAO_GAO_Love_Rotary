@@ -1,0 +1,65 @@
+{
+  "disclaimer": "All budgets and behaviors are fictional gameplay numbers, not Kaohsiung policy cost estimates.",
+  "zones": ["港灣區", "舊城區", "郊區", "科技區", "山城區"],
+  "zone_metadata": {
+    "港灣區": {"name": "港灣區", "display_name": "⚓ 港灣區", "elevation": 0.5, "type": "water", "description": "深藍色水面，低矮倉庫。空間小，交通難外連。"},
+    "舊城區": {"name": "舊城區", "display_name": "🏘️ 舊城區", "elevation": 1.0, "type": "dense_grid", "description": "灰色擁擠建築網格。空間不足，強蓋設施會穿模。"},
+    "郊區": {"name": "郊區", "display_name": "🚡 郊區發展區", "elevation": 1.5, "type": "flat_grass", "description": "淺綠色平坦草地。空間大但極度邊疆。"},
+    "科技區": {"name": "科技區", "display_name": "🏙️ 科技區", "elevation": 2.0, "type": "neon_array", "description": "霓虹藍半透明方塊陣列。招商條件多。"},
+    "山城區": {"name": "山城區", "display_name": "⛰️ 山城區", "elevation": 4.0, "type": "steep_mountain", "description": "陡峭深綠色幾何山體。制高點，交通可達性極低。"}
+  },
+  "buildings": {
+    "wheel": {
+      "cost": 8,
+      "lead_turns": 2,
+      "max_per_zone": 1,
+      "max_per_zone_override": {"舊城區": 3},
+      "operating_gross_per_round": 1,
+      "maintenance_per_round": 1,
+      "tourism_on_open": 8
+    },
+    "shuttle": {
+      "cost": 3,
+      "lead_turns": 0,
+      "max_per_edge": 1,
+      "maintenance_per_round": 0.5,
+      "tourism_on_open": 2
+    },
+    "market": {
+      "cost": 3,
+      "lead_turns": 1,
+      "max_per_zone": 1,
+      "gross_if_covered_per_round": 1,
+      "maintenance_per_round": 0,
+      "tourism_on_open": 3
+    },
+    "event": {
+      "cost": 2,
+      "lead_turns": 0,
+      "tourism_once": 5,
+      "complaints_once": -2
+    },
+    "hearing": {
+      "cost": 1,
+      "lead_turns": 0,
+      "admin_once": -4,
+      "complaints_once": -7
+    }
+  },
+  "start": {
+    "budget": 24,
+    "debt": 0,
+    "tourism": 20,
+    "admin": 20,
+    "complaints": 20
+  },
+  "finance_director_meltdown": {
+    "stage_1": {"threshold_net_budget_min": 10, "state": "calm", "note_color": "blue"},
+    "stage_2": {"threshold_net_budget_min": 0, "threshold_net_budget_max": 9.99, "state": "anxious", "note_color": "neon_yellow"},
+    "stage_3": {"threshold_net_budget_max": -0.01, "state": "meltdown", "note_color": "medical_red"}
+  },
+  "income_per_round": 2,
+  "rounds": 12,
+  "chapters": 4,
+  "fixed_event_turns": [3, 6, 9, 12]
+}

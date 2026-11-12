@@ -1,0 +1,11 @@
+[project]
+name = "gao-gao-v0-4"
+version = "0.4.0"
+description = "《高高平等：人人有輪坐》 — v0.4 multi-agent development kit & deterministic rule engine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
