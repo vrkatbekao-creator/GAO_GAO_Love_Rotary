@@ -324,7 +324,8 @@
         buildMarket: () => {},
         spawnInflatableCupid: () => {},
         triggerVfx: () => {},
-        applyCourtSeizure: () => {}
+        applyCourtSeizure: () => {},
+        reset: () => {}
       };
     }
 
@@ -354,6 +355,9 @@
         if (window.game.net_budget < 0) {
           window.diorama.applyCourtSeizure();
         }
+      },
+      onSceneReset: () => {
+        window.diorama.reset();
       },
       onBudgetReset: (newBudget) => {
         console.log('[Budget Reset]:', newBudget);
