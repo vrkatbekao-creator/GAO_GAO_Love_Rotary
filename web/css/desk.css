@@ -756,6 +756,27 @@ body, html {
   transform: translateX(4px);
 }
 
+.zone-card-capacity {
+  font-size: 12px;
+  font-weight: 800;
+  color: #d9480f;
+  text-align: right;
+  max-width: 43%;
+}
+
+.zone-select-card-unavailable,
+.zone-select-card-unavailable:hover {
+  opacity: 0.55;
+  background: #e9ecef;
+  border-color: #adb5bd;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.zone-select-card-unavailable .zone-card-capacity {
+  color: #6c757d;
+}
+
 .modal-cancel-btn {
   width: 100%;
   background: #ced4da;
