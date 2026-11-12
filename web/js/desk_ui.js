@@ -455,23 +455,53 @@ export class DeskUI {
       card.className = 'zone-select-card';
       
       const count = this.gm.count_zone(actionType, z);
-      let statusText = t('zone_status_existing', count);
-      if (actionType === 'wheel' && z === '舊城區') {
-        statusText = t('zone_status_old_town', count);
+      const cfg = CONFIG.buildings[actionType];
+      const limit = actionType === 'wheel'
+        ? (cfg.max_per_zone_override?.[z] ?? cfg.max_per_zone)
+        : (actionType === 'market' ? cfg.max_per_zone : null);
+      const atLimit = limit !== null && limit !== undefined && count >= limit;
+      const proposedAction = { type: actionType, zone: z };
+      let validationError = null;
+      try {
+        this.gm.validateAction(proposedAction);
+      } catch (err) {
+        validationError = err.message;
       }
-      
+      const unavailable = atLimit || Boolean(validationError);
+      const statusText = limit == null
+        ? t('zone_status_existing', count)
+        : t('zone_status_capacity', count, limit);
+      const statusBadge = atLimit ? t('zone_status_full') : (validationError ? t('zone_status_unavailable') : '');
+      if (unavailable) {
+        card.classList.add('zone-select-card-unavailable');
+        card.setAttribute('aria-disabled', 'true');
+        card.title = atLimit ? t('zone_status_full') : validationError;
+      } else {
+        card.setAttribute('role', 'button');
+        card.tabIndex = 0;
+      }
+
       card.innerHTML = `
         <div>
           <strong>${zInfo.display}</strong> (Elev. ${meta.elevation})
           <div style="font-size:11px;color:#666;">${zInfo.desc}</div>
         </div>
-        <span style="font-size:12px;color:#d9480f;font-weight:bold;">${statusText}</span>
+        <span class="zone-card-capacity">${statusText}${statusBadge ? ` · ${statusBadge}` : ''}</span>
       `;
 
-      card.addEventListener('click', () => {
-        this.closeZoneModal();
-        callback(z);
-      });
+      if (!unavailable) {
+        const chooseZone = () => {
+          this.closeZoneModal();
+          callback(z);
+        };
+        card.addEventListener('click', chooseZone);
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            chooseZone();
+          }
+        });
+      }
       this.zoneOptionsGrid.appendChild(card);
     }
     this.zoneModal.style.display = 'block';
