@@ -1,5 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
 import { CONFIG } from './game_data.js';
+import { CitizenAI } from './citizen_ai.js';
 
 export class Diorama3D {
   constructor(canvasId) {
@@ -23,6 +24,7 @@ export class Diorama3D {
     this.initScene();
     this.createDioramaBase();
     this.createZones();
+    this.citizenAI = new CitizenAI(this);
     this.bindWindowResize();
     this.animate();
   }
@@ -420,6 +422,9 @@ export class Diorama3D {
     }
 
     this.shuttles.push({ tube: tubeMesh, curve: curve });
+    if (this.citizenAI) {
+      this.citizenAI.spawnBusOnShuttle(curve, isNewtonDrop);
+    }
   }
 
   /**
@@ -457,6 +462,9 @@ export class Diorama3D {
 
     this.scene.add(marketGroup);
     this.markets.push(marketGroup);
+    if (this.citizenAI && (zoneName === '舊城區' || Math.random() < 0.5)) {
+      this.citizenAI.triggerMarketSlimeMerge(zoneName);
+    }
   }
 
   /**
@@ -581,6 +589,8 @@ export class Diorama3D {
       this.applyCourtSeizure();
     } else if (vfxKey === 'PETITION_RAIN') {
       this.applyRedXGraffiti();
+    } else if (vfxKey === 'HEARING_HYPNOSIS_ZZZ' && this.citizenAI) {
+      this.citizenAI.triggerPublicHearingSleep();
     }
   }
 
@@ -599,7 +609,7 @@ export class Diorama3D {
     requestAnimationFrame(() => this.animate());
     const delta = this.clock.getDelta();
 
-    // Animate wheels
+    // Animate Wheels
     for (const w of this.wheels) {
       if (!w.landed) {
         w.group.position.y += w.velY;
@@ -607,6 +617,9 @@ export class Diorama3D {
         if (w.group.position.y <= w.targetY) {
           w.group.position.y = w.targetY;
           w.landed = true;
+          if (this.citizenAI) {
+            this.citizenAI.triggerWheelDizziness();
+          }
         }
       } else {
         w.ring.rotation.z += w.rotationSpeed;
@@ -615,6 +628,11 @@ export class Diorama3D {
           cabin.rotation.z = -w.ring.rotation.z;
         }
       }
+    }
+
+    // Update Pixel Citizens & Buses
+    if (this.citizenAI) {
+      this.citizenAI.update(delta);
     }
 
     // Animate Inflatables

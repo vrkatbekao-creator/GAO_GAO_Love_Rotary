@@ -757,3 +757,259 @@ body, html {
   font-size: 15px;
   font-weight: bold;
 }
+
+/* ==========================================================================
+   結算卷宗與藍色帆布覆蓋層 (The Blue Tarp & Dossier Ending)
+   ========================================================================== */
+
+#blue-tarp-ending-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.blue-tarp-curtain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #1d3557 0%, #0d1b2a 100%);
+  opacity: 0.94;
+  animation: dropTarp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dropTarp {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(0); }
+}
+
+.dossier-booklet {
+  position: relative;
+  z-index: 510;
+  width: 980px;
+  max-width: 95vw;
+  height: 640px;
+  max-height: 90vh;
+  display: flex;
+  background: #f4ecd8;
+  border: 6px solid #4a2e1b;
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.85);
+  overflow: hidden;
+  animation: openBooklet 0.6s 0.6s ease-out both;
+}
+
+@keyframes openBooklet {
+  0% { transform: scale(0.85) rotateX(20deg); opacity: 0; }
+  100% { transform: scale(1) rotateX(0deg); opacity: 1; }
+}
+
+.dossier-page {
+  flex: 1;
+  padding: 30px 35px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.page-left {
+  border-right: 3px dashed #ba9c79;
+  background: #faf5e8;
+  position: relative;
+}
+
+.page-right {
+  background: #f7f0df;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 官方大內宣元件 */
+.propaganda-seal-gold {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  border: 3px double #d4af37;
+  color: #b0891d;
+  font-weight: 900;
+  padding: 4px 10px;
+  font-size: 13px;
+  transform: rotate(8deg);
+}
+
+.propaganda-rank-badge {
+  font-size: 13px;
+  font-weight: 900;
+  color: #c92a2a;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.propaganda-headline {
+  font-size: 20px;
+  font-weight: 900;
+  color: #2b1d0c;
+  line-height: 1.35;
+  margin-bottom: 16px;
+}
+
+/* 拍立得照片 */
+.polaroid-frame {
+  background: #fff;
+  padding: 10px 10px 16px 10px;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  transform: rotate(-2deg);
+  margin-bottom: 16px;
+}
+
+.polaroid-photo-box {
+  width: 100%;
+  height: 200px;
+  background: #2b2b2b;
+  overflow: hidden;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.polaroid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.polaroid-placeholder {
+  color: #fff;
+  font-weight: bold;
+}
+
+.polaroid-caption {
+  font-family: "PingFang TC", "Noto Sans TC", cursive, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: #495057;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.propaganda-story {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #3b220c;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 3px solid #d4af37;
+}
+
+/* 長條熱感應發票 */
+.receipt-header {
+  border-bottom: 2px solid #333;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.thermal-receipt-scroll {
+  background: #fff;
+  font-family: "Courier New", Courier, monospace;
+  padding: 14px 18px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.06);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.receipt-cost {
+  font-weight: bold;
+  color: #c92a2a;
+}
+
+.receipt-divider {
+  color: #aaa;
+  text-align: center;
+  margin: 6px 0;
+}
+
+.receipt-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.receipt-stats-row {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+}
+
+/* 長官甩鍋便箋 */
+.buck-passing-note {
+  background: var(--postit-pink);
+  border-top: 5px solid #ff8787;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #721c24;
+  line-height: 1.45;
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.15);
+  transform: rotate(1deg);
+  margin-bottom: 14px;
+}
+
+/* 成就展示徽章組 */
+.ach-badges-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ach-badge {
+  background: #2b2b2b;
+  color: #ffd43b;
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 重啟會議按鈕 */
+.btn-dossier-restart {
+  background: linear-gradient(135deg, #f76707 0%, #d9480f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(217, 72, 15, 0.4);
+  transition: transform 0.15s;
+}
+
+.btn-dossier-restart:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ff922b 0%, #f76707 100%);
+}

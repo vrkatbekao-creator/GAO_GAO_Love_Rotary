@@ -161,14 +161,29 @@
 
   </div>
 
-  <!-- 引入遊戲主程式與 3D 沙盤模組 -->
+  <!-- 引入遊戲主程式與 3D 沙盤、音效與結算模組 -->
   <script type="module">
     import { GameManager } from './js/game_manager.js';
     import { DeskUI } from './js/desk_ui.js';
     import { Diorama3D } from './js/diorama_3d.js';
+    import { AudioEngine } from './js/audio_engine.js';
+    import { DossierEnding } from './js/dossier_ending.js';
+
+    // 初始化音效引擎
+    window.audio = new AudioEngine();
+    let audioStarted = false;
+    document.addEventListener('click', () => {
+      if (!audioStarted) {
+        audioStarted = true;
+        window.audio.startBossaNovaBGM();
+      }
+    }, { once: true });
 
     // 初始化 3D 沙盤實例
     window.diorama = new Diorama3D('diorama-canvas');
+
+    // 初始化結算卷宗模組
+    window.dossier = new DossierEnding('office-desk-container');
 
     // 初始化核心遊戲實例
     window.game = new GameManager(42);
@@ -183,20 +198,35 @@
           window.diorama.buildMarket(action.zone);
         } else if (action.type === 'event') {
           window.diorama.spawnInflatableCupid(action.zone);
+        } else if (action.type === 'hearing') {
+          window.diorama.triggerVfx('HEARING_HYPNOSIS_ZZZ');
+        }
+
+        // Check Deficit & Complaints audio states
+        window.audio.setDeficitState(window.game.net_budget < 0);
+        window.audio.setComplaintsFilter(window.game.complaints >= 50);
+        if (window.game.net_budget < 0) {
+          window.diorama.applyCourtSeizure();
         }
       },
       onDocumentOpen: () => {
         console.log('[Document Opened]');
+        window.audio.duckAudio();
       },
       onStampSlam: () => {
         console.log('[Stamp Slammed]');
+        window.audio.slamStampAndRebound();
       },
       onVfxCallback: (vfx) => {
         console.log('[VFX Triggered]:', vfx);
         window.diorama.triggerVfx(vfx);
+        if (vfx === 'MEGAPHONE_BLAST') {
+          window.audio.playMegaphoneFeedback();
+        }
       },
       onGameFinished: (endingKey, snapshot) => {
         console.log('[Game Finished]:', endingKey, snapshot);
+        window.dossier.showEnding(endingKey, snapshot, window.diorama.canvas);
       }
     });
   </script>
