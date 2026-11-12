@@ -1,6 +1,10 @@
-# 《高高平等：人人有輪坐》 — v0.4 multi-agent development kit
+# 《高高平等：人人有輪坐》 — playable browser prototype
 
-**Version:** Browser prototype + deterministic engine (zero-/negative-base fiscal edition). The P0/P1 fixes are proposed on a review branch, pending browser QA.
+**Version:** Public browser prototype using zero-/negative-base fiscal rules. P0/P1 fixes were merged into `master`; subsequent P2 stability and ending-audit changes undergo separate review.
+
+**Play:** https://vrkatbekao-creator.github.io/GAO_GAO_Love_Rotary/ (published GitHub Pages game; user-confirmed working).
+
+**QA:** See `reports/qa_report.md` for historical simulations, user-confirmed manual smoke checks, and tests that still need to be executed.
 
 ## Important distinction
 
