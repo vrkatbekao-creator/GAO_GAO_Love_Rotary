@@ -664,13 +664,17 @@ export class DeskUI {
   }
 
   startBackgroundSimulations() {
-    // Mayor quote rotation
+    // Mayor quote rotation with smooth opacity fade
     setInterval(() => {
       this.quoteIdx++;
       const lang = getLocale();
       const quotes = MAYOR_QUOTES[lang] || MAYOR_QUOTES.zh;
       if (this.mayorQuote) {
-        this.mayorQuote.textContent = quotes[this.quoteIdx % quotes.length];
+        this.mayorQuote.style.opacity = '0';
+        setTimeout(() => {
+          this.mayorQuote.textContent = quotes[this.quoteIdx % quotes.length];
+          this.mayorQuote.style.opacity = '1';
+        }, 220);
       }
       
       if (this.quoteIdx % 4 === 0) {
@@ -684,15 +688,19 @@ export class DeskUI {
       }
     }, 9000);
 
-    // News ticker rotation
-    setInterval(() => {
-      this.tickerIdx++;
-      const lang = getLocale();
-      const tickers = NEWS_TICKER[lang] || NEWS_TICKER.zh;
-      if (this.newsTicker) {
+    // News ticker rotation: strictly sequential via animationend, preventing double-flash
+    if (this.newsTicker) {
+      this.newsTicker.addEventListener('animationend', () => {
+        this.tickerIdx++;
+        const lang = getLocale();
+        const tickers = NEWS_TICKER[lang] || NEWS_TICKER.zh;
+        this.newsTicker.classList.remove('news-ticker-sliding');
         this.newsTicker.textContent = tickers[this.tickerIdx % tickers.length];
-      }
-    }, 12000);
+        // Force DOM reflow before re-adding class so animation restarts cleanly from right edge
+        void this.newsTicker.offsetWidth;
+        this.newsTicker.classList.add('news-ticker-sliding');
+      });
+    }
   }
 
   setInterpreterState(stateKey) {
