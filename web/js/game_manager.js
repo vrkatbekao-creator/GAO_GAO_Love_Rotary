@@ -72,7 +72,9 @@ export class GameManager {
   }
 
   count(type, operational = false) {
-    return this.buildings.filter(b => b.type === type && (!operational || b.ready_turn <= this.turn)).length;
+    // Do not mark turn-13 facilities as operational when a 12-turn game has ended.
+    const asOfTurn = Math.min(this.turn, CONFIG.rounds);
+    return this.buildings.filter(b => b.type === type && (!operational || b.ready_turn <= asOfTurn)).length;
   }
 
   count_zone(type, zone) {
@@ -366,7 +368,7 @@ export class GameManager {
     const markets = this.count('market');
     const shuttles = this.count('shuttle');
     const cov = this.covered();
-    const op_income = this.buildings.filter(b => b.type === 'market' && b.ready_turn <= 12 && cov.has(b.zone)).length;
+    const op_income = this.buildings.filter(b => b.type === 'market' && b.ready_turn <= CONFIG.rounds && cov.has(b.zone)).length;
     const maintenance = shuttles * 0.5;
 
     // 1. Hidden Ending S
