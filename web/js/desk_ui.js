@@ -9,6 +9,10 @@ export class DeskUI {
     this.gm = gameManager;
     this.options = options;
     this.currentPendingAction = null;
+    this.currentEvent = null;
+    this.isTurnResolving = false;
+    this.stampPending = false;
+    this.turnGeneration = 0;
     this.docOpenedTimestamp = 0;
     this.displayedAchievements = new Set();
     this.quoteIdx = 0;
@@ -116,7 +120,7 @@ export class DeskUI {
     this.btnRestartGame?.addEventListener('click', () => {
       if (confirm(t('confirm_reset_budget'))) {
         this.closeDrawer();
-        this.gm.reset(this.gm.seed, this.gm.initialNetBudget ?? 0.5);
+        this.resetGame(this.gm.initialNetBudget ?? 0.5);
         if (window.audio) {
           window.audio.setDeficitState(this.gm.net_budget < 0);
           window.audio.setComplaintsFilter(false);
@@ -198,7 +202,7 @@ export class DeskUI {
           }
         }
 
-        this.gm.reset(this.gm.seed, targetBudget);
+        this.resetGame(targetBudget);
         if (window.audio) {
           window.audio.setDeficitState(this.gm.net_budget < 0);
         }
@@ -209,6 +213,21 @@ export class DeskUI {
         this.updateAllDisplays();
       });
     }
+  }
+
+  resetGame(initialBudget) {
+    this.turnGeneration++;
+    this.isTurnResolving = false;
+    this.stampPending = false;
+    this.currentPendingAction = null;
+    this.currentEvent = null;
+    this.displayedAchievements.clear();
+    this.gm.reset(this.gm.seed, initialBudget);
+    this.docModal.style.display = 'none';
+    this.officialDoc.classList.remove('doc-active');
+    this.dioramaWrapper.classList.remove('bokeh-blur');
+    this.toastContainer.replaceChildren();
+    this.options.onSceneReset?.();
   }
 
   syncBudgetSelectUI() {
@@ -386,7 +405,7 @@ export class DeskUI {
   }
 
   handleActionClick(type) {
-    if (this.gm.finished) return;
+    if (this.gm.finished || this.isTurnResolving) return;
 
     // Turn 1 mandatory constraint reminder
     if (this.gm.turn === 1 && type !== 'wheel') {
@@ -514,21 +533,29 @@ export class DeskUI {
   }
 
   executeTurnAction(action) {
-    this.currentPendingAction = action;
-    if (this.options.onActionChosen) {
-      this.options.onActionChosen(action);
+    if (this.gm.finished || this.isTurnResolving) return;
+    try {
+      this.gm.validateAction(action);
+    } catch (err) {
+      console.warn('Invalid action:', err);
+      alert(err.message);
+      this.updateActionButtonsAvailability();
+      return;
     }
-    this.presentEventDocument();
+    this.isTurnResolving = true;
+    this.currentPendingAction = action;
+    try {
+      this.presentEventDocument();
+    } catch (err) {
+      console.error('Unable to present event:', err);
+      this.isTurnResolving = false;
+      this.currentPendingAction = null;
+      alert(err.message);
+    }
   }
 
   presentEventDocument() {
-    let rawEv;
-    try {
-      rawEv = this.gm.select_event();
-    } catch (err) {
-      console.error(err);
-      return;
-    }
+    const rawEv = this.gm.select_event();
 
     const lang = getLocale();
     const ev = getLocalizedEvent(rawEv, lang);
@@ -582,6 +609,9 @@ export class DeskUI {
   }
 
   stampDocumentDecision(choiceId) {
+    if (!this.isTurnResolving || this.stampPending || !this.currentEvent) return;
+    this.stampPending = true;
+    const generation = this.turnGeneration;
     const elapsedMs = performance.now() - this.docOpenedTimestamp;
     const seal = document.getElementById(`seal-${choiceId}`);
     const otherChoiceId = choiceId === 'A' ? 'B' : 'A';
@@ -592,6 +622,7 @@ export class DeskUI {
 
     this.container.classList.add('screen-shake');
     setTimeout(() => {
+      if (generation !== this.turnGeneration) return;
       this.container.classList.remove('screen-shake');
     }, 250);
 
@@ -600,15 +631,23 @@ export class DeskUI {
     }
 
     setTimeout(() => {
+      if (generation !== this.turnGeneration) return;
       this.officialDoc.classList.remove('doc-active');
       this.dioramaWrapper.classList.remove('bokeh-blur');
       this.docModal.style.display = 'none';
 
       try {
-        const turnResult = this.gm.play(this.currentPendingAction, choiceId, elapsedMs);
+        const turnResult = this.gm.play(this.currentPendingAction, choiceId, elapsedMs, this.currentEvent.id);
+        this.currentPendingAction = null;
+        this.currentEvent = null;
+        this.options.onActionChosen?.(turnResult.action, turnResult);
         this.onTurnResolved(turnResult);
       } catch (err) {
         console.error('Play error:', err);
+        alert(err.message);
+      } finally {
+        this.isTurnResolving = false;
+        this.stampPending = false;
       }
     }, 700);
   }
@@ -629,7 +668,9 @@ export class DeskUI {
 
     if (this.gm.finished) {
       this.closeActionDrawer();
+      const generation = this.turnGeneration;
       setTimeout(() => {
+        if (generation !== this.turnGeneration) return;
         if (this.options.onGameFinished) {
           try {
             const endingKey = this.gm.ending();
