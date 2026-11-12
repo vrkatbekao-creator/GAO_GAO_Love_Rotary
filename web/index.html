@@ -62,36 +62,56 @@
       <!-- 財政局長崩潰進程道具 (受預算赤字驅動) -->
       <div id="director-meltdown-props"></div>
 
-      <!-- 右側建設行動抽屜按鈕列 -->
-      <nav id="action-drawer">
-        <button class="action-btn" data-action="wheel">
-          <span>🎡 愛情摩天輪</span>
-          <span class="cost-badge">$8億 / 2回</span>
+      <!-- 右側建設行動抽屜 (Collapsible Action Drawer) -->
+      <nav id="action-drawer" class="action-drawer">
+        <!-- 抽屜常駐開關握把 (Drawer Pull Tab) -->
+        <button id="drawer-toggle-btn" class="drawer-toggle-tab" type="button" aria-expanded="false" title="開啟/收起市政行動選單">
+          <span class="drawer-tab-icon">🏗️</span>
+          <span id="drawer-tab-text" class="drawer-tab-text">建設行動</span>
+          <span id="drawer-tab-arrow" class="drawer-tab-arrow">◀</span>
         </button>
-        <button class="action-btn" data-action="shuttle">
-          <span>🚌 愛情接駁線</span>
-          <span class="cost-badge">$3億 / 即時</span>
-        </button>
-        <button class="action-btn" data-action="market">
-          <span>🏪 愛情商圈</span>
-          <span class="cost-badge">$3億 / 1回</span>
-        </button>
-        <button class="action-btn" data-action="event">
-          <span>💕 巡迴充氣活動</span>
-          <span class="cost-badge">$2億 / 即時</span>
-        </button>
-        <button class="action-btn" data-action="hearing">
-          <span>📋 召開公聽會</span>
-          <span class="cost-badge">$1億 / 催眠</span>
-        </button>
-        <button class="action-btn" data-action="repay">
-          <span>💰 償還債務</span>
-          <span class="cost-badge">上限現金</span>
-        </button>
-        <button class="action-btn" data-action="rest" style="background:#e9ecef;">
-          <span>☕ 暫停建設 (休息)</span>
-          <span class="cost-badge">$0</span>
-        </button>
+
+        <!-- 抽屜內部本體 -->
+        <div class="drawer-inner">
+          <div class="drawer-header">
+            <div class="drawer-title-group">
+              <span class="drawer-header-icon">🛠️</span>
+              <span id="drawer-header-title" class="drawer-header-title">市政行動清單</span>
+            </div>
+            <button id="drawer-close-btn" class="drawer-close-btn" type="button" aria-label="Close Drawer">✕</button>
+          </div>
+
+          <div class="action-btn-scroll-list">
+            <button class="action-btn" data-action="wheel">
+              <span>🎡 愛情摩天輪</span>
+              <span class="cost-badge">$8億 / 2回</span>
+            </button>
+            <button class="action-btn" data-action="shuttle">
+              <span>🚌 愛情接駁線</span>
+              <span class="cost-badge">$3億 / 即時</span>
+            </button>
+            <button class="action-btn" data-action="market">
+              <span>🏪 愛情商圈</span>
+              <span class="cost-badge">$3億 / 1回</span>
+            </button>
+            <button class="action-btn" data-action="event">
+              <span>💕 巡迴充氣活動</span>
+              <span class="cost-badge">$2億 / 即時</span>
+            </button>
+            <button class="action-btn" data-action="hearing">
+              <span>📋 召開公聽會</span>
+              <span class="cost-badge">$1億 / 催眠</span>
+            </button>
+            <button class="action-btn" data-action="repay">
+              <span>💰 償還債務</span>
+              <span class="cost-badge">上限現金</span>
+            </button>
+            <button class="action-btn" data-action="rest" style="background:#e9ecef;">
+              <span>☕ 暫停建設 (休息)</span>
+              <span class="cost-badge">$0</span>
+            </button>
+          </div>
+        </div>
       </nav>
 
       <!-- 行政區/端點選取彈窗 (Zone Selector Modal) -->

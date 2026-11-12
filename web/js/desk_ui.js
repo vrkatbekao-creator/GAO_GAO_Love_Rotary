@@ -1,6 +1,6 @@
 import { GameManager } from './game_manager.js';
 import { CONFIG, NARRATIVE } from './game_data.js';
-import { t, getLocale, setLocale, ZONE_NAMES, MAYOR_QUOTES, NEWS_TICKER, INTERPRETER_MOODS } from './i18n.js';
+import { t, getLocale, setLocale, ZONE_NAMES, MAYOR_QUOTES, NEWS_TICKER, INTERPRETER_MOODS, STICKY_NOTES_PHRASES, FINANCE_DIRECTOR_NOTES } from './i18n.js';
 import { getLocalizedEvent } from './i18n_events.js';
 import { ACHIEVEMENTS_I18N } from './i18n_endings.js';
 
@@ -43,6 +43,14 @@ export class DeskUI {
     this.interpreterTitle = document.getElementById('label-interpreter-title');
     this.langSelect = document.getElementById('lang-select');
 
+    // Action Drawer elements
+    this.actionDrawer = document.getElementById('action-drawer');
+    this.drawerToggleBtn = document.getElementById('drawer-toggle-btn');
+    this.drawerTabText = document.getElementById('drawer-tab-text');
+    this.drawerTabArrow = document.getElementById('drawer-tab-arrow');
+    this.drawerCloseBtn = document.getElementById('drawer-close-btn');
+    this.drawerHeaderTitle = document.getElementById('drawer-header-title');
+
     // Props & modals
     this.stickyNotesZone = document.getElementById('sticky-notes-zone');
     this.meltdownProps = document.getElementById('director-meltdown-props');
@@ -58,6 +66,35 @@ export class DeskUI {
   }
 
   bindEvents() {
+    // Action drawer toggle & close
+    this.drawerToggleBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleActionDrawer();
+    });
+
+    this.drawerCloseBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.closeActionDrawer();
+    });
+
+    // Close drawer when clicking the 3D diorama canvas or desk outside drawer
+    this.dioramaWrapper?.addEventListener('click', () => {
+      if (this.actionDrawer?.classList.contains('drawer-open')) {
+        this.closeActionDrawer();
+      }
+    });
+
+    // Keyboard shortcut: 'B' toggles actions drawer, 'Escape' closes drawer
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (this.actionDrawer?.classList.contains('drawer-open')) {
+          this.closeActionDrawer();
+        }
+      } else if ((e.key === 'b' || e.key === 'B') && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+        this.toggleActionDrawer();
+      }
+    });
+
     // Action drawer buttons
     document.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -80,6 +117,30 @@ export class DeskUI {
     }
   }
 
+  toggleActionDrawer() {
+    if (this.actionDrawer?.classList.contains('drawer-open')) {
+      this.closeActionDrawer();
+    } else {
+      this.openActionDrawer();
+    }
+  }
+
+  openActionDrawer() {
+    if (!this.actionDrawer) return;
+    this.actionDrawer.classList.add('drawer-open');
+    if (this.drawerToggleBtn) this.drawerToggleBtn.setAttribute('aria-expanded', 'true');
+    if (this.drawerTabText) this.drawerTabText.textContent = t('drawer_tab_close');
+    if (this.drawerTabArrow) this.drawerTabArrow.textContent = '▶';
+  }
+
+  closeActionDrawer() {
+    if (!this.actionDrawer) return;
+    this.actionDrawer.classList.remove('drawer-open');
+    if (this.drawerToggleBtn) this.drawerToggleBtn.setAttribute('aria-expanded', 'false');
+    if (this.drawerTabText) this.drawerTabText.textContent = t('drawer_tab_open');
+    if (this.drawerTabArrow) this.drawerTabArrow.textContent = '◀';
+  }
+
   updateLanguageStrings() {
     const lang = getLocale();
     document.title = t('app_title');
@@ -95,6 +156,12 @@ export class DeskUI {
     if (statLabels[0]) statLabels[0].textContent = t('tourism_label');
     if (statLabels[1]) statLabels[1].textContent = t('admin_label');
     if (statLabels[2]) statLabels[2].textContent = t('complaints_label');
+
+    // Drawer tab & header
+    const isOpen = this.actionDrawer?.classList.contains('drawer-open');
+    if (this.drawerTabText) this.drawerTabText.textContent = t(isOpen ? 'drawer_tab_close' : 'drawer_tab_open');
+    if (this.drawerTabArrow) this.drawerTabArrow.textContent = isOpen ? '▶' : '◀';
+    if (this.drawerHeaderTitle) this.drawerHeaderTitle.textContent = t('drawer_header_title');
 
     // Action buttons labels
     const actionDefs = [
@@ -140,6 +207,9 @@ export class DeskUI {
       alert(t('turn1_mandatory_alert'));
       return;
     }
+
+    // Auto-close drawer on choosing an action so modal & diorama have full visibility
+    this.closeActionDrawer();
 
     if (type === 'rest') {
       this.executeTurnAction({ type: 'rest' });
@@ -472,14 +542,8 @@ export class DeskUI {
   renderStickyNotes() {
     this.stickyNotesZone.innerHTML = '';
     const noteCount = Math.floor(this.gm.admin / 18);
-    const phrases = [
-      '急件！市長要求摩天輪粉紅色霓虹燈必須在下週完工！',
-      '特急！舊城區居民集體抗議日照權遭巨輪遮蔽！',
-      '極機密：經發局報告建議將香腸攤納入高科技產業！',
-      '長官震怒！80度接駁公車被拍到在空中翻轉兩圈！',
-      '請速簽：山城區居民要求每戶配置個人高空滑索！',
-      '限今日下班前回覆：五區代表要求重新計算平等指標！'
-    ];
+    const lang = getLocale();
+    const phrases = STICKY_NOTES_PHRASES[lang] || STICKY_NOTES_PHRASES.zh;
     const colors = ['note-yellow', 'note-pink', 'note-orange'];
 
     for (let i = 0; i < noteCount; i++) {
@@ -487,18 +551,20 @@ export class DeskUI {
       note.className = `sticky-note ${colors[i % colors.length]}`;
       const rot = (i % 2 === 0 ? -1 : 1) * (5 + (i * 4) % 15);
       
+      // Position notes safely around top and mid borders, strictly avoiding the bottom dashboard
       if (i < 2) {
         note.style.left = `${15 + i * 160}px`;
         note.style.top = '70px';
       } else if (i < 4) {
-        note.style.right = `${260 + (i - 2) * 160}px`;
+        note.style.right = `${160 + (i - 2) * 160}px`;
         note.style.top = '70px';
       } else {
         note.style.left = '20px';
-        note.style.bottom = `${120 + (i - 4) * 110}px`;
+        note.style.top = `${220 + (i - 4) * 125}px`;
       }
       note.style.transform = `rotate(${rot}deg)`;
       note.textContent = phrases[i % phrases.length];
+      this.makeDraggable(note);
       this.stickyNotesZone.appendChild(note);
     }
   }
@@ -506,32 +572,81 @@ export class DeskUI {
   renderMeltdownProps() {
     this.meltdownProps.innerHTML = '';
     const stage = this.gm.meltdown_stage;
+    const lang = getLocale();
+    const notes = FINANCE_DIRECTOR_NOTES[lang] || FINANCE_DIRECTOR_NOTES.zh;
 
     if (stage === 1) {
       const note = document.createElement('div');
       note.className = 'sticky-note note-blue';
-      note.textContent = NARRATIVE.finance_director_notes.stage_1[0];
+      note.textContent = notes.stage_1[0];
+      this.makeDraggable(note);
       this.meltdownProps.appendChild(note);
     } else if (stage === 2) {
       const note = document.createElement('div');
       note.className = 'sticky-note note-yellow';
       note.style.borderColor = '#fa5252';
-      note.innerHTML = `<strong>⚠️ 財政嚴重告急！</strong><br>${NARRATIVE.finance_director_notes.stage_2[1]}`;
+      note.innerHTML = `<strong>${notes.stage_2_warning}</strong><br>${notes.stage_2[1]}`;
+      this.makeDraggable(note);
       this.meltdownProps.appendChild(note);
     } else if (stage === 3) {
       this.meltdownProps.innerHTML = `
         <div class="iv-drip-bag">
-          <div style="font-size:9px;font-weight:bold;color:#fa5252;">緊急預備金</div>
+          <div style="font-size:9px;font-weight:bold;color:#fa5252;">${notes.stage_3_fund}</div>
           <div class="iv-liquid"></div>
         </div>
         <div class="hospital-chart">
-          🏥 高雄榮總診斷書<br>
-          病患：財政局長<br>
-          症狀：急性摩天輪赤字焦慮症<br>
-          醫囑：請勿再提愛情經濟
+          ${notes.stage_3_chart}
         </div>
       `;
     }
+  }
+
+  makeDraggable(element) {
+    let startX = 0, startY = 0, initialLeft = 0, initialTop = 0;
+    let isDragging = false;
+
+    const onPointerDown = (e) => {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+      isDragging = true;
+      const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
+      startX = clientX;
+      startY = clientY;
+
+      const rect = element.getBoundingClientRect();
+      const parentRect = (element.offsetParent || document.body).getBoundingClientRect();
+      initialLeft = rect.left - parentRect.left;
+      initialTop = rect.top - parentRect.top;
+
+      element.style.bottom = 'auto';
+      element.style.right = 'auto';
+      element.style.left = `${initialLeft}px`;
+      element.style.top = `${initialTop}px`;
+      element.style.zIndex = '99';
+
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+    };
+
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+      const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      element.style.left = `${initialLeft + dx}px`;
+      element.style.top = `${initialTop + dy}px`;
+    };
+
+    const onPointerUp = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      element.style.zIndex = '';
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+    };
+
+    element.addEventListener('pointerdown', onPointerDown);
   }
 
   startBackgroundSimulations() {

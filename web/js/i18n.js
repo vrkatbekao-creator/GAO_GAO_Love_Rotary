@@ -73,7 +73,10 @@ export const UI_STRINGS = {
     eval_rank: "評定等第：【{0} 級】",
     audit_date: "決算日期：第 12 回合終局審查",
     actual_balance: "實質預算結餘",
-    confidential_memo: "📌 機密備忘錄："
+    confidential_memo: "📌 機密備忘錄：",
+    drawer_tab_open: "建設行動",
+    drawer_tab_close: "收起選單",
+    drawer_header_title: "市政行動清單"
   },
   en: {
     app_title: "Kaohsiung Equality: Wheels for Everyone",
@@ -120,7 +123,10 @@ export const UI_STRINGS = {
     eval_rank: "Evaluation Grade: [Rank {0}]",
     audit_date: "Audit Date: Round 12 Final Settlement",
     actual_balance: "Net Budget Surplus",
-    confidential_memo: "📌 CONFIDENTIAL MEMO:"
+    confidential_memo: "📌 CONFIDENTIAL MEMO:",
+    drawer_tab_open: "Actions",
+    drawer_tab_close: "Close",
+    drawer_header_title: "Municipal Actions"
   },
   ja: {
     app_title: "『高高平等：みんなに乗る観覧車がある』",
@@ -167,7 +173,10 @@ export const UI_STRINGS = {
     eval_rank: "総合評価判定：【ランク {0}】",
     audit_date: "決算期日：第12ターン終局監査",
     actual_balance: "実質予算余剰",
-    confidential_memo: "📌 機密メモ："
+    confidential_memo: "📌 機密メモ：",
+    drawer_tab_open: "建設行動",
+    drawer_tab_close: "閉じる",
+    drawer_header_title: "市政行動リスト"
   },
   fr: {
     app_title: "Égalité Kaohsiung : Une Grande Roue pour Tous",
@@ -214,7 +223,10 @@ export const UI_STRINGS = {
     eval_rank: "Mention d'Évaluation : [Rang {0}]",
     audit_date: "Date d'Audit : Clôture du 12ème Tour",
     actual_balance: "Excédent Budgétaire Réel",
-    confidential_memo: "📌 MÉMORANDUM CONFIDENTIEL :"
+    confidential_memo: "📌 MÉMORANDUM CONFIDENTIEL :",
+    drawer_tab_open: "Actions",
+    drawer_tab_close: "Fermer",
+    drawer_header_title: "Actions Municipales"
   },
   nl: {
     app_title: "Kaohsiung Gelijkheid: Reuzenraderen voor Iedereen",
@@ -261,7 +273,126 @@ export const UI_STRINGS = {
     eval_rank: "Eindbeoordeling: [Rang {0}]",
     audit_date: "Auditdatum: Eindafrekening Ronde 12",
     actual_balance: "Reëel Begrotingsoverschot",
-    confidential_memo: "📌 VERTROUWELIJK MEMORANDUM:"
+    confidential_memo: "📌 VERTROUWELIJK MEMORANDUM:",
+    drawer_tab_open: "Acties",
+    drawer_tab_close: "Sluiten",
+    drawer_header_title: "Gemeentelijke Acties"
+  }
+};
+
+export const STICKY_NOTES_PHRASES = {
+  zh: [
+    "急件！市長要求摩天輪粉紅色霓虹燈必須在下週完工！",
+    "特急！舊城區居民集體抗議日照權遭巨輪遮蔽！",
+    "極機密：經發局報告建議將香腸攤納入高科技產業！",
+    "長官震怒！80度接駁公車被拍到在空中翻轉兩圈！",
+    "請速簽：山城區居民要求每戶配置個人高空滑索！",
+    "限今日下班前回覆：五區代表要求重新計算平等指標！"
+  ],
+  en: [
+    "URGENT: Mayor demands pink neon lights on Ferris wheel finished next week!",
+    "CRITICAL: Old Town residents protest sunlight completely blocked by giant wheel!",
+    "TOP SECRET: Econ Bureau suggests reclassifying sausage stalls as high-tech!",
+    "CHIEF ENRAGED: 80° shuttle bus filmed doing two aerial flips!",
+    "PLEASE SIGN: Mountain residents demand personal zip lines for every household!",
+    "REPLY TODAY: All district reps demand recalculation of equality index!"
+  ],
+  ja: [
+    "至急！市長が観覧車のピンクネオンを来週中に完工するよう要求！",
+    "特急！旧市街の住民が日照権を大観覧車に遮られたと集団抗議！",
+    "極秘：経発局の報告書でソーセージ屋台のハイテク産業指定を提案！",
+    "長官激怒！80度のシャトルバスが空中で2回転した映像が拡散！",
+    "至急決裁：山岳住民が全世帯への専用ジップライン配備を要求！",
+    "本日中必着：全区代表が平等指数の再計算を要求！"
+  ],
+  fr: [
+    "URGENT ! Le maire exige que les néons roses de la Grande Roue soient finis la semaine prochaine !",
+    "TRÈS URGENT ! Les riverains de la Vieille Ville protestent contre la disparition du soleil !",
+    "SECRET DÉFENSE : Rapport suggérant de classer les stands de saucisses comme haute-technologie !",
+    "COLÈRE DU MAIRE ! La navette à 80° a été filmée en train de faire deux loopings !",
+    "À SIGNER : Les habitants de la montagne réclament une tyrolienne par foyer !",
+    "RÉPONSE AVANT CE SOIR : Les 5 districts exigent un recalcul de l'indice d'égalité !"
+  ],
+  nl: [
+    "SPOED! Burgemeester eist dat de roze neonlichten op het reuzenrad volgende week klaar zijn!",
+    "ZEER DRINGEND! Oude Stad protesteert massaal omdat reuzenrad alle zonlicht wegneemt!",
+    "STRIKT GEHEIM: Economische Dienst stelt voor worstenkramen als hightech aan te merken!",
+    "WOEDE BIJ BURGEMEESTER! 80°-shuttlebus gefilmd terwijl hij twee salto's in de lucht maakte!",
+    "DRINGEND TEKENEN: Bergbewoners eisen een persoonlijke kabelbaan voor elk huishouden!",
+    "VANDAAG BEANTWOORDEN: Alle districten eisen herberekening van de gelijkheidsindex!"
+  ]
+};
+
+export const FINANCE_DIRECTOR_NOTES = {
+  zh: {
+    stage_1: [
+      "市長，目前帳目尚稱整齊，請務必按照進度撥款。",
+      "公聽會的茶水費已經報銷，請長官放心。"
+    ],
+    stage_2_warning: "⚠️ 財政嚴重告急！",
+    stage_2: [
+      "國庫不是許願池，愛情也不能無卡分期！",
+      "如果下個月沒長出浪漫，我們兩個都會被抓去關！",
+      "我已經下令把市府二樓以上燈全關了，您現在滿意了嗎？！"
+    ],
+    stage_3_fund: "緊急預備金",
+    stage_3_chart: `🏥 高雄榮總診斷書<br>病患：財政局長<br>症狀：急性摩天輪赤字焦慮症<br>醫囑：請勿再提愛情經濟`
+  },
+  en: {
+    stage_1: [
+      "Mayor, the books are balanced for now. Please disburse on schedule.",
+      "Hearing refreshment expenses have been reimbursed. Rest assured."
+    ],
+    stage_2_warning: "⚠️ FISCAL EMERGENCY!",
+    stage_2: [
+      "The treasury is not a wishing well, and love cannot be bought on credit!",
+      "If romance doesn't blossom next month, both of us will end up behind bars!",
+      "I ordered all lights above the 2nd floor shut off. Are you satisfied?!"
+    ],
+    stage_3_fund: "EMERGENCY FUND",
+    stage_3_chart: `🏥 Kaohsiung General Hospital<br>Patient: Finance Director<br>Diagnosis: Acute Ferris Wheel Deficit Anxiety<br>Rx: Cease all romance economic talks`
+  },
+  ja: {
+    stage_1: [
+      "市長、現在のところ帳簿は整っております。計画通りの執行を願います。",
+      "公聴会のお茶代は精算済みです。ご安心ください。"
+    ],
+    stage_2_warning: "⚠️ 財政危機警報！",
+    stage_2: [
+      "国庫は賽銭箱ではありません！愛をローンで買うことは不可能です！",
+      "来月ロマンスが実を結ばなければ、私たち二人は投獄されます！",
+      "市庁舎2階以上の照明を全消灯させました。これでご満足ですか？！"
+    ],
+    stage_3_fund: "緊急予備費",
+    stage_3_chart: `🏥 高雄総合病院 診断書<br>患者：財政局長<br>病名：急性観覧車赤字パニック障害<br>指示：二度と「愛の経済」を口にしないこと`
+  },
+  fr: {
+    stage_1: [
+      "Monsieur le Maire, les comptes sont en ordre. Merci de respecter l'échéancier.",
+      "Les frais de café des audiences ont été remboursés. Ne vous inquiétez pas."
+    ],
+    stage_2_warning: "⚠️ CRISE BUDGÉTAIRE GRAVE !",
+    stage_2: [
+      "Le trésor public n'est pas un puits à souhaits, et l'amour ne s'achète pas à crédit !",
+      "Si la romance ne décolle pas le mois prochain, nous finirons tous deux en prison !",
+      "J'ai fait éteindre toutes les lumières dès le 1er étage. Êtes-vous satisfait ?!"
+    ],
+    stage_3_fund: "FONDS D'URGENCE",
+    stage_3_chart: `🏥 Hôpital Central de Kaohsiung<br>Patient : Directeur des Finances<br>Diagnostic : Crise aiguë d'anxiété du déficit de la Grande Roue<br>Prescription : Interdiction de parler d'économie romantique`
+  },
+  nl: {
+    stage_1: [
+      "Burgemeester, de boekhouding is vooralsnog op orde. Houd u aan de begroting.",
+      "De koffiekosten van de hoorzitting zijn gedeclareerd. Maakt u zich geen zorgen."
+    ],
+    stage_2_warning: "⚠️ ERNSTIGE BEGROTINGSNODEN!",
+    stage_2: [
+      "De schatkist is geen wensput, en liefde koop je niet op afbetaling!",
+      "Als er volgende maand geen romantiek bloeit, belanden we allebei in de cel!",
+      "Ik heb alle lichten vanaf de 2e verdieping laten uitschakelen. Bent u nu tevreden?!"
+    ],
+    stage_3_fund: "NOODFONDS",
+    stage_3_chart: `🏥 Algemeen Ziekenhuis Kaohsiung<br>Patiënt: Directeur Financiën<br>Diagnose: Acute reuzenradtekort-paniek<br>Advies: Nooit meer spreken over romantische economie`
   }
 };
 
