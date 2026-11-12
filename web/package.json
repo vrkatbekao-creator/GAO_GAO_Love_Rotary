@@ -2,12 +2,11 @@
   "name": "web",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test_game_manager.js && node tests/test_ending_dossier.js && node tests/test_p0_p1_regressions.js"
   },
   "keywords": [],
   "author": "",
