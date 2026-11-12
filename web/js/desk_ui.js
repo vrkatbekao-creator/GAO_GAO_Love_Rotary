@@ -44,6 +44,19 @@ export class DeskUI {
     this.langSelect = document.getElementById('lang-select');
     this.budgetSelect = document.getElementById('budget-scenario-select');
 
+    // Settings Drawer elements
+    this.settingsDrawer = document.getElementById('settings-drawer');
+    this.settingsToggleBtn = document.getElementById('settings-drawer-toggle-btn');
+    this.settingsTabText = document.getElementById('settings-tab-text');
+    this.settingsTabArrow = document.getElementById('settings-tab-arrow');
+    this.settingsCloseBtn = document.getElementById('settings-drawer-close-btn');
+    this.settingsHeaderTitle = document.getElementById('settings-drawer-header-title');
+    this.labelDrawerLang = document.getElementById('label-drawer-lang');
+    this.labelDrawerBudget = document.getElementById('label-drawer-budget');
+    this.settingsBudgetHint = document.getElementById('settings-budget-hint');
+    this.btnRestartGame = document.getElementById('btn-restart-game');
+    this.mayorAvatarBtn = document.getElementById('mayor-avatar-btn');
+
     // Action Drawer elements
     this.actionDrawer = document.getElementById('action-drawer');
     this.drawerToggleBtn = document.getElementById('drawer-toggle-btn');
@@ -78,21 +91,61 @@ export class DeskUI {
       this.closeActionDrawer();
     });
 
-    // Close drawer when clicking the 3D diorama canvas or desk outside drawer
+    // Settings drawer toggle & close
+    this.settingsToggleBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleSettingsDrawer();
+    });
+
+    this.settingsCloseBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.closeSettingsDrawer();
+    });
+
+    // Mayor avatar click -> cycle next quote with fun feedback
+    this.mayorAvatarBtn?.addEventListener('click', () => {
+      this.cycleNextMayorQuote();
+    });
+
+    // Restart game session button in settings drawer
+    this.btnRestartGame?.addEventListener('click', () => {
+      if (confirm(t('confirm_reset_budget'))) {
+        this.closeSettingsDrawer();
+        this.gm.reset(this.gm.seed, this.gm.initialNetBudget ?? 0.5);
+        if (window.audio) {
+          window.audio.setDeficitState(this.gm.net_budget < 0);
+          window.audio.setComplaintsFilter(false);
+        }
+        if (this.options.onBudgetReset) {
+          this.options.onBudgetReset(this.gm.initialNetBudget ?? 0.5);
+        }
+        this.updateAllDisplays();
+      }
+    });
+
+    // Close drawers when clicking the 3D diorama canvas or desk outside drawers
     this.dioramaWrapper?.addEventListener('click', () => {
       if (this.actionDrawer?.classList.contains('drawer-open')) {
         this.closeActionDrawer();
       }
+      if (this.settingsDrawer?.classList.contains('drawer-open')) {
+        this.closeSettingsDrawer();
+      }
     });
 
-    // Keyboard shortcut: 'B' toggles actions drawer, 'Escape' closes drawer
+    // Keyboard shortcuts: 'B' toggles action drawer, 'S' / 'O' toggles settings drawer, 'Escape' closes both
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (this.actionDrawer?.classList.contains('drawer-open')) {
           this.closeActionDrawer();
         }
+        if (this.settingsDrawer?.classList.contains('drawer-open')) {
+          this.closeSettingsDrawer();
+        }
       } else if ((e.key === 'b' || e.key === 'B') && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
         this.toggleActionDrawer();
+      } else if ((e.key === 's' || e.key === 'S' || e.key === 'o' || e.key === 'O') && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+        this.toggleSettingsDrawer();
       }
     });
 
@@ -189,6 +242,7 @@ export class DeskUI {
 
   openActionDrawer() {
     if (!this.actionDrawer) return;
+    this.closeSettingsDrawer();
     this.actionDrawer.classList.add('drawer-open');
     if (this.drawerToggleBtn) this.drawerToggleBtn.setAttribute('aria-expanded', 'true');
     if (this.drawerTabText) this.drawerTabText.textContent = t('drawer_tab_close');
@@ -201,6 +255,44 @@ export class DeskUI {
     if (this.drawerToggleBtn) this.drawerToggleBtn.setAttribute('aria-expanded', 'false');
     if (this.drawerTabText) this.drawerTabText.textContent = t('drawer_tab_open');
     if (this.drawerTabArrow) this.drawerTabArrow.textContent = '◀';
+  }
+
+  toggleSettingsDrawer() {
+    if (this.settingsDrawer?.classList.contains('drawer-open')) {
+      this.closeSettingsDrawer();
+    } else {
+      this.openSettingsDrawer();
+    }
+  }
+
+  openSettingsDrawer() {
+    if (!this.settingsDrawer) return;
+    this.closeActionDrawer();
+    this.settingsDrawer.classList.add('drawer-open');
+    if (this.settingsToggleBtn) this.settingsToggleBtn.setAttribute('aria-expanded', 'true');
+    if (this.settingsTabText) this.settingsTabText.textContent = t('settings_drawer_tab_close');
+    if (this.settingsTabArrow) this.settingsTabArrow.textContent = '◀';
+  }
+
+  closeSettingsDrawer() {
+    if (!this.settingsDrawer) return;
+    this.settingsDrawer.classList.remove('drawer-open');
+    if (this.settingsToggleBtn) this.settingsToggleBtn.setAttribute('aria-expanded', 'false');
+    if (this.settingsTabText) this.settingsTabText.textContent = t('settings_drawer_tab_open');
+    if (this.settingsTabArrow) this.settingsTabArrow.textContent = '▶';
+  }
+
+  cycleNextMayorQuote() {
+    this.quoteIdx++;
+    const lang = getLocale();
+    const quotes = MAYOR_QUOTES[lang] || MAYOR_QUOTES.zh;
+    if (this.mayorQuote) {
+      this.mayorQuote.style.opacity = '0';
+      setTimeout(() => {
+        this.mayorQuote.textContent = quotes[this.quoteIdx % quotes.length];
+        this.mayorQuote.style.opacity = '1';
+      }, 150);
+    }
   }
 
   updateLanguageStrings() {
@@ -224,6 +316,17 @@ export class DeskUI {
     if (this.drawerTabText) this.drawerTabText.textContent = t(isOpen ? 'drawer_tab_close' : 'drawer_tab_open');
     if (this.drawerTabArrow) this.drawerTabArrow.textContent = isOpen ? '▶' : '◀';
     if (this.drawerHeaderTitle) this.drawerHeaderTitle.textContent = t('drawer_header_title');
+
+    // Settings drawer tab, header & group labels
+    const isSettingsOpen = this.settingsDrawer?.classList.contains('drawer-open');
+    if (this.settingsTabText) this.settingsTabText.textContent = t(isSettingsOpen ? 'settings_drawer_tab_close' : 'settings_drawer_tab_open');
+    if (this.settingsTabArrow) this.settingsTabArrow.textContent = isSettingsOpen ? '◀' : '▶';
+    if (this.settingsHeaderTitle) this.settingsHeaderTitle.textContent = t('settings_drawer_title');
+    if (this.labelDrawerLang) this.labelDrawerLang.textContent = t('label_drawer_lang');
+    if (this.labelDrawerBudget) this.labelDrawerBudget.textContent = t('label_drawer_budget');
+    if (this.settingsBudgetHint) this.settingsBudgetHint.textContent = t('settings_budget_hint');
+    const labelRestart = document.getElementById('label-btn-restart');
+    if (labelRestart) labelRestart.textContent = t('btn_restart_game');
 
     // Action buttons labels
     const actionDefs = [

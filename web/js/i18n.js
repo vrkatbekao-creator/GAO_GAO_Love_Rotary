@@ -87,7 +87,14 @@ export const UI_STRINGS = {
     budget_scenario_custom: "⚙️ 自訂數值 (+0.5 ~ -18.0億)...",
     prompt_custom_budget: "請輸入起始淨預算 (單位：億，範圍從 +0.5 到 -18.0，負數代表負基債務開局)：",
     confirm_reset_budget: "切換起始預算將重新開始市政會議。確定要重新開始嗎？",
-    credit_limit_exceeded: "已達市政舉債信用上限！請償還債務或暫停建設"
+    credit_limit_exceeded: "已達市政舉債信用上限！請償還債務或暫停建設",
+    settings_drawer_tab_open: "市政決策",
+    settings_drawer_tab_close: "收起決策",
+    settings_drawer_title: "市政決策與設定",
+    label_drawer_lang: "語言選擇 (Language)",
+    label_drawer_budget: "起始預算決策 (Fiscal Policy)",
+    settings_budget_hint: "※ 零基開局 (+0.5億) 考驗精準撙節；負基開局 (-18.0億) 將面臨利息與查封深淵。",
+    btn_restart_game: "🔄 重新召開市政會議"
   },
   en: {
     app_title: "Kaohsiung Equality: Wheels for Everyone",
@@ -146,7 +153,14 @@ export const UI_STRINGS = {
     budget_scenario_custom: "⚙️ Custom (+0.5 ~ -18.0B)...",
     prompt_custom_budget: "Enter starting net budget (Billion, range: +0.5 to -18.0, negative means deficit start):",
     confirm_reset_budget: "Changing starting budget will restart the council meeting. Proceed?",
-    credit_limit_exceeded: "Credit limit reached! Please repay debt or pause construction"
+    credit_limit_exceeded: "Credit limit reached! Please repay debt or pause construction",
+    settings_drawer_tab_open: "Policy",
+    settings_drawer_tab_close: "Close",
+    settings_drawer_title: "Fiscal Policy & Settings",
+    label_drawer_lang: "Language (語言)",
+    label_drawer_budget: "Initial Budget Mode",
+    settings_budget_hint: "※ Zero-base (+0.5B) tests strict austerity; Deficit abyss (-18.0B) brings crushing interest & court seizures.",
+    btn_restart_game: "🔄 Restart Council Session"
   },
   ja: {
     app_title: "『高高平等：みんなに乗る観覧車がある』",
@@ -205,7 +219,14 @@ export const UI_STRINGS = {
     budget_scenario_custom: "⚙️ カスタム設定 (+0.5 〜 -18.0億)...",
     prompt_custom_budget: "初期正味予算を入力してください（単位：億、範囲：+0.5 〜 -18.0、負数は赤字開局）：",
     confirm_reset_budget: "初期予算の切り替えは市政会議を再起動します。よろしいですか？",
-    credit_limit_exceeded: "借入信用限度額に達しました！債務を返済するか建設を一時停止してください"
+    credit_limit_exceeded: "借入信用限度額に達しました！債務を返済するか建設を一時停止してください",
+    settings_drawer_tab_open: "市政決策",
+    settings_drawer_tab_close: "閉じる",
+    settings_drawer_title: "市政決策とシステム設定",
+    label_drawer_lang: "言語選択 (Language)",
+    label_drawer_budget: "初期予算モード (Fiscal Policy)",
+    settings_budget_hint: "※ ゼロベース (+0.5億) は厳格な緊縮財政、赤字深淵 (-18.0億) は利息と差押えの試練。",
+    btn_restart_game: "🔄 市政会議を再起動"
   },
   fr: {
     app_title: "Égalité Kaohsiung : Une Grande Roue pour Tous",
@@ -264,7 +285,14 @@ export const UI_STRINGS = {
     budget_scenario_custom: "⚙️ Personnalisé (+0,5 ~ -18,0 Md)...",
     prompt_custom_budget: "Entrez le budget net initial (Milliards, de +0,5 à -18,0, négatif = départ déficitaire) :",
     confirm_reset_budget: "Changer le budget initial réinitialisera la réunion du conseil. Confirmer ?",
-    credit_limit_exceeded: "Plafond d'endettement atteint ! Remboursez la dette ou faites une pause"
+    credit_limit_exceeded: "Plafond d'endettement atteint ! Remboursez la dette ou faites une pause",
+    settings_drawer_tab_open: "Décisions",
+    settings_drawer_tab_close: "Fermer",
+    settings_drawer_title: "Politique Municipale & Paramètres",
+    label_drawer_lang: "Langue (Language)",
+    label_drawer_budget: "Mode Budgétaire Initial",
+    settings_budget_hint: "※ Base zéro (+0,5 Md) impose l'austérité ; le déficit abyssal (-18,0 Md) entraîne saisies et intérêts.",
+    btn_restart_game: "🔄 Relancer la Session Municipale"
   },
   nl: {
     app_title: "Kaohsiung Gelijkheid: Reuzenraderen voor Iedereen",
@@ -323,7 +351,14 @@ export const UI_STRINGS = {
     budget_scenario_custom: "⚙️ Aangepast (+€0,5 ~ -€18,0 mld)...",
     prompt_custom_budget: "Voer startnettobegroting in (Miljard, bereik: +0,5 tot -18,0, negatief = tekortstart):",
     confirm_reset_budget: "Het wijzigen van de startbegroting start de raadsvergadering opnieuw. Doorgaan?",
-    credit_limit_exceeded: "Kredietlimiet bereikt! Los schulden af of pauzeer de bouw"
+    credit_limit_exceeded: "Kredietlimiet bereikt! Los schulden af of pauzeer de bouw",
+    settings_drawer_tab_open: "Beleid",
+    settings_drawer_tab_close: "Sluiten",
+    settings_drawer_title: "Gemeentelijk Beleid & Instellingen",
+    label_drawer_lang: "Taal (Language)",
+    label_drawer_budget: "Startbegrotingsmodus",
+    settings_budget_hint: "※ Nulbasis (+€0,5 mld) vereist extreme bezuiniging; Abyss-tekort (-€18,0 mld) brengt rente en beslagen.",
+    btn_restart_game: "🔄 Raadsvergadering Herstarten"
   }
 };
 
@@ -526,7 +561,22 @@ export const NEWS_TICKER = {
     "【市場動態】愛情商圈香腸攤營收超越半導體封測廠，市府研擬課徵浪漫加值稅。",
     "【陳情速報】市民抗議大聲公音量突破 140 分貝，工務局表示將採購更大聲公反制。",
     "【觀光熱潮】外地情侶搭乘摩天輪因卡死半空 6 小時，獲頒市府「堅定愛情認證書」。",
-    "【財政預警】財政局辦公椅已被法院張貼查封封條，局長宣布全體同仁站立辦公以展現決心。"
+    "【財政預警】財政局辦公椅已被法院張貼查封封條，局長宣布全體同仁站立辦公以展現決心。",
+    "【市長指示】市長要求研發「摩天輪純愛發電」，聲稱情侶心跳加速可提供全市三成綠能。",
+    "【工務闢謠】舊城區民宅屋頂遭巨輪軸心砸穿，工務局表示已列為「天花板採光增強計畫」。",
+    "【市政奇蹟】市府宣布：連續搭乘高空接駁公車嘔吐三次之市民，可持診斷書折抵本季地價稅。",
+    "【外電報導】荷蘭專家實地考察山城區80度軌道，考察結束後全體辭職宣布改行特技飛行。",
+    "【市府人事】財政局長因「預算赤字血壓飆破200」，獲市長親贈題字「心靜自然涼」宣紙一幅。",
+    "【經發狂想】經發局提案將「摩天輪車廂」登記為微型住宅，號稱首創「時速5公里移動青年房產」。",
+    "【熱銷快訊】舊城區「穿模香腸攤」狂賣萬條，因攤位卡在摩天輪鋼架中，顧客需跳高兩米搶購。",
+    "【衛生宣導】衛生局鄭重呼籲：在摩天輪最高處大喊「發大財」並無法預防急性耳鳴或高血壓。",
+    "【科技警訊】科技區工程師抗議：摩天輪運轉震波引發晶圓廠共振，產出大量粉紅色心形晶片。",
+    "【議會質詢】議員質疑國庫空虛只剩五千萬，市長強硬回擊：「市府充滿了愛，無形資產突破三千億！」",
+    "【科技突破】市府研發團隊成功以「市長幹話錄音」驅動公車引擎，據傳續航力大幅超越特斯拉。",
+    "【觀光插曲】郊區地標「巡迴充氣邱比特」遭陣風吹至鄰市，鄰市市長致電抗議「空投巨型垃圾」。",
+    "【環保稽查】環保局檢測全市粉紅霓虹燈光害，局長戴墨鏡出席記者會宣布：「本市夜空已消滅黑暗！」",
+    "【登山爭議】登山客在山城區高空軌道下抗議拉布條，投訴「極速公車漏機油滴進登山便當」。",
+    "【金融重磅】國際信評機構調降本市至「浪漫級」，評語：「債台雖高築，但市民多巴胺突破天際。」"
   ],
   en: [
     "[BREAKING] Old Town sky missing for day 3; residents hold candlelight vigil to find the sun.",
@@ -534,7 +584,22 @@ export const NEWS_TICKER = {
     "[MARKET] Love sausage stalls surpass semiconductor revenue; City drafts Romance VAT.",
     "[PETITIONS] Citizen megaphones reach 140dB; Public Works orders louder megaphones to counter.",
     "[TOURISM] Couple trapped on Ferris wheel for 6 hours awarded City 'Unwavering Love Certificate'.",
-    "[FINANCE] Court seizes Director's office chair; Finance Bureau orders staff to work standing up."
+    "[FINANCE] Court seizes Director's office chair; Finance Bureau orders staff to work standing up.",
+    "[MAYOR'S DIRECTIVE] Mayor orders 'Pure Love Wheel Power' R&D, claiming lovers' heartbeats can supply 30% green energy.",
+    "[PUBLIC WORKS] Old Town roof punctured by giant wheel axle; Public Works: Classified as 'Ceiling Natural Lighting Enhancement'.",
+    "[CITY MIRACLE] Citizens vomiting 3 consecutive times on 80° shuttle bus can offset land taxes with medical receipts.",
+    "[GLOBAL PRESS] Dutch engineers inspect mountain 80° tracks; resign en masse upon returning home to pursue stunt aviation.",
+    "[PERSONNEL] Finance Director's BP hits 200 over deficit; Mayor presents him with 'Calm Mind Cools You Down' calligraphy.",
+    "[ECONOMY BIZARRE] Bureau proposes classifying wheel cabins as micro-apartments: 'World's first 5 km/h mobile youth housing'.",
+    "[BEST SELLER] Old Town 'Clipping Sausage' sells 10,000 links; stall clipped inside wheel frame, buyers must jump 2m high.",
+    "[HEALTH WARNING] Health Bureau: Shouting 'Make a Fortune' at the apex of the Ferris wheel does not cure acute tinnitus.",
+    "[TECH CRISIS] Tech engineers protest: Ferris wheel resonance with fab machinery produces pink heart-shaped silicon wafers.",
+    "[COUNCIL CLASH] Councilor questions only $50M cash left; Mayor retorts: 'City Hall is full of love, an asset worth 300 Billion!'",
+    "[BREAKTHROUGH] R&D team powers shuttle bus engines with Mayor's quote audio tapes; rumored range easily beats Tesla.",
+    "[TOURISM GLITCH] Suburban 'Inflatable Cupid' blown into neighboring city; neighbor Mayor protests against 'airdropped mega-trash'.",
+    "[ENVIRONMENT] Eco Bureau tests pink neon pollution; Director wears sunglasses to press conference: 'Darkness has been eradicated!'",
+    "[HIKING DISPUTE] Hikers protest beneath aerial tracks: 'High-speed transit bus leaking motor oil into our hiking lunchboxes'.",
+    "[CREDIT RATING] Global agency downgrades city to 'Romance Grade': 'Heavily indebted, yet citizen dopamine levels break records.'"
   ],
   ja: [
     "【速報】旧市街の上空が消えて3日目、住民が「太陽を探す」キャンドル集会を開催。",
@@ -542,7 +607,22 @@ export const NEWS_TICKER = {
     "【市場動向】愛のソーセージ屋台の売上が半導体工場を凌駕、市はロマンス付加価値税を検討。",
     "【陳情速報】住民の抗議メガホンが140デシベル突破、工務局は更なる大音量メガホンの配備を決定。",
     "【観光過熱】観覧車で6時間宙吊りになったカップルに市公認「不滅の愛認定証」を授与。",
-    "【財政警告】裁判所が財政局長の椅子を差し押さえ、局長は「決意の直立執務」を全職員に命令。"
+    "【財政警告】裁判所が財政局長の椅子を差し押さえ、局長は「決意の直立執務」を全職員に命令。",
+    "【市長訓示】市長が「愛の観覧車発電」開発を指示、カップルの動悸で市全域の電力3割を賄えると主張。",
+    "【工務釈明】旧市街の民家屋根を巨大観覧車の車軸が直撃、工務局は「天窓採光強化プロジェクト」と認定。",
+    "【市政の奇跡】80度シャトルバスで3回連続嘔吐した市民は、診断書提出で今期の固定資産税免除に。",
+    "【海外電報】オランダの鉄道専門家が山岳80度路線を視察、帰国後全員辞職し曲技飛行士への転身を発表。",
+    "【市庁人事】赤字ショックで血圧200超えの財政局長に、市長直筆「心頭滅却すれば火も自ずから涼し」の書を授与。",
+    "【経発奇策】観覧車のゴンドラを若者向け住宅に指定、「世界初の時速5km移動式ワンルームマンション」と命名。",
+    "【特大ヒット】旧市街の「ポリゴン貫通ソーセージ」が1万本完売、骨組みに埋まった屋台へ2mジャンプして購入。",
+    "【衛生警告】衛生局が厳重警告：観覧車の最高到達点で「大儲け！」と叫んでも耳鳴りや高血圧は予防できません。",
+    "【ハイテク危機】科技区の半導体技術者が抗議：観覧車の振動と露光装置が共振し「ピンクのハート型ウェハー」が大量発生。",
+    "【市議会紛糾】議員が手元資金5000万への激減を追及、市長は「市庁舎は愛に満ちており愛の価値は3000億超だ」と一蹴。",
+    "【技術革新】開発チームが「市長の迷言音声」でバスのエンジンを駆動させることに成功、航続距離テスラ超えの噂。",
+    "【観光トラブル】郊外の巨大インフレータブル・キューピッドが隣市へ突風で漂着、隣市長が「巨大ゴミの空投」と猛抗議。",
+    "【環境白書】ピンクのネオン光害測定で局長がサングラス姿で登壇、「我が市の夜空から暗闇を完全に駆逐した」と宣言。",
+    "【登山客の怒り】山岳高架橋の下で登山客が横断幕抗議：「上空を疾走するバスからエンジンオイルが弁当に降ってくる」。",
+    "【格付け激震】国際格付会社が当市を「ロマンス級」へ格下げ、「借金地獄だが市民のドーパミン分泌量は世界最高水準」。"
   ],
   fr: [
     "[FLASH] Le ciel de la Vieille Ville a disparu depuis 3 jours ; veillée aux chandelles pour retrouver le soleil.",
@@ -550,7 +630,22 @@ export const NEWS_TICKER = {
     "[ÉCONOMIE] Les stands de saucisses dépassent les usines de puces ; la Mairie prépare une TVA Romantique.",
     "[PÉTITIONS] Les mégaphones atteignent 140 dB ; les Travaux Publics commandent des mégaphones plus puissants.",
     "[TOURISME] Un couple coincé 6h sur la Grande Roue reçoit le 'Diplôme d'Amour Éternel' de la Mairie.",
-    "[FINANCES] Fauteuil du directeur saisi par le tribunal ; tout le service financier travaille désormais debout."
+    "[FINANCES] Fauteuil du directeur saisi par le tribunal ; tout le service financier travaille désormais debout.",
+    "[DIRECTIVE DU MAIRE] Projet 'Énergie de l'Amour' : les palpitations des couples alimenteraient 30% de la ville.",
+    "[TRAVAUX PUBLICS] Toit transpercé par l'axe de la Grande Roue ; classé 'Projet d'Amélioration de la Lumière Naturelle'.",
+    "[MIRACLE MUNICIPAL] 3 vomissements consécutifs dans la navette à 80° donnent droit à une déduction de taxe foncière.",
+    "[DÉPÊCHE] Les experts néerlandais inspectent les voies à 80° ; tous démissionnent pour devenir pilotes de voltige.",
+    "[MUNICIPALITÉ] Tension du Directeur des Finances à 200 ; le Maire lui offre un poème calligraphié : 'L'esprit calme reste frais'.",
+    "[IDÉE DU JOUR] Les nacelles de la Roue classées logements pour jeunes : 'Premier studio mobile au monde à 5 km/h'.",
+    "[VENTE RECORD] 10 000 'Saucisses Traversantes' vendues ; le stand étant fusionné dans l'acier, il faut sauter de 2 mètres.",
+    "[SANTÉ] Avertissement sanitaire : Crier 'Fortune !' au sommet de la roue ne guérit ni les acouphènes ni l'hypertension.",
+    "[PANIQUE TECH] Les ingénieurs protestent : la roue fait vibrer les machines et fabrique des puces roses en forme de cœur.",
+    "[CONSEIL MUNICIPAL] L'opposition s'alarme des 50M restants ; le Maire : 'La Mairie déborde d'amour, un actif de 300 Milliards !'",
+    "[INNOVATION] Une navette expérimentale roule grâce aux enregistrements des discours du maire, autonomie supérieure à Tesla.",
+    "[INCIDENT] Le Cupidon gonflable s'envole chez la ville voisine ; leur Maire porte plainte pour 'parachutage de déchets'.",
+    "[ÉCOLOGIE] Pollution néon rose : Le Directeur de l'Environnement en lunettes de soleil déclare 'La nuit est vaincue !'",
+    "[COLÈRE EN MONTAGNE] Les randonneurs protestent : 'Les bus volants à vive allure font couler de l'huile dans nos sandwichs'.",
+    "[NOTATION FINANCIÈRE] La ville dégradée en 'Catégorie Romantique' : 'Dette colossale, mais dopamine citoyenne record'."
   ],
   nl: [
     "[LAATSTE NIEUWS] Lucht boven Oude Stad al 3 dagen verdwenen; bewoners houden wake om de zon te zoeken.",
@@ -558,7 +653,22 @@ export const NEWS_TICKER = {
     "[ECONOMIE] Romantische worstenkraam overtreft chipfabrieken; stad overweegt Romantiek-BTW.",
     "[KLACHTEN] Megafoons van demonstranten bereiken 140 dB; Openbare Werken bestelt luidere megafoons.",
     "[TOERISME] Koppel dat 6 uur vastzat in reuzenrad ontvangt gemeentelijk 'Onvoorwaardelijke Liefde Certificaat'.",
-    "[FINANCIËN] Bureaustoel directeur in beslag genomen; voltallig personeel vergadert voortaan staand."
+    "[FINANCIËN] Bureaustoel directeur in beslag genomen; voltallig personeel vergadert voortaan staand.",
+    "[DIRECTIEVE BURGEMEESTER] Plan voor 'Reuzenrad Liefdesstroom': hartkloppingen van stellen leveren 30% groene stroom.",
+    "[OPENBARE WERKEN] Dak doorboord door reuzenradas; Openbare Werken noemt het 'Subsidieproject Plafondlicht'.",
+    "[GEMEENTELIJK WONDER] Drie opeenvolgende kotsbeurten in de 80°-shuttle geven recht op korting op de ozb.",
+    "[BUITENLANDS BERICHT] Nederlandse experts keuren bergspoor af; nemen voltallig ontslag om stuntvlieger te worden.",
+    "[PERSONEEL] Bloeddruk Financieel Directeur naar 200 door tekort; Burgemeester schenkt kalligrafie: 'Kalmte Brengt Koelte'.",
+    "[ECONOMISCHE GRILL] Reuzenradgondels erkend als starterswoningen: 'Werelds eerste mobiele studio aan 5 km/u'.",
+    "[VERKOOPRECORD] 10.000 'Clippende Worsten' verkocht; kraam zit klem in stalen balken, klanten moeten 2 meter hoog springen.",
+    "[VOLKSGEZONDHEID] Waarschuwing: 'Rijkdom!' roepen op het hoogste punt van het rad geneest geen acute oorsuizen.",
+    "[CHIPCRISIS] Ingenieurs protesteren: resonantie van het reuzenrad veroorzaakt roze hartvormige siliciumwafers.",
+    "[RAADSVERGADERING] Raad bezorgd over resterende 50 miljoen; Burgemeester: 'Het stadhuis zit vol liefde, ter waarde van 300 miljard!'",
+    "[INNOVATIE] Onderzoekers laten shuttlebus rijden op audio-opnames van de burgemeester; bereik groter dan Tesla.",
+    "[TOERISME-PECH] Opblaasbare Cupido waait naar buurgemeente; buurburgemeester eist opruiming van 'megavalafval'.",
+    "[MILIEUDIENST] Lichtvervuiling door roze neon: Directeur draagt zonnebril en verkondigt: 'De nacht is definitief verslagen!'",
+    "[WANDELPROTEST] Bergwandelaars demonstreren onder het spoor: 'Scheurende bussen lekken motorolie in onze lunchboxen'.",
+    "[KREDIETBEOORDELING] Kredietstatus verlaagd naar 'Romantiek-niveau': 'Torenhoge schuld, maar dopaminegehalte historisch hoog.'"
   ]
 };
 

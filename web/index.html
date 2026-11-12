@@ -20,7 +20,60 @@
       
       <!-- 市長 5 大幹話發言盒 -->
       <div class="mayor-quote-box">
-        <div class="mayor-avatar">🎩</div>
+        <div class="mayor-avatar" id="mayor-avatar-btn" title="市長 韓國瑜 Q 版 (點擊切換下則發言)">
+          <svg viewBox="0 0 64 64" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="30" fill="#fff9db" stroke="#ffd43b" stroke-width="2"/>
+            <!-- 招牌藍色襯衫身軀 (經典捲袖淺藍襯衫) -->
+            <path d="M 14 58 C 14 45 22 41 32 41 C 42 41 50 45 50 58 Z" fill="#339af0"/>
+            <!-- 襯衫白色領口與V領開襟 -->
+            <path d="M 26 41 L 32 49 L 38 41 Z" fill="#ffffff"/>
+            <path d="M 32 45 L 32 54" stroke="#1c7ed6" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- 小胸章 -->
+            <circle cx="23" cy="48" r="2.5" fill="#51cf66"/>
+
+            <!-- 光頭頭部本體 (圓潤親切粉膚色) -->
+            <ellipse cx="32" cy="27" rx="17" ry="18" fill="#ffe3c2"/>
+            
+            <!-- 招牌額頭反光光斑 (標誌性大光頭高光) -->
+            <ellipse cx="26" cy="16" rx="6" ry="2.5" transform="rotate(-20 26 16)" fill="#ffffff" opacity="0.8"/>
+            <circle cx="34" cy="14" r="1.5" fill="#ffffff" opacity="0.6"/>
+
+            <!-- 招牌頂部與兩側幾根標誌性稀疏毛髮 -->
+            <path d="M 30 9 Q 32 6 34 8" stroke="#495057" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 33 8 Q 36 5 37 8" stroke="#495057" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M 15 25 Q 13 23 15 20" stroke="#495057" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M 49 25 Q 51 23 49 20" stroke="#495057" stroke-width="1.2" stroke-linecap="round"/>
+
+            <!-- 耳朵 -->
+            <ellipse cx="14" cy="28" rx="2.5" ry="4" fill="#ffd8a8"/>
+            <ellipse cx="50" cy="28" rx="2.5" ry="4" fill="#ffd8a8"/>
+
+            <!-- 招牌親切八字笑眉 -->
+            <path d="M 21 21 Q 25 19 28 22" stroke="#495057" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M 36 22 Q 39 19 43 21" stroke="#495057" stroke-width="1.8" stroke-linecap="round"/>
+
+            <!-- 標誌性瞇瞇眼招牌笑眼 (開朗月牙彎彎眼) -->
+            <path d="M 22 27 Q 26 23 29 27" stroke="#212529" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M 35 27 Q 38 23 42 27" stroke="#212529" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- 眼角招牌笑紋 (魚尾紋) -->
+            <path d="M 19 26 L 21 27" stroke="#868e96" stroke-width="1" stroke-linecap="round"/>
+            <path d="M 45 26 L 43 27" stroke="#868e96" stroke-width="1" stroke-linecap="round"/>
+
+            <!-- 圓圓小鼻子 -->
+            <path d="M 31 30 Q 32 32 33 30" stroke="#e8590c" stroke-width="1.5" stroke-linecap="round"/>
+
+            <!-- 招牌開懷大笑嘴巴 (露出上排白牙與舌頭) -->
+            <path d="M 25 33 Q 32 41 39 33 Z" fill="#c92a2a"/>
+            <!-- 白牙 -->
+            <path d="M 26 33.5 Q 32 36 38 33.5 Z" fill="#ffffff"/>
+            <!-- 舌頭 -->
+            <path d="M 29 38 Q 32 36 35 38 Z" fill="#ff8787"/>
+
+            <!-- 招牌紅潤微笑腮紅 -->
+            <circle cx="19" cy="31" r="3" fill="#ff6b6b" opacity="0.45"/>
+            <circle cx="45" cy="31" r="3" fill="#ff6b6b" opacity="0.45"/>
+          </svg>
+        </div>
         <div id="mayor-quote-text" class="mayor-text">
           愛情不是感覺，愛情是本市下個季度的 GDP！
         </div>
@@ -34,30 +87,6 @@
           <span id="interpreter-mood">專業微笑</span>
         </div>
       </div>
-
-      <!-- 財政開局模式選擇器 (Budget Scenario Selector) -->
-      <div class="budget-selector-box">
-        <span class="budget-icon">💰</span>
-        <select id="budget-scenario-select" class="budget-select-dropdown" title="選擇起始預算模式 (零基或負基)">
-          <option value="0.5">🟢 零基預算 (+$0.5億)</option>
-          <option value="-6.0">🟡 輕度負基 (-$6.0億)</option>
-          <option value="-12.0">🟠 重度負基 (-$12.0億)</option>
-          <option value="-18.0">🔴 極限負基 (-$18.0億)</option>
-          <option value="custom">⚙️ 自訂數值 (+0.5 ~ -18.0億)...</option>
-        </select>
-      </div>
-
-      <!-- 多語言選擇器 (i18n Selector) -->
-      <div class="lang-selector-box">
-        <span class="lang-icon">🌐</span>
-        <select id="lang-select" class="lang-select-dropdown">
-          <option value="zh">繁體中文</option>
-          <option value="en">English</option>
-          <option value="ja">日本語</option>
-          <option value="fr">Français</option>
-          <option value="nl">Nederlands</option>
-        </select>
-      </div>
     </header>
 
     <!-- 主工作區 (3D 微縮沙盤 + 2D 桌面物件) -->
@@ -67,6 +96,69 @@
       <div id="diorama-3d-wrapper">
         <canvas id="diorama-canvas"></canvas>
       </div>
+
+      <!-- 左側市政決策與設定抽屜 (Collapsible Settings & Fiscal Policy Drawer) -->
+      <nav id="settings-drawer" class="settings-drawer">
+        <!-- 抽屜常駐開關握把 (Left Drawer Pull Tab) -->
+        <button id="settings-drawer-toggle-btn" class="settings-drawer-toggle-tab" type="button" aria-expanded="false" title="開啟/收起市政決策與語言設定">
+          <span class="settings-tab-icon">⚙️</span>
+          <span id="settings-tab-text" class="settings-tab-text">市政決策</span>
+          <span id="settings-tab-arrow" class="settings-tab-arrow">▶</span>
+        </button>
+
+        <!-- 抽屜內部本體 -->
+        <div class="settings-drawer-inner">
+          <div class="drawer-header">
+            <div class="drawer-title-group">
+              <span class="drawer-header-icon">⚙️</span>
+              <span id="settings-drawer-header-title" class="drawer-header-title">市政決策與設定</span>
+            </div>
+            <button id="settings-drawer-close-btn" class="drawer-close-btn" type="button" aria-label="Close Settings Drawer">✕</button>
+          </div>
+
+          <div class="settings-drawer-content">
+            <!-- 區塊 1：多語言切換 (i18n Language) -->
+            <div class="settings-group">
+              <label class="settings-group-label" for="lang-select">
+                <span class="settings-group-icon">🌐</span>
+                <span id="label-drawer-lang">語言選擇 (Language)</span>
+              </label>
+              <select id="lang-select" class="settings-select-dropdown">
+                <option value="zh">繁體中文</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+                <option value="fr">Français</option>
+                <option value="nl">Nederlands</option>
+              </select>
+            </div>
+
+            <!-- 區塊 2：財政開局與決策 (Fiscal Start & Decision) -->
+            <div class="settings-group">
+              <label class="settings-group-label" for="budget-scenario-select">
+                <span class="settings-group-icon">💰</span>
+                <span id="label-drawer-budget">起始預算決策 (Fiscal Policy)</span>
+              </label>
+              <select id="budget-scenario-select" class="settings-select-dropdown" title="選擇起始預算模式 (零基或負基)">
+                <option value="0.5">🟢 零基預算 (+$0.5億)</option>
+                <option value="-6.0">🟡 輕度負基 (-$6.0億)</option>
+                <option value="-12.0">🟠 重度負基 (-$12.0億)</option>
+                <option value="-18.0">🔴 極限負基 (-$18.0億)</option>
+                <option value="custom">⚙️ 自訂數值 (+0.5 ~ -18.0億)...</option>
+              </select>
+              <div id="settings-budget-hint" class="settings-hint-text">
+                ※ 零基開局 (+0.5億) 考驗精準撙節；負基開局 (-18.0億) 將面臨利息與查封深淵。
+              </div>
+            </div>
+
+            <!-- 區塊 3：快速操作 (Quick Actions) -->
+            <div class="settings-group settings-group-actions">
+              <button id="btn-restart-game" class="settings-action-btn" type="button">
+                <span id="label-btn-restart">🔄 重新召開市政會議</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       <!-- 螢幕周遭便利貼遮擋層 (受行政負擔驅動) -->
       <div id="sticky-notes-zone"></div>
