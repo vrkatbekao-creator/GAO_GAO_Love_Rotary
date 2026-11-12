@@ -95,6 +95,7 @@
       <!-- 3D 沙盤畫布容器 -->
       <div id="diorama-3d-wrapper">
         <canvas id="diorama-canvas"></canvas>
+        <div id="webgl-fallback-note" role="status" hidden></div>
       </div>
 
       <!-- 螢幕周遭便利貼遮擋層 (左側保留給行政負擔展現) -->
@@ -301,6 +302,7 @@
     import { Diorama3D } from './js/diorama_3d.js';
     import { AudioEngine } from './js/audio_engine.js';
     import { DossierEnding } from './js/dossier_ending.js';
+    import { t } from './js/i18n.js';
 
     // 初始化音效引擎
     window.audio = new AudioEngine();
@@ -319,6 +321,7 @@
       console.warn('3D Diorama init failed, using fallback:', e);
       window.diorama = {
         canvas: document.getElementById('diorama-canvas'),
+        webglSupported: false,
         spawnWheel: () => {},
         buildShuttle: () => {},
         buildMarket: () => {},
@@ -327,6 +330,12 @@
         applyCourtSeizure: () => {},
         reset: () => {}
       };
+    }
+
+    if (!window.diorama.webglSupported || !window.diorama.renderer) {
+      const fallbackNote = document.getElementById('webgl-fallback-note');
+      fallbackNote.hidden = false;
+      fallbackNote.textContent = t('webgl_unavailable');
     }
 
     // 初始化結算卷宗模組

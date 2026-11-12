@@ -9,6 +9,8 @@ export class CitizenAI {
     this.particles = [];
     this.slimes = [];
     this.hearingAsleep = false;
+    this.disposed = false;
+    this.hearingTimeout = null;
 
     this.initCitizens();
   }
@@ -131,6 +133,8 @@ export class CitizenAI {
    * 4. 公聽會催眠撲街睡覺 (Zzz)
    */
   triggerPublicHearingSleep() {
+    if (this.disposed) return;
+    if (this.hearingTimeout !== null) clearTimeout(this.hearingTimeout);
     this.hearingAsleep = true;
     this.citizens.forEach(c => {
       c.isSleeping = true;
@@ -138,7 +142,9 @@ export class CitizenAI {
       c.group.position.y = c.basePos.y + 0.05;
     });
 
-    setTimeout(() => {
+    this.hearingTimeout = setTimeout(() => {
+      this.hearingTimeout = null;
+      if (this.disposed) return;
       this.hearingAsleep = false;
       this.citizens.forEach(c => {
         c.isSleeping = false;
@@ -148,7 +154,20 @@ export class CitizenAI {
     }, 10000);
   }
 
+  dispose() {
+    this.disposed = true;
+    if (this.hearingTimeout !== null) {
+      clearTimeout(this.hearingTimeout);
+      this.hearingTimeout = null;
+    }
+    this.citizens.length = 0;
+    this.buses.length = 0;
+    this.particles.length = 0;
+    this.slimes.length = 0;
+  }
+
   update(delta) {
+    if (this.disposed) return;
     // Update Buses
     for (let i = this.buses.length - 1; i >= 0; i--) {
       const b = this.buses[i];

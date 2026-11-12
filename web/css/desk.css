@@ -236,6 +236,25 @@ body, html {
   display: block;
 }
 
+#webgl-fallback-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: min(560px, 85%);
+  padding: 20px 24px;
+  border: 2px solid #f8e16c;
+  border-radius: 10px;
+  background: rgba(30, 20, 10, 0.95);
+  color: #fff3bf;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+  z-index: 3;
+}
+
+#webgl-fallback-note[hidden] { display: none; }
+
 /* 當公文開啟時的景深模糊 (Bokeh) */
 .bokeh-blur {
   filter: blur(8px) saturate(0.8) brightness(0.7);
