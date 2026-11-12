@@ -169,6 +169,10 @@ export class DeskUI {
       this.langSelect.addEventListener('change', (e) => {
         setLocale(e.target.value);
         this.updateLanguageStrings();
+        const webglFallbackNote = document.getElementById('webgl-fallback-note');
+        if (webglFallbackNote && !webglFallbackNote.hidden) {
+          webglFallbackNote.textContent = t('webgl_unavailable');
+        }
         this.updateAllDisplays();
       });
     }
