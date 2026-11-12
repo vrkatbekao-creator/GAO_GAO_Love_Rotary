@@ -78,7 +78,16 @@ export const UI_STRINGS = {
     confidential_memo: "📌 機密備忘錄：",
     drawer_tab_open: "建設行動",
     drawer_tab_close: "收起選單",
-    drawer_header_title: "市政行動清單"
+    drawer_header_title: "市政行動清單",
+    budget_scenario_label: "財政開局",
+    budget_scenario_zero: "🟢 零基預算 (+$0.5億)",
+    budget_scenario_mild: "🟡 輕度負基 (-$6.0億)",
+    budget_scenario_heavy: "🟠 重度負基 (-$12.0億)",
+    budget_scenario_abyss: "🔴 極限負基 (-$18.0億)",
+    budget_scenario_custom: "⚙️ 自訂數值 (+0.5 ~ -18.0億)...",
+    prompt_custom_budget: "請輸入起始淨預算 (單位：億，範圍從 +0.5 到 -18.0，負數代表負基債務開局)：",
+    confirm_reset_budget: "切換起始預算將重新開始市政會議。確定要重新開始嗎？",
+    credit_limit_exceeded: "已達市政舉債信用上限！請償還債務或暫停建設"
   },
   en: {
     app_title: "Kaohsiung Equality: Wheels for Everyone",
@@ -128,7 +137,16 @@ export const UI_STRINGS = {
     confidential_memo: "📌 CONFIDENTIAL MEMO:",
     drawer_tab_open: "Actions",
     drawer_tab_close: "Close",
-    drawer_header_title: "Municipal Actions"
+    drawer_header_title: "Municipal Actions",
+    budget_scenario_label: "Fiscal Start",
+    budget_scenario_zero: "🟢 Zero-Base (+$0.5B)",
+    budget_scenario_mild: "🟡 Mild Deficit (-$6.0B)",
+    budget_scenario_heavy: "🟠 Heavy Deficit (-$12.0B)",
+    budget_scenario_abyss: "🔴 Abyss Deficit (-$18.0B)",
+    budget_scenario_custom: "⚙️ Custom (+0.5 ~ -18.0B)...",
+    prompt_custom_budget: "Enter starting net budget (Billion, range: +0.5 to -18.0, negative means deficit start):",
+    confirm_reset_budget: "Changing starting budget will restart the council meeting. Proceed?",
+    credit_limit_exceeded: "Credit limit reached! Please repay debt or pause construction"
   },
   ja: {
     app_title: "『高高平等：みんなに乗る観覧車がある』",
@@ -178,7 +196,16 @@ export const UI_STRINGS = {
     confidential_memo: "📌 機密メモ：",
     drawer_tab_open: "建設行動",
     drawer_tab_close: "閉じる",
-    drawer_header_title: "市政行動リスト"
+    drawer_header_title: "市政行動リスト",
+    budget_scenario_label: "財政開局",
+    budget_scenario_zero: "🟢 ゼロベース予算 (+$0.5億)",
+    budget_scenario_mild: "🟡 軽度赤字ベース (-$6.0億)",
+    budget_scenario_heavy: "🟠 重度赤字ベース (-$12.0億)",
+    budget_scenario_abyss: "🔴 極限赤字ベース (-$18.0億)",
+    budget_scenario_custom: "⚙️ カスタム設定 (+0.5 〜 -18.0億)...",
+    prompt_custom_budget: "初期正味予算を入力してください（単位：億、範囲：+0.5 〜 -18.0、負数は赤字開局）：",
+    confirm_reset_budget: "初期予算の切り替えは市政会議を再起動します。よろしいですか？",
+    credit_limit_exceeded: "借入信用限度額に達しました！債務を返済するか建設を一時停止してください"
   },
   fr: {
     app_title: "Égalité Kaohsiung : Une Grande Roue pour Tous",
@@ -228,7 +255,16 @@ export const UI_STRINGS = {
     confidential_memo: "📌 MÉMORANDUM CONFIDENTIEL :",
     drawer_tab_open: "Actions",
     drawer_tab_close: "Fermer",
-    drawer_header_title: "Actions Municipales"
+    drawer_header_title: "Actions Municipales",
+    budget_scenario_label: "Départ Budgétaire",
+    budget_scenario_zero: "🟢 Base Zéro (+0,5 Md)",
+    budget_scenario_mild: "🟡 Déficit Léger (-6,0 Md)",
+    budget_scenario_heavy: "🟠 Déficit Lourd (-12,0 Md)",
+    budget_scenario_abyss: "🔴 Déficit Abyssal (-18,0 Md)",
+    budget_scenario_custom: "⚙️ Personnalisé (+0,5 ~ -18,0 Md)...",
+    prompt_custom_budget: "Entrez le budget net initial (Milliards, de +0,5 à -18,0, négatif = départ déficitaire) :",
+    confirm_reset_budget: "Changer le budget initial réinitialisera la réunion du conseil. Confirmer ?",
+    credit_limit_exceeded: "Plafond d'endettement atteint ! Remboursez la dette ou faites une pause"
   },
   nl: {
     app_title: "Kaohsiung Gelijkheid: Reuzenraderen voor Iedereen",
@@ -278,7 +314,16 @@ export const UI_STRINGS = {
     confidential_memo: "📌 VERTROUWELIJK MEMORANDUM:",
     drawer_tab_open: "Acties",
     drawer_tab_close: "Sluiten",
-    drawer_header_title: "Gemeentelijke Acties"
+    drawer_header_title: "Gemeentelijke Acties",
+    budget_scenario_label: "Begrotingsstart",
+    budget_scenario_zero: "🟢 Nulbasis (+€0,5 mld)",
+    budget_scenario_mild: "🟡 Licht Tekort (-€6,0 mld)",
+    budget_scenario_heavy: "🟠 Zwaar Tekort (-€12,0 mld)",
+    budget_scenario_abyss: "🔴 Abyss-Tekort (-€18,0 mld)",
+    budget_scenario_custom: "⚙️ Aangepast (+€0,5 ~ -€18,0 mld)...",
+    prompt_custom_budget: "Voer startnettobegroting in (Miljard, bereik: +0,5 tot -18,0, negatief = tekortstart):",
+    confirm_reset_budget: "Het wijzigen van de startbegroting start de raadsvergadering opnieuw. Doorgaan?",
+    credit_limit_exceeded: "Kredietlimiet bereikt! Los schulden af of pauzeer de bouw"
   }
 };
 

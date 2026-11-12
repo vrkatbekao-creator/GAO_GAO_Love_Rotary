@@ -195,6 +195,40 @@ body, html {
   font-weight: bold;
 }
 
+/* 財政模式開局選擇器 */
+.budget-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1e293b;
+  border-left: 2px solid #51cf66;
+  padding: 0 12px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.budget-icon {
+  font-size: 16px;
+}
+
+.budget-select-dropdown {
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid #51cf66;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  max-width: 185px;
+}
+
+.budget-select-dropdown:hover {
+  background: #1e293b;
+  border-color: #69db7c;
+}
+
 /* 語言選擇器 */
 .lang-selector-box {
   display: flex;

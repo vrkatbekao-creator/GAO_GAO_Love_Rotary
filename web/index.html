@@ -35,6 +35,18 @@
         </div>
       </div>
 
+      <!-- 財政開局模式選擇器 (Budget Scenario Selector) -->
+      <div class="budget-selector-box">
+        <span class="budget-icon">💰</span>
+        <select id="budget-scenario-select" class="budget-select-dropdown" title="選擇起始預算模式 (零基或負基)">
+          <option value="0.5">🟢 零基預算 (+$0.5億)</option>
+          <option value="-6.0">🟡 輕度負基 (-$6.0億)</option>
+          <option value="-12.0">🟠 重度負基 (-$12.0億)</option>
+          <option value="-18.0">🔴 極限負基 (-$18.0億)</option>
+          <option value="custom">⚙️ 自訂數值 (+0.5 ~ -18.0億)...</option>
+        </select>
+      </div>
+
       <!-- 多語言選擇器 (i18n Selector) -->
       <div class="lang-selector-box">
         <span class="lang-icon">🌐</span>
@@ -130,7 +142,7 @@
       <!-- 7 段 LED 預算顯示器 -->
       <div class="led-panel">
         <span class="led-title">NET BUDGET 淨預算餘額</span>
-        <span id="led-budget-val" class="led-value">$24.0 億</span>
+        <span id="led-budget-val" class="led-value">$0.5 億</span>
       </div>
 
       <!-- 核心三項市政指標進度條組 -->
@@ -230,8 +242,8 @@
     // 初始化結算卷宗模組
     window.dossier = new DossierEnding('office-desk-container');
 
-    // 初始化核心遊戲實例
-    window.game = new GameManager(42);
+    // 初始化核心遊戲實例 (預設 0.5 億零基預算開局)
+    window.game = new GameManager(42, 0.5);
     window.ui = new DeskUI(window.game, {
       onActionChosen: (action) => {
         console.log('[Action Chosen]:', action);
@@ -253,6 +265,11 @@
         if (window.game.net_budget < 0) {
           window.diorama.applyCourtSeizure();
         }
+      },
+      onBudgetReset: (newBudget) => {
+        console.log('[Budget Reset]:', newBudget);
+        window.audio.setDeficitState(window.game.net_budget < 0);
+        window.audio.setComplaintsFilter(window.game.complaints >= 50);
       },
       onDocumentOpen: () => {
         console.log('[Document Opened]');

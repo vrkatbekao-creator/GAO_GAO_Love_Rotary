@@ -48,11 +48,18 @@ export const CONFIG = {
     }
   },
   "start": {
-    "budget": 24,
-    "debt": 0,
+    "budget": 0.5,
+    "debt": 0.0,
+    "default_net_budget": 0.5,
     "tourism": 20,
     "admin": 20,
-    "complaints": 20
+    "complaints": 20,
+    "budget_scenarios": [
+      { "id": "zero", "net_budget": 0.5, "label_key": "budget_scenario_zero" },
+      { "id": "mild", "net_budget": -6.0, "label_key": "budget_scenario_mild" },
+      { "id": "heavy", "net_budget": -12.0, "label_key": "budget_scenario_heavy" },
+      { "id": "abyss", "net_budget": -18.0, "label_key": "budget_scenario_abyss" }
+    ]
   },
   "finance_director_meltdown": {
     "stage_1": {"threshold_net_budget_min": 10, "state": "calm", "note_color": "blue"},

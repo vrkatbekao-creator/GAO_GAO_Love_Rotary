@@ -42,6 +42,7 @@ export class DeskUI {
     this.interpreterMood = document.getElementById('interpreter-mood');
     this.interpreterTitle = document.getElementById('label-interpreter-title');
     this.langSelect = document.getElementById('lang-select');
+    this.budgetSelect = document.getElementById('budget-scenario-select');
 
     // Action Drawer elements
     this.actionDrawer = document.getElementById('action-drawer');
@@ -115,6 +116,67 @@ export class DeskUI {
         this.updateAllDisplays();
       });
     }
+
+    // Budget scenario dropdown change
+    if (this.budgetSelect) {
+      this.budgetSelect.addEventListener('change', (e) => {
+        let val = e.target.value;
+        let targetBudget = parseFloat(val);
+
+        if (val === 'custom') {
+          const promptMsg = t('prompt_custom_budget');
+          const input = prompt(promptMsg, String(this.gm.initialNetBudget ?? 0.5));
+          if (input === null) {
+            this.syncBudgetSelectUI();
+            return;
+          }
+          const parsed = parseFloat(input);
+          if (isNaN(parsed) || parsed > 0.5 || parsed < -18.0) {
+            alert('預算範圍限定於 +0.5 億至 -18.0 億之間！');
+            this.syncBudgetSelectUI();
+            return;
+          }
+          targetBudget = Math.round(parsed * 100) / 100;
+        }
+
+        if (this.gm.turn > 1 || this.gm.buildings.length > 0) {
+          if (!confirm(t('confirm_reset_budget'))) {
+            this.syncBudgetSelectUI();
+            return;
+          }
+        }
+
+        this.gm.reset(this.gm.seed, targetBudget);
+        if (window.audio) {
+          window.audio.setDeficitState(this.gm.net_budget < 0);
+        }
+        if (this.options.onBudgetReset) {
+          this.options.onBudgetReset(targetBudget);
+        }
+        this.syncBudgetSelectUI();
+        this.updateAllDisplays();
+      });
+    }
+  }
+
+  syncBudgetSelectUI() {
+    if (!this.budgetSelect) return;
+    const current = this.gm.initialNetBudget ?? 0.5;
+    const standardValues = ['0.5', '-6.0', '-12.0', '-18.0'];
+    const matched = standardValues.find(v => Math.abs(parseFloat(v) - current) < 0.01);
+    if (matched) {
+      this.budgetSelect.value = matched;
+    } else {
+      let customOpt = this.budgetSelect.querySelector('option[data-custom-val="true"]');
+      if (!customOpt) {
+        customOpt = document.createElement('option');
+        customOpt.setAttribute('data-custom-val', 'true');
+        this.budgetSelect.insertBefore(customOpt, this.budgetSelect.lastElementChild);
+      }
+      customOpt.value = String(current);
+      customOpt.textContent = `⚙️ ${current >= 0 ? '+' : ''}${current.toFixed(1)} ${t('unit_yi')}`;
+      this.budgetSelect.value = String(current);
+    }
   }
 
   toggleActionDrawer() {
@@ -187,6 +249,21 @@ export class DeskUI {
     // Modal cancel button
     const cancelBtn = document.getElementById('zone-modal-cancel');
     if (cancelBtn) cancelBtn.textContent = t('modal_cancel');
+
+    // Budget select options localization
+    if (this.budgetSelect) {
+      const optZero = this.budgetSelect.querySelector('option[value="0.5"]');
+      if (optZero) optZero.textContent = t('budget_scenario_zero');
+      const optMild = this.budgetSelect.querySelector('option[value="-6.0"]');
+      if (optMild) optMild.textContent = t('budget_scenario_mild');
+      const optHeavy = this.budgetSelect.querySelector('option[value="-12.0"]');
+      if (optHeavy) optHeavy.textContent = t('budget_scenario_heavy');
+      const optAbyss = this.budgetSelect.querySelector('option[value="-18.0"]');
+      if (optAbyss) optAbyss.textContent = t('budget_scenario_abyss');
+      const optCustom = this.budgetSelect.querySelector('option[value="custom"]');
+      if (optCustom) optCustom.textContent = t('budget_scenario_custom');
+      this.syncBudgetSelectUI();
+    }
 
     // Current quotes & ticker
     const quotes = MAYOR_QUOTES[lang] || MAYOR_QUOTES.zh;
@@ -544,10 +621,12 @@ export class DeskUI {
 
       if (bInfo) {
         const shortfall = Math.max(0, bInfo.cost - this.gm.budget);
-        if (this.gm.debt + shortfall > 12) {
+        if (this.gm.debt + shortfall > this.gm.max_debt) {
           btn.classList.add('btn-disabled');
+          btn.setAttribute('title', t('credit_limit_exceeded'));
         } else {
           btn.classList.remove('btn-disabled');
+          btn.removeAttribute('title');
         }
       }
     });

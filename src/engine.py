@@ -32,8 +32,9 @@ class Building:
 class Game:
     seed: int = 42
     turn: int = 1
-    budget: float = 24.0
+    budget: float = 0.5
     debt: float = 0.0
+    initial_net_budget: float | None = None
     tourism: int = 20
     admin: int = 20
     complaints: int = 20
@@ -48,6 +49,17 @@ class Game:
 
     def __post_init__(self):
         self.rng = random.Random(self.seed)
+        if self.initial_net_budget is not None:
+            if self.initial_net_budget >= 0:
+                self.budget = round(float(self.initial_net_budget), 2)
+                self.debt = 0.0
+            else:
+                self.budget = 0.0
+                self.debt = round(abs(float(self.initial_net_budget)), 2)
+        else:
+            self.initial_net_budget = round(self.budget - self.debt, 2)
+        self.start_debt = self.debt
+        self.max_debt = max(50.0, self.start_debt + 40.0)
 
     @property
     def net_budget(self) -> float:
@@ -150,7 +162,7 @@ class Game:
             raise ValueError(f'Unknown action: {kind}')
         if kind in CONFIG['buildings']:
             shortfall = max(0.0, float(CONFIG['buildings'][kind]['cost']) - self.budget)
-            if self.debt + shortfall > 12:
+            if self.debt + shortfall > self.max_debt:
                 raise ValueError('Construction credit limit exceeded')
 
     def _build(self, a: dict):
@@ -163,7 +175,7 @@ class Game:
             self.debt = round(self.debt - amount, 2)
             return
         row = CONFIG['buildings'][kind]
-        self._paid(-float(row['cost']), loan_ceiling=12)
+        self._paid(-float(row['cost']), loan_ceiling=self.max_debt)
         if kind in ('wheel', 'shuttle', 'market'):
             self.buildings.append(Building(kind, a.get('zone'), a.get('to_zone'), self.turn, self.turn + row['lead_turns']))
             if kind == 'shuttle':
@@ -312,6 +324,8 @@ class Game:
             'budget': round(self.budget, 2),
             'debt': round(self.debt, 2),
             'net_budget': self.net_budget,
+            'initial_net_budget': self.initial_net_budget,
+            'max_debt': self.max_debt,
             'tourism': self.tourism,
             'admin': self.admin,
             'complaints': self.complaints,

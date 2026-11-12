@@ -72,8 +72,8 @@ g5.finished = true;
 assert(g5.ending() === 'HIDDEN_S', `Expected HIDDEN_S, got ${g5.ending()}`);
 console.log('✓ Hidden Ending S validated');
 
-// Test 7: Full 12-turn game loop & snapshot
-const g6 = new GameManager(42);
+// Test 7: Full 12-turn game loop & snapshot (Legacy $24B start)
+const g6 = new GameManager(42, 24.0);
 const acts = [
   { type: 'wheel', zone: '港灣區' },
   { type: 'market', zone: '港灣區' },
@@ -97,5 +97,25 @@ assert(g6.used_events.length === 12, 'Must have used 12 unique events');
 const snap = g6.snapshot();
 assert(snap.ending === '全市愛情接駁網', `Expected 全市愛情接駁網, got ${snap.ending}`);
 console.log('✓ Full 12-turn game run completed cleanly with ending:', snap.ending);
+
+// Test 8: Zero-Base Start (+$0.5B)
+const gZero = new GameManager(42, 0.5);
+assert(gZero.budget === 0.5, `Expected budget 0.5, got ${gZero.budget}`);
+assert(gZero.debt === 0.0, `Expected debt 0.0, got ${gZero.debt}`);
+assert(gZero.net_budget === 0.5, `Expected net_budget 0.5, got ${gZero.net_budget}`);
+assert(gZero.meltdown_stage === 2, `Expected stage 2, got ${gZero.meltdown_stage}`);
+gZero.play({ type: 'wheel', zone: '港灣區' });
+assert(gZero.debt > 0, 'Zero-base wheel build should result in debt');
+console.log('✓ Zero-base initial budget (+0.5B) validated');
+
+// Test 9: Abyss Deficit Start (-$18.0B)
+const gAbyss = new GameManager(42, -18.0);
+assert(gAbyss.budget === 0.0, `Expected budget 0.0, got ${gAbyss.budget}`);
+assert(gAbyss.debt === 18.0, `Expected debt 18.0, got ${gAbyss.debt}`);
+assert(gAbyss.net_budget === -18.0, `Expected net_budget -18.0, got ${gAbyss.net_budget}`);
+assert(gAbyss.meltdown_stage === 3, `Expected stage 3, got ${gAbyss.meltdown_stage}`);
+gAbyss.play({ type: 'wheel', zone: '港灣區' });
+assert(gAbyss.debt >= 26.0, `Expected debt >= 26.0, got ${gAbyss.debt}`);
+console.log('✓ Abyss deficit initial budget (-18.0B) validated');
 
 console.log('ALL JS TESTS PASSED SUCCESSFULLY!');

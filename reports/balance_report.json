@@ -2,85 +2,82 @@
   "simulations_per_strategy": 200,
   "strategies": {
     "balanced": {
-      "avg_budget": 13.15,
-      "avg_debt": 0.0,
+      "avg_budget": 2.64,
+      "avg_debt": 24.52,
       "avg_coverage": 5,
       "avg_tourism": 65.46,
       "endings": {
-        "全市愛情接駁網": 200
+        "預算追加申請中": 165,
+        "HIDDEN_S": 35
       }
     },
     "transit": {
-      "avg_budget": 9.3,
-      "avg_debt": 2.99,
+      "avg_budget": 2.84,
+      "avg_debt": 33.49,
       "avg_coverage": 5,
       "avg_tourism": 65.46,
       "endings": {
-        "全市愛情接駁網": 194,
-        "HIDDEN_S": 3,
-        "預算追加申請中": 3
+        "預算追加申請中": 165,
+        "HIDDEN_S": 35
       }
     },
     "wheel_heavy": {
-      "avg_budget": 5.56,
-      "avg_debt": 11.43,
+      "avg_budget": 0.0,
+      "avg_debt": 56.05,
       "avg_coverage": 5,
-      "avg_tourism": 76.86,
+      "avg_tourism": 80.79,
       "endings": {
-        "HIDDEN_S": 112,
-        "仍在協商中的愛情城市": 16,
-        "預算追加申請中": 8,
-        "一城五輪": 64
+        "HIDDEN_S": 146,
+        "一城五輪": 54
       }
     },
     "market_first": {
-      "avg_budget": 27.24,
-      "avg_debt": 0.0,
+      "avg_budget": 12.4,
+      "avg_debt": 17.74,
       "avg_coverage": 5,
       "avg_tourism": 66.55,
       "endings": {
-        "全市愛情接駁網": 200
+        "預算追加申請中": 146,
+        "HIDDEN_S": 37,
+        "全市愛情接駁網": 17
       }
     },
     "passive": {
-      "avg_budget": 36.01,
-      "avg_debt": 0.0,
+      "avg_budget": 15.47,
+      "avg_debt": 7.79,
       "avg_coverage": 1,
       "avg_tourism": 44.1,
       "endings": {
-        "仍在協商中的愛情城市": 200
+        "仍在協商中的愛情城市": 199,
+        "預算追加申請中": 1
       }
     },
     "random": {
-      "avg_budget": 2.35,
-      "avg_debt": 8.55,
-      "avg_coverage": 4.85,
-      "avg_tourism": 72.39,
+      "avg_budget": 0.5,
+      "avg_debt": 44.79,
+      "avg_coverage": 4.87,
+      "avg_tourism": 72.66,
       "endings": {
-        "預算追加申請中": 95,
-        "HIDDEN_S": 67,
-        "摩天輪旁的夜市": 8,
-        "全市愛情接駁網": 23,
-        "一城五輪": 5,
-        "仍在協商中的愛情城市": 1,
-        "低調完成任務": 1
+        "HIDDEN_S": 90,
+        "預算追加申請中": 103,
+        "一城五輪": 7
       }
     }
   },
   "all_endings": {
-    "全市愛情接駁網": 617,
-    "HIDDEN_S": 182,
-    "預算追加申請中": 106,
-    "仍在協商中的愛情城市": 217,
-    "一城五輪": 69,
-    "摩天輪旁的夜市": 8,
-    "低調完成任務": 1
+    "預算追加申請中": 580,
+    "HIDDEN_S": 343,
+    "一城五輪": 61,
+    "全市愛情接駁網": 17,
+    "仍在協商中的愛情城市": 199
   },
   "warnings": [
     "Some endings were not reached by the current limited strategy suite. Do not claim all endings are reachable."
   ],
   "unobserved_endings": [
     "永遠開不完的協調會",
-    "招商成功，命名失敗"
+    "摩天輪旁的夜市",
+    "招商成功，命名失敗",
+    "低調完成任務"
   ]
 }

@@ -55,13 +55,34 @@ class EngineTests(unittest.TestCase):
         self.assertIn('ACH02', g.achievements)
 
     def test_meltdown_stage(self):
-        g = Game(seed=40)
+        g = Game(seed=40, initial_net_budget=24.0)
         self.assertEqual(g.meltdown_stage(), 1)  # 24 >= 10
         g.budget = 5.0
         g.debt = 0.0
         self.assertEqual(g.meltdown_stage(), 2)  # 5 in [0, 10)
         g.debt = 8.0
         self.assertEqual(g.meltdown_stage(), 3)  # 5 - 8 = -3 < 0
+
+    def test_initial_budget_scenarios(self):
+        # 1. Zero-base start (+0.5B)
+        g_zero = Game(seed=42, initial_net_budget=0.5)
+        self.assertEqual(g_zero.budget, 0.5)
+        self.assertEqual(g_zero.debt, 0.0)
+        self.assertEqual(g_zero.net_budget, 0.5)
+        self.assertEqual(g_zero.meltdown_stage(), 2)
+        # Can construct Turn 1 Love Ferris Wheel ($8.0B)
+        g_zero.play({'type': 'wheel', 'zone': '港灣區'})
+        self.assertGreater(g_zero.debt, 0.0)
+
+        # 2. Deficit Abyss start (-18.0B)
+        g_abyss = Game(seed=42, initial_net_budget=-18.0)
+        self.assertEqual(g_abyss.budget, 0.0)
+        self.assertEqual(g_abyss.debt, 18.0)
+        self.assertEqual(g_abyss.net_budget, -18.0)
+        self.assertEqual(g_abyss.meltdown_stage(), 3)
+        # Can construct Turn 1 Love Ferris Wheel ($8.0B) without credit limit violation
+        g_abyss.play({'type': 'wheel', 'zone': '港灣區'})
+        self.assertGreaterEqual(g_abyss.debt, 26.0)
 
     def test_hidden_ending_s(self):
         g = Game(seed=50)

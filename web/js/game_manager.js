@@ -14,19 +14,27 @@ function createPRNG(seed) {
 }
 
 export class GameManager {
-  constructor(seed = 42) {
-    this.reset(seed);
+  constructor(seed = 42, initialNetBudget = 0.5) {
+    this.reset(seed, initialNetBudget);
   }
 
-  reset(seed = 42) {
+  reset(seed = 42, initialNetBudget = 0.5) {
     this.seed = seed;
+    this.initialNetBudget = typeof initialNetBudget === 'number' ? initialNetBudget : (CONFIG.start?.default_net_budget ?? 0.5);
     this.rng = createPRNG(seed);
     this.turn = 1;
-    this.budget = 24.0;
-    this.debt = 0.0;
-    this.tourism = 20;
-    this.admin = 20;
-    this.complaints = 20;
+    if (this.initialNetBudget >= 0) {
+      this.budget = Math.round(this.initialNetBudget * 100) / 100;
+      this.debt = 0.0;
+    } else {
+      this.budget = 0.0;
+      this.debt = Math.round(Math.abs(this.initialNetBudget) * 100) / 100;
+    }
+    this.start_debt = this.debt;
+    this.max_debt = Math.max(50.0, this.start_debt + 40.0);
+    this.tourism = CONFIG.start?.tourism ?? 20;
+    this.admin = CONFIG.start?.admin ?? 20;
+    this.complaints = CONFIG.start?.complaints ?? 20;
     this.buildings = [];
     this.used_events = [];
     this.history = [];
@@ -180,7 +188,7 @@ export class GameManager {
     }
     if (CONFIG.buildings[kind]) {
       const shortfall = Math.max(0, CONFIG.buildings[kind].cost - this.budget);
-      if (this.debt + shortfall > 12) {
+      if (this.debt + shortfall > this.max_debt) {
         throw new Error('Construction credit limit exceeded');
       }
     }
@@ -196,7 +204,7 @@ export class GameManager {
       return;
     }
     const row = CONFIG.buildings[kind];
-    this._paid(-row.cost, true, 12);
+    this._paid(-row.cost, true, this.max_debt);
 
     if (['wheel', 'shuttle', 'market'].includes(kind)) {
       this.buildings.push({
@@ -391,6 +399,8 @@ export class GameManager {
       budget: Math.round(this.budget * 100) / 100,
       debt: Math.round(this.debt * 100) / 100,
       net_budget: this.net_budget,
+      initial_net_budget: this.initialNetBudget,
+      max_debt: this.max_debt,
       tourism: this.tourism,
       admin: this.admin,
       complaints: this.complaints,
