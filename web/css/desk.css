@@ -1785,7 +1785,18 @@ body, html {
   .page-right { gap: 12px; }
   .polaroid-photo-box { height: clamp(120px, 28vh, 200px); }
 
-  #zone-picker-modal { max-height: calc(100% - 12px); }
+  /* Picking a district/route is also a right-hand sheet on phones. */
+  #zone-picker-modal {
+    top: 6px;
+    right: 4px;
+    left: auto;
+    width: min(74vw, 300px);
+    height: calc(100% - 12px);
+    max-height: calc(100% - 12px);
+    transform: none;
+    padding: 10px;
+    gap: 8px;
+  }
   .zone-select-card { min-height: 44px; }
   #achievement-toast-container { max-width: 85vw; }
 }
