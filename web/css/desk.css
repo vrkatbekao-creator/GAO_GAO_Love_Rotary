@@ -1697,7 +1697,9 @@ body, html {
     gap: 4px;
     overflow-y: auto;
     overflow-x: hidden;
-    pointer-events: none;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    pointer-events: auto;
     scrollbar-width: none;
   }
   #sticky-notes-zone::-webkit-scrollbar { display: none; }
