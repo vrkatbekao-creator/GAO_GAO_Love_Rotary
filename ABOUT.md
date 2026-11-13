@@ -10,7 +10,7 @@
 
 A browser-based city-management parody built around Ferris wheels, shuttle links, tourism and the administrative cost of public promises. A deterministic JavaScript game engine drives 12 turns of building decisions and event cards. The interface combines a stylized Three.js city with a retro municipal office, decision-stamping documents and a final dossier. It offers Traditional Chinese, English, Japanese, French and Dutch.
 
-On phones the mayor's remarks and sign-language interpreter occupy the top band, the city remains in the centre, the construction/settings drawer opens from the right, notes are arranged along the left, and the news ticker runs at the bottom. Touch controls allow users to orbit the 3D city.
+On phones the mayor's remarks and sign-language interpreter occupy the top band, the city remains in the centre, the construction/settings drawer and district/route choices open from the right, notes are arranged along the left, and the news ticker runs at the bottom. Touch controls allow users to orbit the 3D city.
 
 **Creator / 作者**
 
