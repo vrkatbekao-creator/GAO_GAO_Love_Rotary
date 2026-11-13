@@ -130,7 +130,7 @@ export class Diorama3D {
       && window.matchMedia?.('(max-width: 760px), (max-width: 1024px) and (max-height: 540px)')?.matches;
     // The original camera crops the 30-unit wide city tray on tall screens.
     // Widen the field through camera distance rather than distorting geometry.
-    const factor = compact ? Math.max(1, Math.min(2.35, 1.58 / aspect)) : 1;
+    const factor = compact ? Math.max(h < 330 ? 1.3 : 1, Math.min(2.35, 1.58 / aspect)) : 1;
     const angle = this.camAngle ?? Math.atan2(22, 18);
     this.camDist = Math.hypot(18, 22) * factor;
     this.camera.position.set(
