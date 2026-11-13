@@ -25,6 +25,8 @@ assert.match(mobile, /#main-viewport-layout\s*\{[^}]*min-height:\s*0/s);
 assert.match(mobile, /#diorama-3d-wrapper\s*\{[^}]*height:\s*100%/s);
 assert.match(mobile, /#diorama-canvas\s*\{[^}]*touch-action:\s*none/s);
 assert.match(mobile, /#action-drawer\s*\{[^}]*right:\s*0/s);
+assert.match(mobile, /#zone-picker-modal\s*\{[^}]*right:\s*4px/s);
+assert.match(mobile, /#zone-picker-modal\s*\{[^}]*width:\s*min\(74vw, 300px\)/s);
 assert.match(mobile, /\.drawer-toggle-tab\s*\{[^}]*left:\s*-42px/s);
 assert.match(mobile, /#sticky-notes-zone\s*\{[^}]*flex-direction:\s*column/s);
 assert.match(mobile, /#director-meltdown-props\s*\{[^}]*bottom:\s*7px/s);
