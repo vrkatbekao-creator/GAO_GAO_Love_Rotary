@@ -7,7 +7,7 @@
 
 1. **Historical Python execution report (v0.4 prototype).** The earlier QA report recorded 7 functional Python tests passing, plus 1,200 simulated games across 6 scripted strategies and 200 seeds per strategy. Those executions have **not been repeated** for the current browser release. Their stored aggregates are in `reports/balance_report.json`.
 2. **User-confirmed browser manual checks (after P0/P1 merge).** Repeated stamping, negative-start budget reset, 3D scene clearing, duplicate shuttle links, and the subsequent GitHub Pages deployment were reported working. A prior Ferris-wheel capacity failure led to the P0/P1 UI/engine synchronization corrections; capacity should be checked again against the merged release.
-3. **Committed automated JavaScript tests.** `web/package.json` wires the engine, 9-ending localization/rendering, P0/P1, wheel capacity, and P2 ending/3D-lifecycle tests into `npm test`. **No successful CI or local execution of the full current suite is recorded in this repository.** Do not label these passing until run.
+3. **Committed automated JavaScript tests.** `web/package.json` wires the engine, 9-ending localization/rendering, P0/P1, wheel capacity, P2 ending/3D-lifecycle, zone-picker scrolling, and mobile-layout checks into `npm test`. **No successful CI or local execution of the full current suite is recorded in this repository.** Do not label these passing until run.
 
 ## Current release check commands
 
@@ -29,6 +29,31 @@ Use a local static server to verify the browser (run `python -m http.server 8000
 - [ ] WebGL-disabled browser shows a localized 3D warning; the action menu and 12-turn settlement still work
 - [ ] Resize with WebGL unavailable raises no exception; restarting cancels stale citizen-hearing animations
 - [ ] End of round 12 displays a final dossier, not coverage from buildings becoming ready in round 13
+
+## Mobile layout acceptance (new responsive UI)
+
+**Implementation:** `web/css/desk.css` has mobile and short-height landscape layouts. `web/js/diorama_3d.js` adjusts camera framing and supports single-finger pointer orbit. `web/tests/test_mobile_layout.js` checks source structure, responsive regions, viewport camera geometry, and orientation resize callbacks.
+
+**Automated scope:** The new mobile layout test was evaluated in an isolated V8 environment against the fetched CSS, HTML and JavaScript and passed. It is a structural/geometry contract, **not proof of correct pixel rendering on a physical phone**. No browser screenshot or touch-device QA has been recorded for this release.
+
+### Manual device / emulator checklist
+
+- [ ] **390×844 portrait**: mayor quote and interpreter above, 3D model centred and fully framed, right drawer handles visible; news ticker at bottom
+- [ ] **360×780 or 320×568 portrait**: compact budget/tourism/admin/complaints/turn board is readable; no horizontal overflow
+- [ ] **844×390 or 667×375 landscape**: model remains visible after orientation change; header and footer do not cover its centre
+- [ ] **Right drawer**: actions and settings scroll on touch, handles and close button work, selecting a construction action returns to the model
+- [ ] **Zone/shuttle pickers**: all five zones and ten possible shuttle pairs reachable using internal scrolling; cancel accessible
+- [ ] **Sticky notes**: small left-side vertical rail moves notes away from the 3D centre; finance-director props below notes
+- [ ] **Touch**: one finger orbits the 3D scene, does not accidentally trigger a construction button, and dragging the view does not scroll the whole game
+- [ ] **Bottom ticker**: displayed beneath the municipal dashboard and outside iOS safe-area obstruction
+- [ ] **Documents and ending**: decision sheets and final dossiers scroll vertically; no cropped action choices or restart buttons
+- [ ] **Desktop regression**: >1024px wide screen retains original desk/header/ticker layout and mouse orbit
+
+### License metadata check
+
+- [x] MIT `LICENSE` added; `README.md`, `ABOUT.md`, `web/package.json`, `web/package-lock.json`, and `pyproject.toml` aligned
+- [x] Third-party Three.js MIT header retained (copyright 2010–2026 Three.js Authors)
+- [ ] GitHub repository **About sidebar description** cannot be updated by the connected read/write actions available for this workspace; suggested copy is in `ABOUT.md` until manually updated in GitHub repository settings
 
 ## Ending reachability — evidence, not assumption
 
