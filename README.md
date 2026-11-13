@@ -14,7 +14,7 @@ The browser game runs directly from the `web/` directory with no server-side acc
 
 - **Desktop:** retro office desk, scrolling news ticker at the top, 3D diorama, sticky notes, and a collapsible construction/settings drawer on the right.
 - **Mobile (portrait and landscape):** the mayor's quotes and sign-language interpreter stay at the top; the **3D city remains in the centre**; construction and settings open from compact right-side drawer handles; sticky notes move into a narrow left-side rail; the news ticker moves to the **bottom**.
-- **3D touch control:** drag on the city to orbit the camera. Portrait framing moves the camera back to show more of the 3D model. The zone and shuttle selection lists scroll independently on smaller screens.
+- **3D touch control:** drag on the city to orbit the camera. Portrait framing moves the camera back to show more of the 3D model. The zone and shuttle selection lists open as scrollable **right-side sheets** on smaller screens.
 - If WebGL is unavailable, the core 2D decision game remains accessible with a fallback notice.
 
 The mobile layout has automated structure and rule checks; **real-device visual QA is still recommended**, especially on small-height landscape displays and iOS/Android browsers.
